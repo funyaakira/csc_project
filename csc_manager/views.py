@@ -37,7 +37,7 @@ def get_output(request, target_day):
 		prev_day = target_day + timedelta(days=-1)
 		next_day = target_day + timedelta(days=1)
 
-		template = loader.get_template('ayumi_manager/index.html')
+		template = loader.get_template('csc_manager/index.html')
 		context = {
 			'shift_data': shift_data,
 			'event_data_list': event_data_list,
