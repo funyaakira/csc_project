@@ -1,0 +1,45 @@
+table {
+  border: 1px solid #aaa;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+td {
+  width :350px;
+  padding: .6em 1em;
+  border-bottom: 1px solid #aaa;
+}
+
+.HAYABAN {
+  background-color: #e0ffff;
+}
+
+.NIKKIN {
+  background-color: #e0ffef;
+}
+
+.NIKKIN_E {
+  background-color: #fff7ef;
+}
+
+.OSOBAN {
+  background-color: #f4eaff;
+}
+
+.YAKIN {
+  background-color: #dcdcdc;
+}
+
+.KANGO {
+  background-color: #ffeaea;
+}
+
+.SOUDANIN {
+  background-color: #ffffef;
+}

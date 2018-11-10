@@ -1,0 +1,6 @@
+db.sqlite3
+manage.py
+csc_project
+csc_manager/migrations
+csc_manager/__pycache__
+csc_manager/__init__.py

@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+
+    <title>
+      {% block title %}Ayumi Manaer{% endblock %}
+    </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+JP">
+    <link rel="stylesheet" href="{% static 'common/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'common/css/app.css' %}">
+    <link rel="stylesheet" href="{% static 'csc_manager/css/main.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+     integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="manifest" href="manifest.json">
+    {% block stylesheet %}{% endblock %}
+
+  </head>
+
+  <body>
+    {% block body %}
+      <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'home' %}">Ayumi Manager</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainMenu">
+            {% if user.is_authenticated %}
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.username }}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                    <a class="dropdown-item" href="#">My account</a>
+                    <a class="dropdown-item" href="#">Change password</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+                  </div>
+                </li>
+              </ul>
+            {% else %}
+              <form class="form-inline ml-auto">
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in</a>
+                <a href="{% url 'signup' %}" class="btn btn-primary ml-2">Sign up</a>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+      <div class="container">
+        <ol class="breadcrumb my-4">
+          {% block breadcrumb %}
+          {% endblock %}
+        </ol>
+        {% block content %}
+        {% endblock %}
+      </div>
+    {% endblock body %}
+    <script src="{% static 'common/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'common/js/popper.min.js' %}"></script>
+    <script src="{% static 'common/js/bootstrap.min.js' %}"></script>
+    <script>
+      // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
+      if ('serviceWorker' in navigator) {
+  	     navigator.serviceWorker.register("sw.js").then(function(registration) {
+  		       console.log('ServiceWorker registration successful with scope: ', registration.scope);
+  	  }).catch(function(err) {
+  		    console.log('ServiceWorker registration failed: ', err);
+  	  });
+      }
+  </script>
+  </body>
+</html>
