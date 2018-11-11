@@ -28,7 +28,8 @@ class ShiftView(DetailView):
 
     def get_context_data(self, **kwargs):
         # 前の日と次の日の設定
-        target_day = Shift.objects.get(pk=self.kwargs.get('pk')).date
+        pk = self.kwargs.get('pk')
+        target_day = Shift.objects.get(pk=pk).date
 
         prev_day = target_day + timedelta(days=-1)
         next_day = target_day + timedelta(days=1)
