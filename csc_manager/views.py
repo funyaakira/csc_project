@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
 
 from django.http import HttpResponse
@@ -12,7 +12,13 @@ from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
 
+@login_required
+def home(request):
+    return redirect('index')
 
+
+
+@login_required
 def index(request):
 	output = get_output(request, date.today())
 	return HttpResponse(output)
