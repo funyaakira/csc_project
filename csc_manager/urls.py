@@ -12,14 +12,12 @@ urlpatterns = [
 
 	path('', views.home, name='home'),
 
-	# path('shift/', views.index, name='index'),
-    # path('shift/', ShiftView.as_view(), name='shift'),
-    path('shift/<int:pk>/', ShiftView.as_view(), name='shift_day'),
-	# path('shift/index.html', views.index, name='index'),
 
-	# re_path(r'shift/(?P<shift_day>\d{4}-\d{2}-\d{2})/$', views.shift_day, name='shift_day'),
+    path('shift/<int:pk>/', ShiftView.as_view(), name='shift_day'),
+
 
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
+
 
 	path('shift/sw.js', (TemplateView.as_view(template_name="ayumi_manager/sw.js",
 		content_type='application/javascript',)), name='sw.js'),
