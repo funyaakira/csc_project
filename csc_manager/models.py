@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class MT_SEX(models.Model):
@@ -29,6 +30,7 @@ class MT_SYOKUMU(models.Model):
 class MT_STAFF(models.Model):
     def __str__(self):
         return self.STAFF_NAME
+    USER = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     SYOKUMU_ID = models.ForeignKey(MT_SYOKUMU, on_delete=models.CASCADE)
     STAFF_NAME = models.CharField(max_length=200, null=True)
     DEL_FLG = models.BooleanField(default=False)
