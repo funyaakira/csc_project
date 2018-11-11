@@ -56,7 +56,7 @@ class DT_EVENT(models.Model):
     EV_GO   = models.ForeignKey(MT_GAIBU,on_delete=models.PROTECT,null=True,blank=True,)
     D_STAFF = models.ForeignKey(MT_STAFF,on_delete=models.PROTECT,null=True,blank=True,related_name="D_STAFF")
     T_STAFF = models.ForeignKey(MT_STAFF,on_delete=models.PROTECT,null=True,blank=True,related_name="T_STAFF")
-    NAIYO = models.CharField(max_length=200,null=True,blank=True)
+    NotADirectoryErrorYO = models.CharField(max_length=200,null=True,blank=True)
 
 
 class DT_SHIFT(models.Model):
