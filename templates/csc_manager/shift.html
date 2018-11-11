@@ -14,7 +14,7 @@
  {% if shift %}
   <table class="table">
     <tr>
-    <td colspan="2">{{ shift.shift_date|date:"Y/m/d ’l’"  }} {{ test }}</td>
+    <td colspan="2">{{ shift.date|date:"Y/m/d ’l’"  }} {{ test }}</td>
     </tr>
 
     {% if shift.kango1 is not None %}
@@ -107,14 +107,14 @@
     </tr>
     {% endif %}
 
-    {% if event_data_list|length %}
+    {% if events|length %}
     <tr>
       <td>イベント</td>
       <td>
-        {% for event_data in event_data_list %}
-         {{event_data.EV_KND}}&nbsp;{{event_data.RIYOSYA|default_if_none:""}}&nbsp;
-         {{event_data.EV_TIME|default_if_none:""}}{{event_data.HT_KBN|default_if_none:""}}&nbsp;
-         {{event_data.EV_GO|default_if_none:""}}{{event_data.NAIYO|default_if_none:""}}
+        {% for event in events %}
+         <small class="text_muted">{{event.knd}}&nbsp;{{event.Riyosya|default_if_none:""}}&nbsp;
+         {{event.time|default_if_none:""}}{{event.ht_kbn|default_if_none:""}}&nbsp;
+         {{event.go_place|default_if_none:""}}{{event.naiyo|default_if_none:""}}</small>
          </br>
         {% endfor %}
       </td>
