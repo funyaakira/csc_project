@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class MT_SEX(models.Model):
@@ -44,11 +45,18 @@ class DT_RIYOSYA(models.Model):
     BIRTH_DAY = models.DateField(null=True,default=None)
     DEL_FLG = models.BooleanField(default=False)
 
+
+class MT_BASE_SCHEDULE(models.Model):
+    def __str__(self):
+        return str(self.base_date.strftime("%Y/%m/%d"))
+    base_date = models.DateField(_('基本日付'), unique=True)
+
+
 class DT_EVENT(models.Model):
     def __str__(self):
         return str(self.EV_DATE.strftime("%Y/%m/%d")) + " " + str(self.EV_KND) + " " + str(self.NAIYO)
 
-    EV_DATE = models.DateField()
+    EV_DATE = models.ForeignKey(MT_BASE_SCHEDULE, on_delete=models.PROTECT,related_name="events", default=None)
     EV_KND  = models.ForeignKey(MT_EVENT_KND,on_delete=models.PROTECT)
     RIYOSYA = models.ForeignKey(DT_RIYOSYA,on_delete=models.PROTECT,null=True,blank=True)
     EV_TIME = models.TimeField(null=True,blank=True)
@@ -56,13 +64,13 @@ class DT_EVENT(models.Model):
     EV_GO   = models.ForeignKey(MT_GAIBU,on_delete=models.PROTECT,null=True,blank=True,)
     D_STAFF = models.ForeignKey(MT_STAFF,on_delete=models.PROTECT,null=True,blank=True,related_name="D_STAFF")
     T_STAFF = models.ForeignKey(MT_STAFF,on_delete=models.PROTECT,null=True,blank=True,related_name="T_STAFF")
-    NotADirectoryErrorYO = models.CharField(max_length=200,null=True,blank=True)
+    NAIYO = models.CharField(max_length=200,null=True,blank=True)
 
 
 class DT_SHIFT(models.Model):
     def __str__(self):
         return str(self.SHIFT_DATE)
-    SHIFT_DATE = models.DateField(null=True,unique=True,blank=True,)
+    shift_date = models.OneToOneField(MT_BASE_SCHEDULE, on_delete=models.PROTECT,related_name="shift", default=None)
     HAYABAN    = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_HAYABAN',   on_delete=models.CASCADE, null=True,blank=True,)
     HAYABAN_E  = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_HAYABAN_E', on_delete=models.CASCADE, null=True,blank=True,)
     NIKKIN     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN',    on_delete=models.CASCADE, null=True,blank=True,)

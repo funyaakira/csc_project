@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 
 from django.http import HttpResponse
-from .models import DT_SHIFT, MT_STAFF, DT_SHIFT, DT_EVENT
+from .models import DT_SHIFT, MT_STAFF, DT_SHIFT, DT_EVENT, MT_BASE_SCHEDULE
 
 from datetime import datetime,timedelta,date
 import logging
@@ -11,49 +11,31 @@ from django.views.decorators.csrf import csrf_exempt
 from dateutil.relativedelta import relativedelta
 
 from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
+
 
 @login_required
 def home(request):
-    return redirect('index')
+    today_obj = MT_BASE_SCHEDULE.objects.get(base_date=date.today())
+    return redirect('shift_day', pk=today_obj.pk)
 
 
+class ShiftView(DetailView):
+    model = MT_BASE_SCHEDULE
+    context_object_name = 'schedule'
+    template_name = 'csc_manager/shift.html'
 
-@login_required
-def index(request):
-	output = get_output(request, date.today())
-	return HttpResponse(output)
+    def get_context_data(self, **kwargs):
+        today_obj = MT_BASE_SCHEDULE.objects.get(pk=self.kwargs.get('pk'))
+        target_day = today_obj.base_date
 
+        prev_day = target_day + timedelta(days=-1)
+        next_day = target_day + timedelta(days=1)
+        kwargs['prev_day_pk'] = MT_BASE_SCHEDULE.objects.get(base_date=prev_day).pk
+        kwargs['next_day_pk'] = MT_BASE_SCHEDULE.objects.get(base_date=next_day).pk
 
+        return super().get_context_data(**kwargs)
 
-def shift_day(request, shift_day):
-	d_targetday = datetime.strptime(shift_day, '%Y-%m-%d')
-	output = get_output(request, d_targetday)
-	return HttpResponse(output)
-
-
-
-def get_output(request, target_day):
-
-	shift_data = DT_SHIFT.objects.get(SHIFT_DATE=target_day)
-	event_data_list = DT_EVENT.objects.filter(EV_DATE=target_day)
-
-	output = target_day
-
-	if shift_data:
-		prev_day = target_day + timedelta(days=-1)
-		next_day = target_day + timedelta(days=1)
-
-		template = loader.get_template('csc_manager/index.html')
-		context = {
-			'shift_data': shift_data,
-			'event_data_list': event_data_list,
-			'today': date.today(),
-			'prev_day': prev_day,
-			'next_day': next_day
-		}
-		output = template.render(context, request)
-
-	return output
 
 @csrf_exempt
 def receive_from_gas(request):

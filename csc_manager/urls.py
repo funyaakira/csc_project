@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 from . import views
+from .views import ShiftView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -11,11 +12,12 @@ urlpatterns = [
 
 	path('', views.home, name='home'),
 
-	path('shift/', views.index, name='index'),
+	# path('shift/', views.index, name='index'),
+    # path('shift/', ShiftView.as_view(), name='shift'),
+    path('shift/<int:pk>/', ShiftView.as_view(), name='shift_day'),
+	# path('shift/index.html', views.index, name='index'),
 
-	path('shift/index.html', views.index, name='index'),
-
-	re_path(r'shift/(?P<shift_day>\d{4}-\d{2}-\d{2})/$', views.shift_day, name='shift_day'),
+	# re_path(r'shift/(?P<shift_day>\d{4}-\d{2}-\d{2})/$', views.shift_day, name='shift_day'),
 
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
 

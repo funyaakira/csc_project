@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {{ board.name }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="#">Home</a></li>
+  <li class="breadcrumb-item active">Shift</li>
+{% endblock %}
+
+{% block content %}
+ <p>
+ {% if schedule %}
+  <table class="table">
+    <tr>
+    <td colspan="2">{{ schedule.base_date|date:"Y/m/d ’l’"  }} {{ test }}</td>
+    </tr>
+
+    {% if schedule.shift.KANGO1 is not None %}
+    <tr>
+    <td class="KANGO">看護1</td><td class="KANGO">{{ schedule.shift.KANGO1 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.KANGO2 is not None %}
+    <tr>
+    <td class="KANGO">看護2</td><td class="KANGO">{{ schedule.shift.KANGO2 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.SOUDANIN is not None %}
+    <tr>
+    <td class="SOUDANIN">相談員</td><td class="SOUDANIN">{{ schedule.shift.SOUDANIN }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.HAYABAN is not None %}
+    <tr>
+    <td class="HAYABAN">早番</td><td class="HAYABAN">{{ schedule.shift.HAYABAN }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.HAYABAN_E is not None %}
+    <tr>
+    <td class="HAYABAN">早番</td><td class="HAYABAN">{{ schedule.shift.HAYABAN_E }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN is not None %}
+    <tr>
+    <td class="NIKKIN">日勤</td><td class="NIKKIN">{{ schedule.shift.NIKKIN }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN_E is not None %}
+    <tr>
+    <td class="NIKKIN">日勤</td><td class="NIKKIN">{{ schedule.shift.NIKKIN_E }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN1 is not None %}
+    <tr>
+    <td class="NIKKIN">日勤1</td><td class="NIKKIN">{{ schedule.shift.NIKKIN1 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN2 is not None %}
+    <tr>
+    <td class="NIKKIN">日勤2</td><td class="NIKKIN">{{ schedule.shift.NIKKIN2 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.OSOBAN is not None %}
+    <tr>
+    <td class="OSOBAN">遅番</td><td class="OSOBAN">{{ schedule.shift.OSOBAN }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.OSOBAN_E is not None %}
+    <tr>
+    <td class="OSOBAN">遅番</td><td class="OSOBAN">{{ schedule.shift.OSOBAN_E }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN_E1 is not None %}
+    <tr>
+    <td class="NIKKIN_E">日勤その他1</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E1 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN_E2 is not None %}
+    <tr>
+    <td class="NIKKIN_E">日勤その他2</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E2 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.NIKKIN_E3 is not None %}
+    <tr>
+    <td class="NIKKIN_E">日勤その他3</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E3 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if schedule.shift.YAKIN is not None %}
+    <tr>
+    <td class="YAKIN">夜勤</td><td class="YAKIN">{{ schedule.shift.YAKIN }}</td>
+    </tr>
+    {% endif %}
+
+    {% if event_data_list|length %}
+    <tr>
+      <td>イベント</td>
+      <td>
+        {% for event_data in event_data_list %}
+         {{event_data.EV_KND}}&nbsp;{{event_data.RIYOSYA|default_if_none:""}}&nbsp;
+         {{event_data.EV_TIME|default_if_none:""}}{{event_data.HT_KBN|default_if_none:""}}&nbsp;
+         {{event_data.EV_GO|default_if_none:""}}{{event_data.NAIYO|default_if_none:""}}
+         </br>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endif %}
+
+    <tr>
+    <td>メモ</td>
+    <td>
+      {% if schedule.shift.MEMO is not None %}
+      {{ schedule.shift.MEMO }}
+      {% endif %}
+    </td>
+    </tr>
+  </table>
+ {% endif %}
+    <p class=".text-center">
+      <div>
+          <a href="{% url 'shift_day' prev_day_pk %}"><i class="fas fa-arrow-left"></i>前日</a>
+          <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i>今日</a>
+          <a href="{% url 'shift_day' next_day_pk %}"><i class="fas fa-arrow-right"></i>翌日</a>
+      </div>
+    </p>
+</p>
+{% endblock %}
