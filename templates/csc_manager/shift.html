@@ -11,99 +11,99 @@
 
 {% block content %}
  <p>
- {% if schedule %}
+ {% if shift %}
   <table class="table">
     <tr>
-    <td colspan="2">{{ schedule.base_date|date:"Y/m/d ’l’"  }} {{ test }}</td>
+    <td colspan="2">{{ shift.shift_date|date:"Y/m/d ’l’"  }} {{ test }}</td>
     </tr>
 
-    {% if schedule.shift.KANGO1 is not None %}
+    {% if shift.kango1 is not None %}
     <tr>
-    <td class="KANGO">看護1</td><td class="KANGO">{{ schedule.shift.KANGO1 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if schedule.shift.KANGO2 is not None %}
-    <tr>
-    <td class="KANGO">看護2</td><td class="KANGO">{{ schedule.shift.KANGO2 }}</td>
+    <td class="kango">看護1</td><td class="kango">{{ shift.kango1 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.SOUDANIN is not None %}
+    {% if shift.kango2 is not None %}
     <tr>
-    <td class="SOUDANIN">相談員</td><td class="SOUDANIN">{{ schedule.shift.SOUDANIN }}</td>
+    <td class="kango">看護2</td><td class="kango">{{ shift.kango2 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.HAYABAN is not None %}
+    {% if shift.soudanin is not None %}
     <tr>
-    <td class="HAYABAN">早番</td><td class="HAYABAN">{{ schedule.shift.HAYABAN }}</td>
+    <td class="soudanin">相談員</td><td class="soudanin">{{ shift.soudanin }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.HAYABAN_E is not None %}
+    {% if shift.hayaban is not None %}
     <tr>
-    <td class="HAYABAN">早番</td><td class="HAYABAN">{{ schedule.shift.HAYABAN_E }}</td>
+    <td class="hayaban">早番</td><td class="hayaban">{{ shift.hayaban }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN is not None %}
+    {% if shift.hayaban_e is not None %}
     <tr>
-    <td class="NIKKIN">日勤</td><td class="NIKKIN">{{ schedule.shift.NIKKIN }}</td>
+    <td class="hayaban">早番</td><td class="hayaban">{{ shift.hayaban_e }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN_E is not None %}
+    {% if shift.nikkin is not None %}
     <tr>
-    <td class="NIKKIN">日勤</td><td class="NIKKIN">{{ schedule.shift.NIKKIN_E }}</td>
+    <td class="nikkin">日勤</td><td class="nikkin">{{ shift.nikkin }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN1 is not None %}
+    {% if shift.nikkin_e is not None %}
     <tr>
-    <td class="NIKKIN">日勤1</td><td class="NIKKIN">{{ schedule.shift.NIKKIN1 }}</td>
+    <td class="nikkin">日勤</td><td class="nikkin">{{ shift.nikkin_e }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN2 is not None %}
+    {% if shift.nikkin1 is not None %}
     <tr>
-    <td class="NIKKIN">日勤2</td><td class="NIKKIN">{{ schedule.shift.NIKKIN2 }}</td>
+    <td class="nikkin">日勤1</td><td class="nikkin">{{ shift.nikkin1 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.OSOBAN is not None %}
+    {% if shift.nikkin2 is not None %}
     <tr>
-    <td class="OSOBAN">遅番</td><td class="OSOBAN">{{ schedule.shift.OSOBAN }}</td>
+    <td class="nikkin">日勤2</td><td class="nikkin">{{ shift.nikkin2 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.OSOBAN_E is not None %}
+    {% if shift.osoban is not None %}
     <tr>
-    <td class="OSOBAN">遅番</td><td class="OSOBAN">{{ schedule.shift.OSOBAN_E }}</td>
+    <td class="osoban">遅番</td><td class="osoban">{{ shift.osoban }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN_E1 is not None %}
+    {% if shift.osoban_e is not None %}
     <tr>
-    <td class="NIKKIN_E">日勤その他1</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E1 }}</td>
+    <td class="osoban">遅番</td><td class="osoban">{{ shift.osoban_e }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN_E2 is not None %}
+    {% if shift.nikkin_e1 is not None %}
     <tr>
-    <td class="NIKKIN_E">日勤その他2</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E2 }}</td>
+    <td class="nikkin_e">日勤その他1</td><td class="nikkin_e">{{ shift.nikkin_e1 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.NIKKIN_E3 is not None %}
+    {% if shift.nikkin_e2 is not None %}
     <tr>
-    <td class="NIKKIN_E">日勤その他3</td><td class="NIKKIN_E">{{ schedule.shift.NIKKIN_E3 }}</td>
+    <td class="nikkin_e">日勤その他2</td><td class="nikkin_e">{{ shift.nikkin_e2 }}</td>
     </tr>
     {% endif %}
 
-    {% if schedule.shift.YAKIN is not None %}
+    {% if shift.nikkin_e3 is not None %}
     <tr>
-    <td class="YAKIN">夜勤</td><td class="YAKIN">{{ schedule.shift.YAKIN }}</td>
+    <td class="nikkin_e">日勤その他3</td><td class="nikkin_e">{{ shift.nikkin_e3 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if shift.yakin is not None %}
+    <tr>
+    <td class="yakin">夜勤</td><td class="yakin">{{ shift.yakin }}</td>
     </tr>
     {% endif %}
 
@@ -124,8 +124,8 @@
     <tr>
     <td>メモ</td>
     <td>
-      {% if schedule.shift.MEMO is not None %}
-      {{ schedule.shift.MEMO }}
+      {% if shift.memo is not None %}
+      {{ shift.memo }}
       {% endif %}
     </td>
     </tr>
@@ -134,8 +134,8 @@
     <p class=".text-center">
       <div>
           <a href="{% url 'shift_day' prev_day_pk %}"><i class="fas fa-arrow-left"></i>前日</a>
-          <a href="{% url 'home' %}"><i class="fas fa-arrow-left"></i>今日</a>
-          <a href="{% url 'shift_day' next_day_pk %}"><i class="fas fa-arrow-right"></i>翌日</a>
+          <a href="{% url 'home' %}">今日</a>
+          <a href="{% url 'shift_day' next_day_pk %}">翌日<i class="fas fa-arrow-right"></i></a>
       </div>
     </p>
 </p>

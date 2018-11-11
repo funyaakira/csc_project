@@ -46,17 +46,11 @@ class DT_RIYOSYA(models.Model):
     DEL_FLG = models.BooleanField(default=False)
 
 
-class MT_BASE_SCHEDULE(models.Model):
-    def __str__(self):
-        return str(self.base_date.strftime("%Y/%m/%d"))
-    base_date = models.DateField(_('基本日付'), unique=True)
-
-
 class DT_EVENT(models.Model):
     def __str__(self):
         return str(self.EV_DATE.strftime("%Y/%m/%d")) + " " + str(self.EV_KND) + " " + str(self.NAIYO)
 
-    EV_DATE = models.ForeignKey(MT_BASE_SCHEDULE, on_delete=models.PROTECT,related_name="events", default=None)
+    EV_DATE = models.DateField(default=None)
     EV_KND  = models.ForeignKey(MT_EVENT_KND,on_delete=models.PROTECT)
     RIYOSYA = models.ForeignKey(DT_RIYOSYA,on_delete=models.PROTECT,null=True,blank=True)
     EV_TIME = models.TimeField(null=True,blank=True)
@@ -67,26 +61,26 @@ class DT_EVENT(models.Model):
     NAIYO = models.CharField(max_length=200,null=True,blank=True)
 
 
-class DT_SHIFT(models.Model):
+class Shift(models.Model):
     def __str__(self):
-        return str(self.SHIFT_DATE)
-    shift_date = models.OneToOneField(MT_BASE_SCHEDULE, on_delete=models.PROTECT,related_name="shift", default=None)
-    HAYABAN    = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_HAYABAN',   on_delete=models.CASCADE, null=True,blank=True,)
-    HAYABAN_E  = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_HAYABAN_E', on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN',    on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN1    = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN1',   on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN2    = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN2',   on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN3    = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN3',   on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN_E   = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN_E',  on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN_E1  = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN_E1', on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN_E2  = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN_E2', on_delete=models.CASCADE, null=True,blank=True,)
-    NIKKIN_E3  = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_NIKKIN_E3', on_delete=models.CASCADE, null=True,blank=True,)
-    OSOBAN     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_OSOBAN',    on_delete=models.CASCADE, null=True,blank=True,)
-    OSOBAN_E   = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_OSOBAN_E',  on_delete=models.CASCADE, null=True,blank=True,)
-    YAKIN      = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_YAKIN',     on_delete=models.CASCADE, null=True,blank=True,)
-    AKE        = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_AKE',       on_delete=models.CASCADE, null=True,blank=True,)
-    KANGO1     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_KANGO1',    on_delete=models.CASCADE, null=True,blank=True,)
-    KANGO2     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_KANGO2',    on_delete=models.CASCADE, null=True,blank=True,)
-    SOUDANIN   = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_SOUDANIN',  on_delete=models.CASCADE, null=True,blank=True,)
-    SEISOU     = models.ForeignKey(MT_STAFF,related_name='MT_STAFF_SEISOU',    on_delete=models.CASCADE, null=True,blank=True,)
-    MEMO       = models.CharField(max_length=1000, null=True,blank=True,)
+        return str(self.shift_date)
+    shift_date = models.DateField(default=None, unique=True)
+    hayaban    = models.ForeignKey(MT_STAFF,related_name='hayaban',   on_delete=models.CASCADE, null=True,blank=True,)
+    hayaban_e  = models.ForeignKey(MT_STAFF,related_name='hayaban_e', on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin     = models.ForeignKey(MT_STAFF,related_name='nikkin',    on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin1    = models.ForeignKey(MT_STAFF,related_name='nikkin1',   on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin2    = models.ForeignKey(MT_STAFF,related_name='nikkin2',   on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin3    = models.ForeignKey(MT_STAFF,related_name='nikkin3',   on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin_e   = models.ForeignKey(MT_STAFF,related_name='nikkin_e',  on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin_e1  = models.ForeignKey(MT_STAFF,related_name='nikkin_e1', on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin_e2  = models.ForeignKey(MT_STAFF,related_name='nikkin_e2', on_delete=models.CASCADE, null=True,blank=True,)
+    nikkin_e3  = models.ForeignKey(MT_STAFF,related_name='nikkin_e3', on_delete=models.CASCADE, null=True,blank=True,)
+    osoban     = models.ForeignKey(MT_STAFF,related_name='osoban',    on_delete=models.CASCADE, null=True,blank=True,)
+    osoban_e   = models.ForeignKey(MT_STAFF,related_name='osoban_e',  on_delete=models.CASCADE, null=True,blank=True,)
+    yakin      = models.ForeignKey(MT_STAFF,related_name='yakin',     on_delete=models.CASCADE, null=True,blank=True,)
+    ake        = models.ForeignKey(MT_STAFF,related_name='ake',       on_delete=models.CASCADE, null=True,blank=True,)
+    kango1     = models.ForeignKey(MT_STAFF,related_name='kango1',    on_delete=models.CASCADE, null=True,blank=True,)
+    kango2     = models.ForeignKey(MT_STAFF,related_name='kango2',    on_delete=models.CASCADE, null=True,blank=True,)
+    soudanin   = models.ForeignKey(MT_STAFF,related_name='soudanin',  on_delete=models.CASCADE, null=True,blank=True,)
+    seisou     = models.ForeignKey(MT_STAFF,related_name='seisou',    on_delete=models.CASCADE, null=True,blank=True,)
+    memo       = models.CharField(max_length=1000, null=True,blank=True,)

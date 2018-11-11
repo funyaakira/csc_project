@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 
 from django.http import HttpResponse
-from .models import DT_SHIFT, MT_STAFF, DT_SHIFT, DT_EVENT, MT_BASE_SCHEDULE
+from .models import MT_STAFF, Shift, DT_EVENT
 
 from datetime import datetime,timedelta,date
 import logging
@@ -16,23 +16,23 @@ from django.views.generic import DetailView
 
 @login_required
 def home(request):
-    today_obj = MT_BASE_SCHEDULE.objects.get(base_date=date.today())
+    today_obj = Shift.objects.get(shift_date=date.today())
     return redirect('shift_day', pk=today_obj.pk)
 
 
 class ShiftView(DetailView):
-    model = MT_BASE_SCHEDULE
-    context_object_name = 'schedule'
+    model = Shift
+    context_object_name = 'shift'
     template_name = 'csc_manager/shift.html'
 
     def get_context_data(self, **kwargs):
-        today_obj = MT_BASE_SCHEDULE.objects.get(pk=self.kwargs.get('pk'))
-        target_day = today_obj.base_date
+        today_obj = Shift.objects.get(pk=self.kwargs.get('pk'))
+        target_day = today_obj.shift_date
 
         prev_day = target_day + timedelta(days=-1)
         next_day = target_day + timedelta(days=1)
-        kwargs['prev_day_pk'] = MT_BASE_SCHEDULE.objects.get(base_date=prev_day).pk
-        kwargs['next_day_pk'] = MT_BASE_SCHEDULE.objects.get(base_date=next_day).pk
+        kwargs['prev_day_pk'] = Shift.objects.get(shift_date=prev_day).pk
+        kwargs['next_day_pk'] = Shift.objects.get(shift_date=next_day).pk
 
         return super().get_context_data(**kwargs)
 
