@@ -13,7 +13,7 @@ urlpatterns = [
 	path('', views.home, name='home'),
 
 
-    path('shift/<int:pk>/', ShiftView.as_view(), name='shift_day'),
+    path('shift/<int:year>/<int:month>/<int:day>/', ShiftView.as_view(), name='shift_day'),
 
 
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),

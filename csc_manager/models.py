@@ -21,7 +21,10 @@ class Shift_knd(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=200)
+    short_name = models.CharField(max_length=200, default=None)
     shift_disp_order = models.IntegerField(unique=True, default=0)
+    css_class = models.CharField(max_length=200, default=None)
+    desc = models.CharField(max_length=200, default=None, null=True)
     del_flg = models.BooleanField(default=False)
 
 class MT_GAIBU(models.Model):
@@ -33,6 +36,7 @@ class Syokumu(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=200, null=True)
+
 
 class Staff(models.Model):
     def __str__(self):
@@ -65,34 +69,34 @@ class Event(models.Model):
     t_staff = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True,blank=True,related_name="t_staff")
     naiyo = models.CharField(max_length=200,null=True,blank=True)
 
-class Shift(models.Model):
-    def __str__(self):
-        return str(self.date)
-    date = models.DateField(default=None, unique=True)
-    hayaban    = models.ForeignKey(Staff,related_name='hayaban',   on_delete=models.CASCADE, null=True,blank=True,)
-    hayaban_e  = models.ForeignKey(Staff,related_name='hayaban_e', on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin     = models.ForeignKey(Staff,related_name='nikkin',    on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin1    = models.ForeignKey(Staff,related_name='nikkin1',   on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin2    = models.ForeignKey(Staff,related_name='nikkin2',   on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin3    = models.ForeignKey(Staff,related_name='nikkin3',   on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin_e   = models.ForeignKey(Staff,related_name='nikkin_e',  on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin_e1  = models.ForeignKey(Staff,related_name='nikkin_e1', on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin_e2  = models.ForeignKey(Staff,related_name='nikkin_e2', on_delete=models.CASCADE, null=True,blank=True,)
-    nikkin_e3  = models.ForeignKey(Staff,related_name='nikkin_e3', on_delete=models.CASCADE, null=True,blank=True,)
-    osoban     = models.ForeignKey(Staff,related_name='osoban',    on_delete=models.CASCADE, null=True,blank=True,)
-    osoban_e   = models.ForeignKey(Staff,related_name='osoban_e',  on_delete=models.CASCADE, null=True,blank=True,)
-    yakin      = models.ForeignKey(Staff,related_name='yakin',     on_delete=models.CASCADE, null=True,blank=True,)
-    ake        = models.ForeignKey(Staff,related_name='ake',       on_delete=models.CASCADE, null=True,blank=True,)
-    kango1     = models.ForeignKey(Staff,related_name='kango1',    on_delete=models.CASCADE, null=True,blank=True,)
-    kango2     = models.ForeignKey(Staff,related_name='kango2',    on_delete=models.CASCADE, null=True,blank=True,)
-    soudanin   = models.ForeignKey(Staff,related_name='soudanin',  on_delete=models.CASCADE, null=True,blank=True,)
-    seisou     = models.ForeignKey(Staff,related_name='seisou',    on_delete=models.CASCADE, null=True,blank=True,)
-    memo       = models.CharField(max_length=1000, null=True,blank=True,)
+# class Shift(models.Model):
+#     def __str__(self):
+#         return str(self.date)
+#     date = models.DateField(default=None, unique=True)
+#     hayaban    = models.ForeignKey(Staff,related_name='hayaban',   on_delete=models.CASCADE, null=True,blank=True,)
+#     hayaban_e  = models.ForeignKey(Staff,related_name='hayaban_e', on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin     = models.ForeignKey(Staff,related_name='nikkin',    on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin1    = models.ForeignKey(Staff,related_name='nikkin1',   on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin2    = models.ForeignKey(Staff,related_name='nikkin2',   on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin3    = models.ForeignKey(Staff,related_name='nikkin3',   on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin_e   = models.ForeignKey(Staff,related_name='nikkin_e',  on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin_e1  = models.ForeignKey(Staff,related_name='nikkin_e1', on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin_e2  = models.ForeignKey(Staff,related_name='nikkin_e2', on_delete=models.CASCADE, null=True,blank=True,)
+#     nikkin_e3  = models.ForeignKey(Staff,related_name='nikkin_e3', on_delete=models.CASCADE, null=True,blank=True,)
+#     osoban     = models.ForeignKey(Staff,related_name='osoban',    on_delete=models.CASCADE, null=True,blank=True,)
+#     osoban_e   = models.ForeignKey(Staff,related_name='osoban_e',  on_delete=models.CASCADE, null=True,blank=True,)
+#     yakin      = models.ForeignKey(Staff,related_name='yakin',     on_delete=models.CASCADE, null=True,blank=True,)
+#     ake        = models.ForeignKey(Staff,related_name='ake',       on_delete=models.CASCADE, null=True,blank=True,)
+#     kango1     = models.ForeignKey(Staff,related_name='kango1',    on_delete=models.CASCADE, null=True,blank=True,)
+#     kango2     = models.ForeignKey(Staff,related_name='kango2',    on_delete=models.CASCADE, null=True,blank=True,)
+#     soudanin   = models.ForeignKey(Staff,related_name='soudanin',  on_delete=models.CASCADE, null=True,blank=True,)
+#     seisou     = models.ForeignKey(Staff,related_name='seisou',    on_delete=models.CASCADE, null=True,blank=True,)
+#     memo       = models.CharField(max_length=1000, null=True,blank=True,)
 
-class t_Shift(models.Model):
-    date = models.DateField(default=None, unique=True)
-    staff = models.ForeignKey(Staff, related_name='staff', on_delete=models.PROTECT)
+class Shift(models.Model):
+    date = models.DateField(default=None)
     shift_knd = models.ForeignKey(Shift_knd, related_name='shift_knd', on_delete=models.PROTECT)
+    staff = models.ForeignKey(Staff, related_name='staff', on_delete=models.PROTECT)
 
     def __str__(self):
         return str(self.date.strftime("%Y/%m/%d"))

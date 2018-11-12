@@ -10,6 +10,15 @@
 {% endblock %}
 
 {% block content %}
+  <table class="table">
+  {% for shift in shifts %}
+    <tr>
+      <td class="{{ shift.shift_knd.css_class }}">{{ shift.shift_knd.name }}</td>
+      <td class="{{ shift.shift_knd.css_class }}">{{ shift.staff.name }}</td>
+    </tr>
+  {% endfor %}
+  </table>
+
  <p>
  {% if shift %}
   <table class="table">
@@ -133,9 +142,9 @@
  {% endif %}
     <p class=".text-center">
       <div>
-          <a href="{% url 'shift_day' prev_day_pk %}"><i class="fas fa-arrow-left"></i>前日</a>
+          <a href="{% url 'shift_day' prev_day.year prev_day.month prev_day.day %}"><i class="fas fa-arrow-left"></i>前日</a>
           <a href="{% url 'home' %}">今日</a>
-          <a href="{% url 'shift_day' next_day_pk %}">翌日<i class="fas fa-arrow-right"></i></a>
+          <a href="{% url 'shift_day' next_day.year next_day.month next_day.day %}">翌日<i class="fas fa-arrow-right"></i></a>
       </div>
     </p>
 </p>

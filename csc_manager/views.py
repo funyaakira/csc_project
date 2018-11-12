@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 
 from django.http import HttpResponse
-from .models import Staff, Shift, Event, t_Shift
+from .models import Staff, Shift, Event
 
 from datetime import datetime, timedelta, date
 import logging
@@ -12,35 +12,44 @@ from dateutil.relativedelta import relativedelta
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView
+from django.views.generic import ListView
 
 
 @login_required
 def home(request):
-    today_obj = Shift.objects.get(date=date.today())
-    return redirect('shift_day', pk=today_obj.pk)
+    year = date.today().year
+    month = date.today().month
+    day = date.today().day
+    return redirect('shift_day', year=year, month=month, day=day)
+
 
 @method_decorator(login_required, name='dispatch')
-class ShiftView(DetailView):
+class ShiftView(ListView):
     model = Shift
-    context_object_name = 'shift'
+    context_object_name = 'shifts'
     template_name = 'csc_manager/shift.html'
 
     def get_context_data(self, **kwargs):
         # 前の日と次の日の設定
-        pk = self.kwargs.get('pk')
-        target_day = Shift.objects.get(pk=pk).date
+        prev_day = self.target_day + timedelta(days=-1)
+        kwargs['prev_day'] = prev_day
 
-        prev_day = target_day + timedelta(days=-1)
-        next_day = target_day + timedelta(days=1)
-        kwargs['prev_day_pk'] = Shift.objects.get(date=prev_day).pk
-        kwargs['next_day_pk'] = Shift.objects.get(date=next_day).pk
+        next_day = self.target_day + timedelta(days=1)
+        kwargs['next_day'] = next_day
 
         # イベントの取得、設定
-        kwargs['events'] = Event.objects.filter(date=target_day)
+        kwargs['events'] = Event.objects.filter(date=self.target_day)
 
         return super().get_context_data(**kwargs)
 
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+        self.target_day = date(year, month, day)
+
+        queryset = Shift.objects.filter(date=self.target_day).order_by('shift_knd__shift_disp_order')
+        return queryset
 
 @csrf_exempt
 def receive_from_gas(request):
