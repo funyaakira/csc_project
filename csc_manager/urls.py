@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 
 from . import views
-from .views import ShiftView
+from .views import ShiftView, TestView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -19,6 +19,9 @@ urlpatterns = [
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
 
 
+    path('test/', TestView.as_view(), name='test'),
+
+    
 	path('shift/sw.js', (TemplateView.as_view(template_name="ayumi_manager/sw.js",
 		content_type='application/javascript',)), name='sw.js'),
 
