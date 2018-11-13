@@ -31,6 +31,8 @@ class ShiftView(ListView):
     template_name = 'csc_manager/shift.html'
 
     def get_context_data(self, **kwargs):
+        kwargs['target_day'] = self.target_day
+
         # 前の日と次の日の設定
         prev_day = self.target_day + timedelta(days=-1)
         kwargs['prev_day'] = prev_day
@@ -74,6 +76,11 @@ def receive_from_gas(request):
         if short_name != '':
             staff = Staff.objects.get(name=name)
             shift_knd = Shift_knd.objects.get(short_name=short_name)
+
+            # 固定シフトが登録されている場合は、それを登録(休み以外)
+            if shift_knd.catergory != '休':
+                if staff.fixed_shift != None:
+                    shift_knd = staff.fixed_shift
 
             Shift(date=date, shift_knd=shift_knd, staff=staff).save()
 

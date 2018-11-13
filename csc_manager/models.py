@@ -7,9 +7,14 @@ gender = (
     ("男性", '男性'),
 )
 
-ht_kbn  = (
+ht_kbn = (
     ("発", '発'),
     ("着", '着'),
+)
+
+shift_catergory = (
+    ('出', '出'),
+    ('休', '休')
 )
 
 class Event_knd(models.Model):
@@ -25,6 +30,7 @@ class Shift_knd(models.Model):
     shift_disp_order = models.IntegerField(unique=True, default=0)
     css_class = models.CharField(max_length=200, default=None)
     desc = models.CharField(max_length=200, default=None, null=True)
+    catergory = models.CharField(max_length=2, choices=shift_catergory, default=None)
     del_flg = models.BooleanField(default=False)
 
 class MT_GAIBU(models.Model):
@@ -44,6 +50,7 @@ class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None)
     name = models.CharField(max_length=200, null=True)
     syokumu = models.ForeignKey(Syokumu, on_delete=models.CASCADE, default=None)
+    fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None)
     del_flg = models.BooleanField(default=False)
 
 class Riyosya(models.Model):

@@ -11,10 +11,13 @@
 
 {% block content %}
   <table class="table">
+    <tr>
+      <td colspan="2">{{ target_day|date:"Y/m/d ’l’" }}</td>
+    </tr>
   {% for shift in shifts %}
     <tr>
       <td class="{{ shift.shift_knd.css_class }}">{{ shift.shift_knd.name }}</td>
-      <td class="{{ shift.shift_knd.css_class }}">{{ shift.staff.name }}</td>
+      <td class="{{ shift.shift_knd.css_class }}"><a href="#">{{ shift.staff.name }}</a></td>
     </tr>
   {% endfor %}
   </table>
