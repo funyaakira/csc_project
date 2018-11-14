@@ -37,7 +37,7 @@ class Riyosya(models.Model):
     name = models.CharField(_("氏名"), max_length=200)
     furigana = models.CharField(_("ふりがな"), max_length=200)
     sex = models.CharField(_("性別"), max_length=2, choices=gender, default=None)
-    birthday = models.DateField(_("誕生日"), null=True, default=None)
+    birthday = models.DateField(_("生年月日"), null=True, default=None)
     caremanager = models.ForeignKey(CareManager, verbose_name=_("ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("初回入所日"), null=True, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
