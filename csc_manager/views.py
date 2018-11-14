@@ -12,7 +12,7 @@ from datetime import datetime, timedelta, date
 from calendar import Calendar
 
 from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
-from .forms import RiyosyaNewForm, TestNewForm
+from .forms import RiyosyaNewForm
 
 @login_required
 def home(request):
