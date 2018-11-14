@@ -53,6 +53,7 @@ class Staff(models.Model):
     fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None)
     del_flg = models.BooleanField(default=False)
 
+
 class Riyosya(models.Model):
     def __str__(self):
         return self.name

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Shift</a></li>
+  <li class="breadcrumb-item active">{{ staff.name }}</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        {% for w in week_names %}
+          <th>{{ w }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for week in days %}
+        <tr>
+          {% for day in week %}
+            {% if shifts.0 %}
+              <td class="">
+            {% else %}
+              <td>
+            {% endif %}
+            {% if month != day.month %}
+              {{ day | date:"m/d" }}
+            {% else %}
+              {{ day.day }} {{ shifts_dic|lookup:day.day }}
+            {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

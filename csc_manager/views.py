@@ -1,20 +1,18 @@
-from django.shortcuts import render, redirect
-from django.template import loader
-
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, TemplateView
+from django.utils.decorators import method_decorator
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+
+from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta, date
+
+from calendar import Calendar
+
 from .models import Staff, Shift, Event, Shift_knd
 
-from datetime import datetime, timedelta, date
-import logging
-
-from django.views.decorators.csrf import csrf_exempt
-from dateutil.relativedelta import relativedelta
-
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, TemplateView
-
-from django.utils import timezone
 
 @login_required
 def home(request):
@@ -24,11 +22,12 @@ def home(request):
     return redirect('shift_day', year=year, month=month, day=day)
 
 
+# シフト単日表示
 @method_decorator(login_required, name='dispatch')
-class ShiftView(ListView):
+class ShiftDayView(ListView):
     model = Shift
     context_object_name = 'shifts'
-    template_name = 'csc_manager/shift.html'
+    template_name = 'csc_manager/shift_day.html'
 
     def get_context_data(self, **kwargs):
         kwargs['target_day'] = self.target_day
@@ -53,7 +52,45 @@ class ShiftView(ListView):
 
         queryset = Shift.objects.filter(
             date=self.target_day).order_by('shift_knd__shift_disp_order')
+
         return queryset
+
+
+# シフト個人カレンダー表示
+@method_decorator(login_required, name='dispatch')
+class ShiftIndivView(TemplateView):
+    template_name = 'csc_manager/shift_indiv.html'
+
+    def get_context_data(self, **kwargs):
+        # スタッフオブジェクトの取得・設定
+        pk = self.kwargs.get('pk')
+        staff = Staff.objects.get(pk=pk)
+
+        # カレンダー情報の取得・設定
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        days = Calendar(firstweekday=6).monthdatescalendar(year, month)
+        week_names = ['日','月','火','水','木','金','土',]
+
+        # スタッフ、当月の条件でシフトオブジェクトを取得・設定
+        dateF = date(year, month, 1)
+        dateT = dateF + relativedelta(months=1)
+        shifts = Shift.objects.filter(staff=staff, date__gte=dateF, date__lt=dateT).order_by("date")
+
+        ## テンプレートで参照できるように辞書に格納し直す
+        shifts_dic = {}
+        for shift in shifts:
+            shifts_dic[shift.date.day] = shift
+
+        # テンプレートに渡す
+        kwargs["staff"] = staff
+        kwargs["days"] = days
+        kwargs["month"] = month
+        kwargs["week_names"] = week_names
+        kwargs["shifts_dic"] = shifts_dic
+
+        return super().get_context_data(**kwargs)
+
 
 @csrf_exempt
 def receive_from_gas(request):
@@ -84,7 +121,7 @@ def receive_from_gas(request):
 
             Shift(date=date, shift_knd=shift_knd, staff=staff).save()
 
-    return HttpResponse(str(date) + ' - ' + str(staff.id) + ' - ' + str(shift_knd.id))
+    return HttpResponse('正常終了しました')
 
 class TestView(TemplateView):
     template_name = 'csc_manager/test.html'

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-  {{ board.name }} - {{ block.super }}
+
 {% endblock %}
 
 {% block breadcrumb %}
@@ -17,7 +17,13 @@
   {% for shift in shifts %}
     <tr>
       <td class="{{ shift.shift_knd.css_class }}">{{ shift.shift_knd.name }}</td>
-      <td class="{{ shift.shift_knd.css_class }}"><a href="#">{{ shift.staff.name }}</a></td>
+      <td class="{{ shift.shift_knd.css_class }}">
+        <a href="{% url 'shift_indiv' shift.staff.pk target_day.year target_day.month %}">
+          <div>
+            {{ shift.staff.name }}
+          </div>
+        </a>
+      </td>
     </tr>
   {% endfor %}
   </table>
