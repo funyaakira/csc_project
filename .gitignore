@@ -5,6 +5,8 @@ csc_project/__pycache__
 csc_project/__init__.py
 csc_project/wsgi.py
 
+templatetags/__pycache__
+
 csc_manager/migrations
 csc_manager/__pycache__
 csc_manager/__init__.py

@@ -30,13 +30,14 @@ class CareManager(models.Model):
     def __str__(self):
         return self.kyotaku.name + ' - ' + self.name
 
+
 class Riyosya(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(_("氏名"), max_length=200)
     furigana = models.CharField(_("ふりがな"), max_length=200)
     sex = models.CharField(_("性別"), max_length=2, choices=gender, default=None)
-    birthday = models.DateField(_("誕生日"), null=True, default=None)
+    birthday = models.DateField(_("生年月日"), null=True, default=None)
     caremanager = models.ForeignKey(CareManager, verbose_name=_("ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("初回入所日"), null=True, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
@@ -113,7 +114,7 @@ class Staff(models.Model):
 class Event(models.Model):
     date = models.DateField(default=None)
     knd  = models.ForeignKey(Event_knd,on_delete=models.PROTECT)
-    Riyosya = models.ForeignKey(Riyosya,on_delete=models.PROTECT,null=True,blank=True)
+    rriyosya = models.ForeignKey(Riyosya,on_delete=models.PROTECT,null=True,blank=True)
     time = models.TimeField(null=True,blank=True)
     ht_kbn  = models.CharField(_("発着"), max_length=1, blank=True, choices=ht_kbn, default=None)
     go_place = models.ForeignKey(MT_GAIBU,on_delete=models.PROTECT,null=True,blank=True,)
