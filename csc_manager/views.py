@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, CreateView
 from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -11,8 +11,8 @@ from datetime import datetime, timedelta, date
 
 from calendar import Calendar
 
-from .models import Staff, Shift, Event, Shift_knd
-
+from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
+from .forms import RiyosyaNewForm, TestNewForm
 
 @login_required
 def home(request):
@@ -90,7 +90,7 @@ class ShiftIndivView(TemplateView):
         kwargs["week_names"] = week_names
         kwargs["shifts_dic"] = shifts_dic
         kwargs["today"] = date.today()
-        
+
         return super().get_context_data(**kwargs)
 
 
@@ -124,6 +124,42 @@ def receive_from_gas(request):
             Shift(date=date, shift_knd=shift_knd, staff=staff).save()
 
     return HttpResponse('正常終了しました')
+
+
+# 利用者 - トップ(一覧)
+class RiyosyaListView(ListView):
+    model = Riyosya
+    context_object_name = 'riyosyas'
+    template_name = 'csc_manager/riyosyas.html'
+
+    def get_queryset(self):
+        queryset = Riyosya.objects.filter(
+            taisyo_flg=False
+        ).order_by('furigana')
+
+        return queryset
+
+
+# 利用者 - 新規入所
+class RiyosyaNewView(CreateView):
+    model = Riyosya
+    form_class = RiyosyaNewForm
+    template_name = 'csc_manager/riyosya_new.html'
+    success_url = "riyosya_list"
+
+    def form_valid(self, form):
+        try:
+            post = form.save(commit=False)
+            post.created_by = self.request.user
+            post.created_at = timezone.now()
+            post.updated_by = self.request.user
+            post.updated_at = timezone.now()
+            post.save()
+        except:
+            pass
+
+        return redirect('riyosya_list')
+
 
 class TestView(TemplateView):
     template_name = 'csc_manager/test.html'

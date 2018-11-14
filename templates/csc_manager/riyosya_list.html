@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">利用者</li>
+{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規入所</a>
+  </div>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>氏名</th>
+        <th>誕生日</th>
+        <th>緊急連絡先</th>
+        <th>ケアマネ</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for riyosya in riyosyas %}
+      <tr>
+        <td>
+          <div>
+            {{ riyosya.name }}
+          </div>
+          <small class="text-muted d-block">{{ riyosya.furigana }}</small>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+          <div>
+            {{ riyosya.caremanager.name }}
+          </div>
+          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

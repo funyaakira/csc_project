@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item active">新規入所</li>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<form method="post" class="col-6">
+  {% csrf_token %}
+  {% include "include.html" %}
+  <button type="submit" class="btn btn-success">登録</button>
+</form>
+
+{% endblock %}
