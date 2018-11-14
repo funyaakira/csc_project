@@ -114,7 +114,7 @@ class Staff(models.Model):
 class Event(models.Model):
     date = models.DateField(default=None)
     knd  = models.ForeignKey(Event_knd,on_delete=models.PROTECT)
-    riyosya = models.ForeignKey(Riyosya,on_delete=models.PROTECT,null=True,blank=True)
+    rriyosya = models.ForeignKey(Riyosya,on_delete=models.PROTECT,null=True,blank=True)
     time = models.TimeField(null=True,blank=True)
     ht_kbn  = models.CharField(_("発着"), max_length=1, blank=True, choices=ht_kbn, default=None)
     go_place = models.ForeignKey(MT_GAIBU,on_delete=models.PROTECT,null=True,blank=True,)
