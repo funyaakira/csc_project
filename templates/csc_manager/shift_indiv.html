@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-  <table class="table">
+  <table class="table __table">
     <thead>
       <tr>
         {% for w in week_names %}
@@ -25,15 +25,23 @@
       {% for week in days %}
         <tr>
           {% for day in week %}
-            {% if shifts.0 %}
-              <td class="">
-            {% else %}
-              <td>
-            {% endif %}
             {% if month != day.month %}
+              <td class="calendar_td">
               {{ day | date:"m/d" }}
             {% else %}
-              {{ day.day }} {{ shifts_dic|lookup:day.day }}
+              <td class="{{ shifts_dic|shift_to_cssclass:day.day }} calendar_td">
+                <a href="{% url 'shift_day' day.year day.month day.day %}">
+                  <div class="">
+                    {% if day == today %}
+                      <b>{{ day.day }}</b>
+                    {% else %}
+                      {{ day.day }}
+                    {% endif %}
+                  </div>
+                  <div class="">
+                    {{ shifts_dic|shift_to_name:day.day }}
+                  </div>
+                </a>
             {% endif %}
             </td>
           {% endfor %}

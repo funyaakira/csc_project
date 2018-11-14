@@ -78,6 +78,7 @@ class ShiftIndivView(TemplateView):
         shifts = Shift.objects.filter(staff=staff, date__gte=dateF, date__lt=dateT).order_by("date")
 
         ## テンプレートで参照できるように辞書に格納し直す
+        ## キーは "日"
         shifts_dic = {}
         for shift in shifts:
             shifts_dic[shift.date.day] = shift
@@ -88,7 +89,8 @@ class ShiftIndivView(TemplateView):
         kwargs["month"] = month
         kwargs["week_names"] = week_names
         kwargs["shifts_dic"] = shifts_dic
-
+        kwargs["today"] = date.today()
+        
         return super().get_context_data(**kwargs)
 
 

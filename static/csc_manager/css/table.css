@@ -16,6 +16,9 @@ td {
   border-bottom: 1px solid #aaa;
 }
 
+td.calendar_td {
+  width : 13%;
+}
 .hayaban {
   background-color: #e0ffff;
 }
