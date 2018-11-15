@@ -67,7 +67,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
-                'lookup': 'templatetags.lookup',
+                # 'lookup': 'templatetags.lookup',
             },
         },
     },

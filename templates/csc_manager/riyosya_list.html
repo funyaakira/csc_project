@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load lookup %}
+
 
 {% block title %}
 
@@ -17,7 +19,7 @@
     <thead class="thead-inverse">
       <tr>
         <th>氏名</th>
-        <th>誕生日</th>
+        <th>誕生日/年齢</th>
         <th>緊急連絡先</th>
         <th>ケアマネ</th>
       </tr>
@@ -32,6 +34,11 @@
           <small class="text-muted d-block">{{ riyosya.furigana }}</small>
         </td>
         <td>
+          <div>
+            {{ riyosya.birthday|seireki_to_wareki }}
+            <small class="text-muted d-block">{{ riyosya.birthday  }}</small>
+            <small class="text-muted d-block">{{ riyosya.birthday|calculate_age  }}歳</small>
+          </div>
         </td>
         <td>
         </td>
