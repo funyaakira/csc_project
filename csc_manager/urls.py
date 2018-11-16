@@ -2,9 +2,10 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
+from django.urls import reverse
 
 from . import views
-from .views import ShiftDayView, ShiftIndivView, TestView, RiyosyaListView
+from .views import ShiftDayView, ShiftIndivView, TestView, RiyosyaListView, TestCreateView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -28,6 +29,9 @@ urlpatterns = [
     # 利用者 - 新規入所
 	path('riyosya_new/', views.RiyosyaNewView.as_view(), name='riyosya_new'),
 
+
+
+    path('test_create/', views.TestCreateView.as_view(), name='test_create'),
 
     path('test/', TestView.as_view(), name='test'),
 

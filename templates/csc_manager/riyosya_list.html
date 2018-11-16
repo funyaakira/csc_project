@@ -20,7 +20,7 @@
       <tr>
         <th>氏名</th>
         <th>誕生日/年齢</th>
-        <th>緊急連絡先</th>
+        <th>連絡先</th>
         <th>ケアマネ</th>
       </tr>
     </thead>
@@ -44,9 +44,10 @@
         </td>
         <td>
           <div>
+            <small class="text-muted">{{ riyosya.caremanager.kyotaku.name }}</small><br>
             {{ riyosya.caremanager.name }}
+            <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
           </div>
-          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
         </td>
       </tr>
       {% endfor %}

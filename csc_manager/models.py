@@ -135,6 +135,6 @@ class Shift(models.Model):
         return str(self.date.strftime("%Y/%m/%d"))
 
 class Test(models.Model):
-    col1 = models.CharField(max_length=200)
-    col2 = models.CharField(max_length=200)
-    col3 = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    sex = models.IntegerField(_("性別"), choices=gender, default=None)
+    birthday = models.DateField(default=None)

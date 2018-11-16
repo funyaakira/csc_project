@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import login_required
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, date
-
+from django.urls import reverse
 from calendar import Calendar
 
 from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
-from .forms import RiyosyaNewForm
+from .forms import RiyosyaForm, TestForm
 
 @login_required
 def home(request):
@@ -143,7 +143,7 @@ class RiyosyaListView(ListView):
 # 利用者 - 新規入所
 class RiyosyaNewView(CreateView):
     model = Riyosya
-    form_class = RiyosyaNewForm
+    form_class = RiyosyaForm
     template_name = 'csc_manager/riyosya_new.html'
     success_url = "riyosya_list"
 
@@ -163,3 +163,9 @@ class RiyosyaNewView(CreateView):
 
 class TestView(TemplateView):
     template_name = 'csc_manager/test.html'
+
+class TestCreateView(CreateView):
+    model = Test
+    form_class = TestForm
+    template_name = 'test.html'
+    success_url = '/'
