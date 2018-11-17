@@ -1,6 +1,8 @@
 from django import forms
 from .models import Riyosya, gender, Test
 import bootstrap_datepicker_plus as datetimepicker
+from datetime import date
+from .libs.funcs import wareki_to_seireki
 
 class RiyosyaForm(forms.ModelForm):
     gengou = forms.IntegerField(
@@ -33,7 +35,7 @@ class RiyosyaForm(forms.ModelForm):
 
     class Meta:
         model = Riyosya
-        fields = ['first_day', 'name', 'furigana', 'sex', 'birthday', 'caremanager']
+        fields = ['first_day', 'name', 'furigana', 'sex', 'caremanager']
         widgets = {
             # 'first_day': datetimepicker.DatePickerInput(
             #     format='%Y-%m-%d',
@@ -42,19 +44,34 @@ class RiyosyaForm(forms.ModelForm):
             #         'dayViewHeaderFormat': 'YYYY年 MMMM',
             #     }
             # ),
-            'first_day': forms.DateInput(attrs={'class': 'form-control qform-control-sm col-4'}),
+            'first_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
+            'furigana': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'sex': forms.Select(attrs={'class': 'form-control form-control-sm col-2'}),
+            'caremanager': forms.Select(attrs={'class': 'form-control form-control-sm col-8'}),
         }
 
     def clean_name(self):
         name = self.cleaned_data['name']
-        print(name)
+
         if name=="村山明":
             self.fields["name"].widget.attrs['class'] += ' is-invalid'
             raise forms.ValidationError('氏名に村山明は使用できません')
 
         return name
+
+    def clean(self):
+        try:
+            gengou = self.cleaned_data['gengou']
+            g_year = self.cleaned_data['g_year']
+            month = self.cleaned_data['month']
+            day = self.cleaned_data['day']
+
+            d = wareki_to_seireki(gengou, g_year, month, day)
+        except:
+            # raise forms.ValidationError('誕生日がおかしいです')
+            pass
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

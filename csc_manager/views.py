@@ -13,6 +13,7 @@ from calendar import Calendar
 
 from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
 from .forms import RiyosyaForm, TestForm
+from .libs.funcs import wareki_to_seireki
 
 @login_required
 def home(request):
@@ -148,17 +149,21 @@ class RiyosyaNewView(CreateView):
     success_url = "riyosya_list"
 
     def form_valid(self, form):
-        print('form_valid')
 
-        try:
-            post = form.save(commit=False)
-            post.created_by = self.request.user
-            post.created_at = timezone.now()
-            post.updated_by = self.request.user
-            post.updated_at = timezone.now()
-            post.save()
-        except:
-            pass
+        post = form.save(commit=False)
+        post.created_by = self.request.user
+        post.created_at = timezone.now()
+        post.updated_by = self.request.user
+        post.updated_at = timezone.now()
+
+        # birthday設定
+        gengou = self.request.POST['gengou']
+        g_year = self.request.POST['g_year']
+        month = self.request.POST['month']
+        day = self.request.POST['day']
+        post.birthday = wareki_to_seireki(gengou, g_year, month, day)
+
+        post.save()
 
         return redirect('riyosya_list')
 
