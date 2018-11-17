@@ -148,6 +148,8 @@ class RiyosyaNewView(CreateView):
     success_url = "riyosya_list"
 
     def form_valid(self, form):
+        print('form_valid')
+
         try:
             post = form.save(commit=False)
             post.created_by = self.request.user

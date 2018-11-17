@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
+<script>
+  $(function() {
+      var dateFormat = 'yy-mm-dd';
+      $('#id_name').datepicker({
+          dateFormat: dateFormat
+      });
+  });
+</script>
+
 <div class="row">
   <div class="col">
     <form class=""method="post">
@@ -9,19 +26,19 @@
         {{ form.name }}
       </div>
       <div class="form-group">
-        {{ form.sex.label_tag }}<br>
+        {{ form.sex.label_tag }}
         {{ form.sex }}
       </div>
-      <div class="form-group-sm">
-        {{ form.gengou}}
+      <div class="form-group">
+        {{ form.birthday.label_tag }}
+        <div class="form-inline">
+          {{ form.gengou }} {{ form.g_year }}  年 {{ form.month }}  月 {{ form.day }} 日
+        </div>
       </div>
       <button type="submit" name="button">Update</button>
     </form>
   </div>
   <div class="col">
     2列目
-     {% for field in form %}
-      {{ field }}
-     {% endfor %}
 </div>
 {% endblock %}
