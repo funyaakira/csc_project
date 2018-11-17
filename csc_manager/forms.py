@@ -43,7 +43,7 @@ class RiyosyaForm(forms.ModelForm):
             #     }
             # ),
             'first_day': forms.DateInput(attrs={'class': 'form-control qform-control-sm col-4'}),
-            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4 is-valid'}),
+            'name': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'sex': forms.Select(attrs={'class': 'form-control form-control-sm col-2'}),
         }
 
@@ -58,6 +58,13 @@ class RiyosyaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.name = forms.CharField(max_length=10,
+                        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-4 is-valid'}))
+        self.name.label_classes = ('form-control-sm', )
+        # self.name.label = '氏名'
+        # print(self.name.label)
+        # print(dir(self.name.label))
         # for field in self.fields.values():
         #     # my_class = field.widget.attrs['class']
         #     field.widget.attrs['class'] = 'form-control'
