@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load lookup %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">イベント</li>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+  <tbody>
+  {% for day in days %}
+    <tr>
+      <td>
+        <div>
+          {{ day }}
+        </div>
+      </td>
+      <td>
+        {% for event in events|get_events:day %}
+          {{ event.knd.name }}<br>
+        {% endfor %}
+      </td>
+    </tr>
+  {% endfor %}
+</tbody>
+</table>
+{% endblock %}

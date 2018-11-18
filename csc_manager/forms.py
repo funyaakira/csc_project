@@ -35,7 +35,7 @@ class RiyosyaForm(forms.ModelForm):
 
     class Meta:
         model = Riyosya
-        fields = ['first_day', 'name', 'furigana', 'sex', 'caremanager']
+        fields = ['first_day', 'start_kbn', 'name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo']
         widgets = {
             # 'first_day': datetimepicker.DatePickerInput(
             #     format='%Y-%m-%d',
@@ -45,10 +45,14 @@ class RiyosyaForm(forms.ModelForm):
             #     }
             # ),
             'first_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-4'}),
+            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'furigana': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'sex': forms.Select(attrs={'class': 'form-control form-control-sm col-2'}),
             'caremanager': forms.Select(attrs={'class': 'form-control form-control-sm col-8'}),
+            'addr': forms.TextInput(attrs={'class': 'form-control form-control-sm col-12'}),
+            'tel': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
+            'youkaigodo': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
         }
 
     def clean_name(self):

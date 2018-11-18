@@ -10,6 +10,9 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta, date
 from django.urls import reverse
 from calendar import Calendar
+import calendar
+
+from . import models
 
 from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
 from .forms import RiyosyaForm, TestForm
@@ -166,6 +169,49 @@ class RiyosyaNewView(CreateView):
         post.save()
 
         return redirect('riyosya_list')
+
+
+# イベント - 一覧
+class EventListView(TemplateView):
+    template_name = 'csc_manager/event_list.html'
+
+    def get_context_data(self, **kwargs):
+
+        # 指定年月の取得
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+
+        # 年月指定がない場合は当月を設定
+        if year == None:
+            now = datetime.now()
+            year = now.year
+            month = now.month
+
+        days = [date(year, month, i+1)
+            for i in range(calendar.monthrange(year, month)[1])]
+
+        # 指定月の条件でイベントオブジェクトを取得
+        dateF = date(year, month, 1)
+        dateT = dateF + relativedelta(months=1)
+        events = models.Event.objects.filter(date__gte=dateF, date__lt=dateT)
+
+        ## テンプレートで参照できるように辞書に格納し直す
+        ## キーは "日"
+        events_dic = {}
+        for event in events:
+            events_dic[event.date.day] = event
+        print(events_dic)
+        #
+        # テンプレートに渡す
+        kwargs["events"] = events
+        kwargs["days"] = days
+        # kwargs["month"] = month
+        # kwargs["week_names"] = week_names
+        # kwargs["shifts_dic"] = shifts_dic
+        # kwargs["today"] = date.today()
+
+        return super().get_context_data(**kwargs)
+
 
 
 class TestView(TemplateView):

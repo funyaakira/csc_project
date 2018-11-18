@@ -2,6 +2,7 @@
 from django import template
 from ..libs.funcs import seireki_to_wareki as libs_seireki_to_wareki
 from ..libs.funcs import calculate_age as libs_calculate_age
+from .. import models
 
 register = template.Library()
 
@@ -26,6 +27,12 @@ def shift_to_cssclass(value, arg, default=""):
 def seireki_to_wareki(value):
     return libs_seireki_to_wareki(value);
 
+
 @register.filter(name='calculate_age')
 def calculate_age(value):
     return libs_calculate_age(value);
+
+
+@register.filter(name='get_events')
+def get_events(value, arg):
+    return models.Event.objects.filter(date=arg)

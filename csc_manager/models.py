@@ -27,6 +27,14 @@ youkaigodo = (
     (7, '要介護5'),
 )
 
+start_kbn = (
+    (1, '朝食から'),
+    (2, '朝おやつから'),
+    (3, '昼食から'),
+    (4, '昼おやつから'),
+    (5, '夕食から'),
+)
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
@@ -48,11 +56,12 @@ class Riyosya(models.Model):
     furigana = models.CharField(_("ふりがな"), max_length=200)
     sex = models.IntegerField(_("性別"), choices=gender, default=None)
     birthday = models.DateField(_("生年月日"), null=True, default=None)
-    addr = models.CharField(_("住所"), max_length=200, default=None)
-    tel = models.CharField(_("電話番号"), max_length=200, default=None)
-    youkaigodo = models.IntegerField(default=0)
+    addr = models.CharField(_("住所"), max_length=200, default=None, blank=True, null=True)
+    tel = models.CharField(_("電話番号"), max_length=200, default=None, blank=True, null=True)
+    youkaigodo = models.IntegerField(_("要介護度"), choices=youkaigodo, default=None)
     caremanager = models.ForeignKey(CareManager, verbose_name=_("ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
-    first_day = models.DateField(_("初回入所日"), null=True, default=None)
+    first_day = models.DateField(_("利用開始日"), null=True, default=None)
+    start_kbn = models.IntegerField(_("開始区分"), choices=start_kbn, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
     taisyo_flg = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -91,7 +100,6 @@ class Event_knd(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=200)
-
 
 class Shift_knd(models.Model):
     def __str__(self):
