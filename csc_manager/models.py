@@ -17,6 +17,16 @@ shift_catergory = (
     ('休', '休')
 )
 
+youkaigodo = (
+    (1, '要支援1'),
+    (2, '要支援2'),
+    (3, '要介護1'),
+    (4, '要介護2'),
+    (5, '要介護3'),
+    (6, '要介護4'),
+    (7, '要介護5'),
+)
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
@@ -38,6 +48,9 @@ class Riyosya(models.Model):
     furigana = models.CharField(_("ふりがな"), max_length=200)
     sex = models.IntegerField(_("性別"), choices=gender, default=None)
     birthday = models.DateField(_("生年月日"), null=True, default=None)
+    addr = models.CharField(_("住所"), max_length=200, default=None)
+    tel = models.CharField(_("電話番号"), max_length=200, default=None)
+    youkaigodo = models.IntegerField(default=0)
     caremanager = models.ForeignKey(CareManager, verbose_name=_("ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("初回入所日"), null=True, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
@@ -55,6 +68,9 @@ class RiyosyaRenrakusaki(models.Model):
     zokugara = models.CharField(_("続柄"), max_length=200)
     addr = models.CharField(_("住所"), max_length=200)
     tel = models.CharField(_("電話番号"), max_length=200)
+    tel2 = models.CharField(_("電話番号"), max_length=200, default=None)
+    primary_flg = models.BooleanField(default=False)
+    doukyo_flg = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='riyosya_renrakusaki', default=None)
