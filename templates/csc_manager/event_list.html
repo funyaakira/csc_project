@@ -1,5 +1,10 @@
 {% extends "base.html" %}
+
 {% load lookup %}
+
+{% block title %}
+
+{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -7,22 +12,39 @@
 {% endblock %}
 
 {% block content %}
-<table class="table">
-  <tbody>
-  {% for day in days %}
-    <tr>
-      <td>
-        <div>
-          {{ day }}
-        </div>
-      </td>
-      <td>
-        {% for event in events|get_events:day %}
-          {{ event.knd.name }}<br>
-        {% endfor %}
-      </td>
-    </tr>
-  {% endfor %}
-</tbody>
-</table>
+  <div class="mb-4">
+    <a href="{% url 'event_create' %}" class="btn btn-primary">新規イベント</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>イベント</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for day in days %}
+      <tr>
+        <td style="width:6rem">
+          <div>
+            {{ day }}
+          </div>
+        </td>
+        <td class="p-0">
+          {% for event in events|get_events:day %}
+          <div class="my-2">
+              <div class="rounded text-center float-left {{ event.knd.css_class }} mr-2" style="width: 4rem">
+                {{ event.knd.short_name }}
+              </div>
+              <div class="">
+                {{ event.time }} {{ event.riyosya.name }} {{ event.d_staff.name }} {{ event.t_staff.name }} {{ event.naiyo }}
+              </div>
+          </div>
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

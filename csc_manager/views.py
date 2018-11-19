@@ -1,22 +1,13 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, TemplateView, CreateView
-from django.utils.decorators import method_decorator
+from django.urls import reverse
 from django.utils import timezone
+from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-from dateutil.relativedelta import relativedelta
-from datetime import datetime, timedelta, date
-from django.urls import reverse
-from calendar import Calendar
-import calendar
+from datetime import date
 
-from . import models
+from .models import Shift, Shift_knd
 
-from .models import Staff, Shift, Event, Shift_knd, Riyosya, Test
-from .forms import RiyosyaForm, TestForm
-from .libs.funcs import wareki_to_seireki
 
 @login_required
 def home(request):
@@ -26,78 +17,7 @@ def home(request):
     return redirect('shift_day', year=year, month=month, day=day)
 
 
-# シフト単日表示
-@method_decorator(login_required, name='dispatch')
-class ShiftDayView(ListView):
-    model = Shift
-    context_object_name = 'shifts'
-    template_name = 'csc_manager/shift_day.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['target_day'] = self.target_day
-
-        # 前の日と次の日の設定
-        prev_day = self.target_day + timedelta(days=-1)
-        kwargs['prev_day'] = prev_day
-
-        next_day = self.target_day + timedelta(days=1)
-        kwargs['next_day'] = next_day
-
-        # イベントの取得、設定
-        kwargs['events'] = Event.objects.filter(date=self.target_day)
-
-        return super().get_context_data(**kwargs)
-
-    def get_queryset(self):
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
-        self.target_day = date(year, month, day)
-
-        queryset = Shift.objects.filter(
-            date=self.target_day).order_by('shift_knd__shift_disp_order')
-
-        return queryset
-
-
-# シフト個人カレンダー表示
-@method_decorator(login_required, name='dispatch')
-class ShiftIndivView(TemplateView):
-    template_name = 'csc_manager/shift_indiv.html'
-
-    def get_context_data(self, **kwargs):
-        # スタッフオブジェクトの取得・設定
-        pk = self.kwargs.get('pk')
-        staff = Staff.objects.get(pk=pk)
-
-        # カレンダー情報の取得・設定
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        days = Calendar(firstweekday=6).monthdatescalendar(year, month)
-        week_names = ['日','月','火','水','木','金','土',]
-
-        # スタッフ、当月の条件でシフトオブジェクトを取得・設定
-        dateF = date(year, month, 1)
-        dateT = dateF + relativedelta(months=1)
-        shifts = Shift.objects.filter(staff=staff, date__gte=dateF, date__lt=dateT).order_by("date")
-
-        ## テンプレートで参照できるように辞書に格納し直す
-        ## キーは "日"
-        shifts_dic = {}
-        for shift in shifts:
-            shifts_dic[shift.date.day] = shift
-
-        # テンプレートに渡す
-        kwargs["staff"] = staff
-        kwargs["days"] = days
-        kwargs["month"] = month
-        kwargs["week_names"] = week_names
-        kwargs["shifts_dic"] = shifts_dic
-        kwargs["today"] = date.today()
-
-        return super().get_context_data(**kwargs)
-
-
+# GoogleSpreadSheetのシフトデータを受け取る
 @csrf_exempt
 def receive_from_gas(request):
 
@@ -130,95 +50,11 @@ def receive_from_gas(request):
     return HttpResponse('正常終了しました')
 
 
-# 利用者 - トップ(一覧)
-class RiyosyaListView(ListView):
-    model = Riyosya
-    context_object_name = 'riyosyas'
-    template_name = 'csc_manager/riyosyas.html'
-
-    def get_queryset(self):
-        queryset = Riyosya.objects.filter(
-            taisyo_flg=False
-        ).order_by('furigana')
-
-        return queryset
-
-
-# 利用者 - 新規入所
-class RiyosyaNewView(CreateView):
-    model = Riyosya
-    form_class = RiyosyaForm
-    template_name = 'csc_manager/riyosya_new.html'
-    success_url = "riyosya_list"
-
-    def form_valid(self, form):
-
-        post = form.save(commit=False)
-        post.created_by = self.request.user
-        post.created_at = timezone.now()
-        post.updated_by = self.request.user
-        post.updated_at = timezone.now()
-
-        # birthday設定
-        gengou = self.request.POST['gengou']
-        g_year = self.request.POST['g_year']
-        month = self.request.POST['month']
-        day = self.request.POST['day']
-        post.birthday = wareki_to_seireki(gengou, g_year, month, day)
-
-        post.save()
-
-        return redirect('riyosya_list')
-
-
-# イベント - 一覧
-class EventListView(TemplateView):
-    template_name = 'csc_manager/event_list.html'
-
-    def get_context_data(self, **kwargs):
-
-        # 指定年月の取得
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-
-        # 年月指定がない場合は当月を設定
-        if year == None:
-            now = datetime.now()
-            year = now.year
-            month = now.month
-
-        days = [date(year, month, i+1)
-            for i in range(calendar.monthrange(year, month)[1])]
-
-        # 指定月の条件でイベントオブジェクトを取得
-        dateF = date(year, month, 1)
-        dateT = dateF + relativedelta(months=1)
-        events = models.Event.objects.filter(date__gte=dateF, date__lt=dateT)
-
-        ## テンプレートで参照できるように辞書に格納し直す
-        ## キーは "日"
-        events_dic = {}
-        for event in events:
-            events_dic[event.date.day] = event
-        print(events_dic)
-        #
-        # テンプレートに渡す
-        kwargs["events"] = events
-        kwargs["days"] = days
-        # kwargs["month"] = month
-        # kwargs["week_names"] = week_names
-        # kwargs["shifts_dic"] = shifts_dic
-        # kwargs["today"] = date.today()
-
-        return super().get_context_data(**kwargs)
-
-
-
-class TestView(TemplateView):
-    template_name = 'csc_manager/test.html'
-
-class TestCreateView(CreateView):
-    model = Test
-    form_class = TestForm
-    template_name = 'test.html'
-    success_url = '/'
+# class TestView(TemplateView):
+#     template_name = 'csc_manager/test.html'
+#
+# class TestCreateView(CreateView):
+#     model = Test
+#     form_class = TestForm
+#     template_name = 'test.html'
+#     success_url = '/'

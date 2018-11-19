@@ -5,6 +5,9 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 from . import views
+from ._views.Event import EventListView, EventCreateView
+from ._views.Shift import ShiftDayView, ShiftIndivView
+from ._views.Riyosya import RiyosyaListView, RiyosyaNewView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -14,36 +17,40 @@ urlpatterns = [
 	path('', views.home, name='home'),
 
     # シフト単日表示
-    path('shift/<int:year>/<int:month>/<int:day>/', views.ShiftDayView.as_view(), name='shift_day'),
+    path('shift/<int:year>/<int:month>/<int:day>/', ShiftDayView.as_view(), name='shift_day'),
 
     # シフト個人カレンダー表示
-    path('shift/indiv/<int:pk>/<int:year>/<int:month>/', views.ShiftIndivView.as_view(), name='shift_indiv'),
+    path('shift/indiv/<int:pk>/<int:year>/<int:month>/', ShiftIndivView.as_view(), name='shift_indiv'),
 
     # シフトGogleSpreadSheetからの受信インターフェース
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
 
     # 利用者 - 一覧
-	path('riyosya_list/', views.RiyosyaListView.as_view(), name='riyosya_list'),
+	path('riyosya_list/', RiyosyaListView.as_view(), name='riyosya_list'),
 
     # 利用者 - 新規入所
-	path('riyosya_new/', views.RiyosyaNewView.as_view(), name='riyosya_new'),
+	path('riyosya_new/', RiyosyaNewView.as_view(), name='riyosya_new'),
 
     # イベント - 一覧(当月)
-	path('event_list/', views.EventListView.as_view(), name='event_list'),
+	path('event_list/', EventListView.as_view(), name='event_list'),
 
     # イベント - 一覧(年月指定)
-	path('event_list/<int:year>/<int:month>/', views.EventListView.as_view(), name='event_list'),
+	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
+
+    # イベント - 新規
+    path('event_create/', EventCreateView.as_view(), name='event_create'),
 
 
-    path('test_create/', views.TestCreateView.as_view(), name='test_create'),
 
-
-    path('test/', views.TestView.as_view(), name='test'),
-
-
-	path('shift/sw.js', (TemplateView.as_view(template_name="ayumi_manager/sw.js",
-		content_type='application/javascript',)), name='sw.js'),
-
-	path('shift/manifest.json', (TemplateView.as_view(template_name="ayumi_manager/manifest.json",
-		content_type='application/javascript',)), name='manifest.json'),
+    # path('test_create/', views.TestCreateView.as_view(), name='test_create'),
+    #
+    #
+    # path('test/', views.TestView.as_view(), name='test'),
+    #
+    #
+	# path('shift/sw.js', (TemplateView.as_view(template_name="ayumi_manager/sw.js",
+	# 	content_type='application/javascript',)), name='sw.js'),
+    #
+	# path('shift/manifest.json', (TemplateView.as_view(template_name="ayumi_manager/manifest.json",
+	# 	content_type='application/javascript',)), name='manifest.json'),
 ]

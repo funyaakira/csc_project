@@ -1,2 +1,27 @@
 @import url("header.css");
 @import url("table.css");
+
+html {
+  font-size: 15px;
+}
+
+.nyusyo {
+  color: white;
+  background-color: royalblue;
+  border-style: solid;
+  border-color: cornflowerblue;
+}
+
+.taisyo {
+  color: white;
+  background-color: crimson;
+  border-style: solid;
+  border-color: pink;
+}
+
+.jusin {
+  color: white;
+  background-color: seagreen;
+  border-style: solid;
+  border-color: mediumaquamarine;
+}

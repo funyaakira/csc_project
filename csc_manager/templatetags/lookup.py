@@ -34,5 +34,5 @@ def calculate_age(value):
 
 
 @register.filter(name='get_events')
-def get_events(value, arg):
-    return models.Event.objects.filter(date=arg)
+def get_events(evnets, date):
+    return evnets.filter(date=date)

@@ -28,6 +28,7 @@ youkaigodo = (
 )
 
 start_kbn = (
+    (0, '不明'),
     (1, '朝食から'),
     (2, '朝おやつから'),
     (3, '昼食から'),
@@ -96,11 +97,6 @@ class RiyosyaRiyouKikan(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
 
-class Event_knd(models.Model):
-    def __str__(self):
-        return self.name
-    name = models.CharField(max_length=200)
-
 class Shift_knd(models.Model):
     def __str__(self):
         return self.name
@@ -113,10 +109,10 @@ class Shift_knd(models.Model):
     del_flg = models.BooleanField(default=False)
 
 
-class MT_GAIBU(models.Model):
+class Gaibu(models.Model):
     def __str__(self):
         return self.GB_NAME
-    GB_NAME = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
 
 
 class Syokumu(models.Model):
@@ -135,16 +131,24 @@ class Staff(models.Model):
     del_flg = models.BooleanField(default=False)
 
 
+class Event_knd(models.Model):
+    name = models.CharField(max_length=200)
+    short_name = models.CharField(max_length=200, default=None)
+    css_class = models.CharField(max_length=200, default=None)
+    def __str__(self):
+        return self.name
+
+
 class Event(models.Model):
-    date = models.DateField(default=None)
-    knd  = models.ForeignKey(Event_knd,on_delete=models.PROTECT)
-    riyosya = models.ForeignKey(Riyosya,on_delete=models.PROTECT,null=True,blank=True)
-    time = models.TimeField(null=True,blank=True)
-    ht_kbn  = models.CharField(_("発着"), max_length=1, blank=True, choices=ht_kbn, default=None)
-    go_place = models.ForeignKey(MT_GAIBU,on_delete=models.PROTECT,null=True,blank=True,)
-    d_staff = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True,blank=True,related_name="d_staff")
-    t_staff = models.ForeignKey(Staff,on_delete=models.PROTECT,null=True,blank=True,related_name="t_staff")
-    naiyo = models.CharField(max_length=200,null=True,blank=True)
+    date = models.DateField(_('日付'), default=None)
+    knd  = models.ForeignKey(Event_knd, verbose_name=_('イベント種類'), on_delete=models.PROTECT)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_('対象利用者'), on_delete=models.PROTECT, null=True, blank=True)
+    time = models.TimeField(verbose_name=_('開始時間'), null=True, blank=True)
+    ht_kbn  = models.CharField(_('発着'), max_length=1, null=True, blank=True, choices=ht_kbn, default=None)
+    go_place = models.ForeignKey(Gaibu, verbose_name=_('行き先'), on_delete=models.PROTECT, null=True, blank=True,)
+    d_staff = models.ForeignKey(Staff, verbose_name=_('運転手'), on_delete=models.PROTECT, null=True, blank=True, related_name="d_staff")
+    t_staff = models.ForeignKey(Staff, verbose_name=_('付き添い'), on_delete=models.PROTECT, null=True, blank=True, related_name="t_staff")
+    naiyo = models.CharField(_('イベント内容'), max_length=200, null=True, blank=True)
 
     def __str__(self):
         return str(self.date.strftime("%Y/%m/%d")) + " " + str(self.knd) + " " + str(self.naiyo)
