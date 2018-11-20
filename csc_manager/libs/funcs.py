@@ -1,5 +1,6 @@
 from datetime import datetime, date
 
+
 def seireki_to_wareki(arg):
 
     syouwaGannen = date(1926, 12, 25)
@@ -24,8 +25,8 @@ def seireki_to_wareki(arg):
 
     return wareki
 
+
 def wareki_to_seireki(gengou, g_year, month, day):
-    print(gengou)
 
     year = 0
     if gengou == '2':
@@ -34,6 +35,7 @@ def wareki_to_seireki(gengou, g_year, month, day):
         year = int(g_year) + 1925
 
     return date(year, int(month), int(day))
+
 
 def calculate_age(born):
     """年齢を返す"""

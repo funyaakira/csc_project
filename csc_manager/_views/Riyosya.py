@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.db import transaction
 
-from ..models import Riyosya, RiyosyaRiyouKikan
+from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki
 from .._forms.Riyosya import RiyosyaForm
 from ..libs.funcs import wareki_to_seireki
 
@@ -16,7 +16,7 @@ class RiyosyaListView(ListView):
 
     def get_queryset(self):
         queryset = Riyosya.objects.filter(
-            taisyo_flg=False
+            taisyo_flg=False,
         ).order_by('furigana')
 
         return queryset
@@ -55,5 +55,37 @@ class RiyosyaNewView(CreateView):
             updated_by=self.request.user,
             updated_at=timezone.now()
         ).save()
+
+        # RiyosyaRenrakusaki 更新
+        RiyosyaRenrakusaki(
+            riyosya=post,
+            name=self.request.POST['r_name_1'],
+            furigana=self.request.POST['r_furigana_1'],
+            zokugara=self.request.POST['r_zoku_1'],
+            addr=self.request.POST['r_addr_1'],
+            tel=self.request.POST['r_tel_1_1'],
+            tel2=self.request.POST['r_tel_2_1'],
+            primary_flg=True,
+            created_by=self.request.user,
+            created_at=timezone.now(),
+            updated_by=self.request.user,
+            updated_at=timezone.now()
+        ).save()
+
+        if self.request.POST['r_name_2']:
+            RiyosyaRenrakusaki(
+                riyosya=post,
+                name=self.request.POST['r_name_2'],
+                furigana=self.request.POST['r_furigana_2'],
+                zokugara=self.request.POST['r_zoku_2'],
+                addr=self.request.POST['r_addr_2'],
+                tel=self.request.POST['r_tel_1_2'],
+                tel2=self.request.POST['r_tel_2_2'],
+                primary_flg=False,
+                created_by=self.request.user,
+                created_at=timezone.now(),
+                updated_by=self.request.user,
+                updated_at=timezone.now()
+            ).save()
 
         return redirect('riyosya_list')

@@ -72,7 +72,7 @@ class Riyosya(models.Model):
 
 
 class RiyosyaRenrakusaki(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyosya_renrakusaki', on_delete=models.PROTECT, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='renrakusakis', on_delete=models.PROTECT, default=None)
     name =  models.CharField(_("氏名"), max_length=200)
     furigana = models.CharField(_("ふりがな"), max_length=200)
     zokugara = models.CharField(_("続柄"), max_length=200)

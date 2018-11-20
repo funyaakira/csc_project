@@ -61,14 +61,56 @@ class RiyosyaForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-8'})
     )
 
-    r_tel_1 = forms.CharField(
+    r_tel_1_1 = forms.CharField(
         label='電話番号1',
         max_length=20,
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
     )
 
-    r_tel_2 = forms.CharField(
+    r_tel_2_1 = forms.CharField(
+        label='電話番号2',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
+    )
+
+    r_name_2 = forms.CharField(
+        label='名前',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'})
+    )
+
+    r_furigana_2 = forms.CharField(
+        label='ふりがな',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'})
+    )
+
+    r_zoku_2 = forms.CharField(
+        label='続柄',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
+    )
+
+    r_addr_2 = forms.CharField(
+        label='住所',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-8'})
+    )
+
+    r_tel_1_2 = forms.CharField(
+        label='電話番号1',
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
+    )
+
+    r_tel_2_2 = forms.CharField(
         label='電話番号2',
         max_length=20,
         required=False,

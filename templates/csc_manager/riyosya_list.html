@@ -15,7 +15,7 @@
   <div class="mb-4">
     <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規入所</a>
   </div>
-  
+
   <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -42,12 +42,22 @@
           </div>
         </td>
         <td>
+          <div>
+            {% for renrakusaki in riyosya.renrakusakis.all %}
+              {% if renrakusaki.primary_flg %}
+                {{ renrakusaki.name }}
+                <small class="text-muted d-block">{{ renrakusaki.zokugara }}</small>
+                <small class="text-muted d-block">{{ renrakusaki.tel }}</small>
+              {% endif %}
+            {% endfor %}
+          </div>
         </td>
         <td>
           <div>
-            <small class="text-muted">{{ riyosya.caremanager.kyotaku.name }}</small><br>
             {{ riyosya.caremanager.name }}
-            <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
+          </div>
+          <small class="text-muted">{{ riyosya.caremanager.kyotaku.name }}</small><br>
+          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
           </div>
         </td>
       </tr>
