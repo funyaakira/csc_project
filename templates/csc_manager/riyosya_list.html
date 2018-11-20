@@ -36,7 +36,9 @@
         </td>
         <td>
           <div>
-            {{ riyosya.birthday|seireki_to_wareki }}
+            <div>
+              {{ riyosya.birthday|seireki_to_wareki }}
+            </div>
             <small class="text-muted d-block">{{ riyosya.birthday  }}</small>
             <small class="text-muted d-block">{{ riyosya.birthday|calculate_age  }}歳</small>
           </div>
@@ -45,7 +47,9 @@
           <div>
             {% for renrakusaki in riyosya.renrakusakis.all %}
               {% if renrakusaki.primary_flg %}
-                {{ renrakusaki.name }}
+                <div>
+                  {{ renrakusaki.name }}
+                </div>
                 <small class="text-muted d-block">{{ renrakusaki.zokugara }}</small>
                 <small class="text-muted d-block">{{ renrakusaki.tel }}</small>
               {% endif %}
@@ -56,7 +60,7 @@
           <div>
             {{ riyosya.caremanager.name }}
           </div>
-          <small class="text-muted">{{ riyosya.caremanager.kyotaku.name }}</small><br>
+          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.name }}</small>
           <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
           </div>
         </td>
