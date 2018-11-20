@@ -60,7 +60,7 @@ class Riyosya(models.Model):
     addr = models.CharField(_("住所"), max_length=200, default=None, blank=True, null=True)
     tel = models.CharField(_("電話番号"), max_length=200, default=None, blank=True, null=True)
     youkaigodo = models.IntegerField(_("要介護度"), choices=youkaigodo, default=None)
-    caremanager = models.ForeignKey(CareManager, verbose_name=_("ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
+    caremanager = models.ForeignKey(CareManager, verbose_name=_("担当ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("利用開始日"), null=True, default=None)
     start_kbn = models.IntegerField(_("開始区分"), choices=start_kbn, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
@@ -88,12 +88,12 @@ class RiyosyaRenrakusaki(models.Model):
 
 
 class RiyosyaRiyouKikan(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyosya_riyoukikan', on_delete=models.PROTECT, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.PROTECT, default=None)
     start_day = models.DateField(_("入所日"), null=True, default=None)
     last_day = models.DateField(_("退所日"), null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='riyosya_riyoukikan', default=None)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='riyosya_riyoukikan', default=None)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
 

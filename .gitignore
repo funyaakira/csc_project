@@ -10,3 +10,5 @@ csc_manager/__pycache__
 csc_manager/__init__.py
 csc_manager/libs/__pycache__
 csc_manager/templatetags/__pycache__
+csc_manager/_forms/__pycache__
+csc_manager/_views/__pycache__

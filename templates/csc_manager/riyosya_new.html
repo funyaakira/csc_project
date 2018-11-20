@@ -16,172 +16,231 @@
 {% for error in form.non_field_errors %}
     <small><div class="text-danger">{{ error }}</div></small>
 {% endfor %}
+
 {# {{ form.errors }} #}
-<div class="row">
-  <div class="col">
-    <form method="post" class="col-6" novalidate>
-      {% csrf_token %}
 
+  <form method="post" novalidate>
+    {% csrf_token %}
+      <div class="row">
+        <div class="col">
+          <div class="form-control-sm">
+            <h5>利用者情報</h3>
+          </div>
 
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.first_day.name }}">
-          {{ form.first_day.label }}
-        </div>
+          <div class="border rounded mb-3 py-3 px-3">
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.first_day.name }}">
+                {{ form.first_day.label }}
+              </div>
 
-        {% if form.is_bound %}
-          {% if form.first_day.errors %}
-            <div class="form-inline">
-              {{ form.first_day|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}
+              {% if form.is_bound %}
+                {% if form.first_day.errors %}
+                  <div class="form-inline">
+                    {{ form.first_day|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}
+                  </div>
+                  {% for error in form.first_day.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                <div class="form-inline">
+                  {{ form.first_day|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}
+                </div>
+                {% endif %}
+              {% else %}
+                <div class="form-inline">
+                  {{ form.first_day }} {{ form.start_kbn }}
+                </div>
+              {% endif %}
             </div>
-            {% for error in form.first_day.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-          <div class="form-inline">
-            {{ form.first_day|add_class:'is-valid' }} {{ form.start_kbn|add_class:'
 
-            is-valid' }}
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.name.name }}">
+                {{ form.name.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.name.errors %}
+                {{ form.name|add_class:'is-invalid' }}
+                  {% for error in form.name.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.name|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.name }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.furigana.name }}">
+                {{ form.furigana.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.furigana.errors %}
+                {{ form.furigana|add_class:'is-invalid' }}
+                  {% for error in form.furigana.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.furigana|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.furigana }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.sex.name }}">
+                {{ form.sex.label }}
+              </div>
+              {{ form.sex }}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.birthday.name }}">
+                生年月日
+              </div>
+              <div class="form-inline">
+                {{ form.gengou }} {{ form.g_year }}  年 {{ form.month }}  月 {{ form.day }} 日
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.addr.name }}">
+                {{ form.addr.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.addr.errors %}
+                {{ form.addr|add_class:'is-invalid' }}
+                  {% for error in form.addr.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.addr|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.addr }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.tel.name }}">
+                {{ form.tel.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.tel.errors %}
+                {{ form.tel|add_class:'is-invalid' }}
+                  {% for error in form.tel.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.tel|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.tel }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.youkaigodo.name }}">
+                {{ form.youkaigodo.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.youkaigodo.errors %}
+                {{ form.youkaigodo|add_class:'is-invalid' }}
+                  {% for error in form.youkaigodo.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.youkaigodo|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.youkaigodo }}
+              {% endif %}
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.caremanager.name }}">
+                {{ form.caremanager.label }}
+              </div>
+              {% if form.is_bound %}
+                {% if form.caremanager.errors %}
+                {{ form.caremanager|add_class:'is-invalid' }}
+                  {% for error in form.caremanager.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                  {{ form.caremanager|add_class:'is-valid' }}
+                {% endif %}
+              {% else %}
+                {{ form.caremanager }}
+              {% endif %}
+            </div>
           </div>
-          {% endif %}
-        {% else %}
-          <div class="form-inline">
-            {{ form.first_day }} {{ form.start_kbn }}
+        </div>
+
+        <div class="col">
+          <div class="form-group">
+            <div class="form-control-sm">
+              <h5>連絡先</h5>
+            </div>
+            <div class="border rounded mb-3 py-3 px-2 h-100">
+              <div class="form-control-sm">
+                {{ form.r_name_1.label }}
+                {{ form.r_name_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_furigana_1.label }}
+                {{ form.r_furigana_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_zoku_1.label }}
+                {{ form.r_zoku_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_addr_1.label }}
+                {{ form.r_addr_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_tel_1.label }}
+                {{ form.r_tel_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_tel_2.label }}
+                {{ form.r_tel_2 }}
+              </div>
+            </div>
+            <div class="border rounded mb-3 py-3 px-2">
+              <div class="form-control-sm">
+                {{ form.r_name_1.label }}
+                {{ form.r_name_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_furigana_1.label }}
+                {{ form.r_furigana_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_zoku_1.label }}
+                {{ form.r_zoku_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_addr_1.label }}
+                {{ form.r_addr_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_tel_1.label }}
+                {{ form.r_tel_1 }}
+              </div>
+              <div class="form-control-sm">
+                {{ form.r_tel_2.label }}
+                {{ form.r_tel_2 }}
+              </div>
+            </div>
           </div>
-        {% endif %}
-      </div>
-
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.name.name }}">
-          {{ form.name.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.name.errors %}
-          {{ form.name|add_class:'is-invalid' }}
-            {% for error in form.name.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.name|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.name }}
-        {% endif %}
-      </div>
-
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.furigana.name }}">
-          {{ form.furigana.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.furigana.errors %}
-          {{ form.furigana|add_class:'is-invalid' }}
-            {% for error in form.furigana.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.furigana|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.furigana }}
-        {% endif %}
-      </div>
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.sex.name }}">
-          {{ form.sex.label }}
-        </div>
-        {{ form.sex }}
-      </div>
-
-      <div class="form-group-sm">
-        <div class="form-control-sm" for="{{ form.birthday.name }}">
-          生年月日
-        </div>
-        <div class="form-inline">
-          {{ form.gengou }} {{ form.g_year }}  年 {{ form.month }}  月 {{ form.day }} 日
         </div>
       </div>
-      <br>
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.addr.name }}">
-          {{ form.addr.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.addr.errors %}
-          {{ form.addr|add_class:'is-invalid' }}
-            {% for error in form.addr.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.addr|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.addr }}
-        {% endif %}
-      </div>
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.tel.name }}">
-          {{ form.tel.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.tel.errors %}
-          {{ form.tel|add_class:'is-invalid' }}
-            {% for error in form.tel.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.tel|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.tel }}
-        {% endif %}
-      </div>
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.youkaigodo.name }}">
-          {{ form.youkaigodo.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.youkaigodo.errors %}
-          {{ form.youkaigodo|add_class:'is-invalid' }}
-            {% for error in form.youkaigodo.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.youkaigodo|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.youkaigodo }}
-        {% endif %}
-      </div>
-
-      <div class="form-group">
-        <div class="form-control-sm" for="{{ form.caremanager.name }}">
-          {{ form.caremanager.label }}
-        </div>
-        {% if form.is_bound %}
-          {% if form.caremanager.errors %}
-          {{ form.caremanager|add_class:'is-invalid' }}
-            {% for error in form.caremanager.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
-            {% endfor %}
-          {% else %}
-            {{ form.caremanager|add_class:'is-valid' }}
-          {% endif %}
-        {% else %}
-          {{ form.caremanager }}
-        {% endif %}
-      </div>
-
-      <br>
-      <button type="submit" class="btn btn-success">登録</button>
-    </form>
-  </div>
-</div>
-
-
+      <row>
+        <button type="submit" class="col btn btn-success my-4">登録</button>
+      </row>
+  </form>
 {% endblock %}

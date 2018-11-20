@@ -1,8 +1,9 @@
 from django.views.generic import ListView, CreateView
 from django.utils import timezone
 from django.shortcuts import redirect
+from django.db import transaction
 
-from ..models import Riyosya
+from ..models import Riyosya, RiyosyaRiyouKikan
 from .._forms.Riyosya import RiyosyaForm
 from ..libs.funcs import wareki_to_seireki
 
@@ -42,7 +43,17 @@ class RiyosyaNewView(CreateView):
         month = self.request.POST['month']
         day = self.request.POST['day']
         post.birthday = wareki_to_seireki(gengou, g_year, month, day)
-
         post.save()
+
+        # RiyosyaRiyouKikan 更新
+        RiyosyaRiyouKikan(
+            riyosya=post,
+            start_day=post.first_day,
+            last_day=None,
+            created_by=self.request.user,
+            created_at=timezone.now(),
+            updated_by=self.request.user,
+            updated_at=timezone.now()
+        ).save()
 
         return redirect('riyosya_list')
