@@ -25,7 +25,7 @@ SECRET_KEY = 'n61igh3nl@c5(wg=w5$sc5s)m4mqwc=v)zsm4$&tr8mziqow)+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['funya.pw']
+ALLOWED_HOSTS = ['funya.pw','127.0.0.1']
 
 
 # Application definition
