@@ -23,6 +23,7 @@
         <th>誕生日/年齢</th>
         <th>連絡先</th>
         <th>ケアマネ</th>
+        <th style="width: 10%"></th>
       </tr>
     </thead>
     <tbody>
@@ -62,7 +63,10 @@
           </div>
           <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.name }}</small>
           <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
-          </div>
+        </td>
+        <td>
+          <a href="#" class="btn btn-primary btn-sm mb-1" role="button">編集</a>
+          <a href="#" class="btn btn-primary btn-sm" role="button">退所処理</a>
         </td>
       </tr>
       {% endfor %}
