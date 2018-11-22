@@ -129,13 +129,6 @@ class RiyosyaForm(forms.ModelForm):
         model = Riyosya
         fields = ['first_day', 'name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo', 'memo']
         widgets = {
-            # 'first_day': datetimepicker.DatePickerInput(
-            #     format='%Y-%m-%d',
-            #     options={
-            #         'locale': 'ja',
-            #         'dayViewHeaderFormat': 'YYYY年 MMMM',
-            #     }
-            # ),
             'first_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
             'name': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),

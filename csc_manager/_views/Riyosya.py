@@ -46,7 +46,7 @@ class RiyosyaNewView(CreateView):
         post.birthday = wareki_to_seireki(gengou, g_year, month, day)
         post.save()
 
-        # RiyosyaRiyouKikan 更新
+        # RiyosyaRiyouKikan 作成
         RiyosyaRiyouKikan(
             riyosya=post,
             start_day=post.first_day,
@@ -59,7 +59,7 @@ class RiyosyaNewView(CreateView):
             updated_at=timezone.now()
         ).save()
 
-        # RiyosyaRenrakusaki 更新
+        # RiyosyaRenrakusaki 作成
         RiyosyaRenrakusaki(
             riyosya=post,
             name=self.request.POST['r_name_1'],
@@ -103,8 +103,13 @@ class RiyosyaTaisyoView(UpdateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.created_by = self.request.user
-        post.created_at = timezone.now()
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
+
+        # Riyosya taisyo_flg 更新
+        r = Riyosya.objects.get(id=post.riyosya.id)
+        r.taisyo_flg = True
+        r.save()
+
+        return redirect('riyosya_list')
