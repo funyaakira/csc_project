@@ -1,10 +1,11 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.db import transaction
 
 from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki
 from .._forms.Riyosya import RiyosyaForm
+from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm
 from ..libs.funcs import wareki_to_seireki
 
 
@@ -49,7 +50,9 @@ class RiyosyaNewView(CreateView):
         RiyosyaRiyouKikan(
             riyosya=post,
             start_day=post.first_day,
+            start_kbn= self.request.POST['start_kbn'],
             last_day=None,
+            last_kbn=None,
             created_by=self.request.user,
             created_at=timezone.now(),
             updated_by=self.request.user,
@@ -89,3 +92,19 @@ class RiyosyaNewView(CreateView):
             ).save()
 
         return redirect('riyosya_list')
+
+
+# 利用者 - 退所
+class RiyosyaTaisyoView(UpdateView):
+    model = RiyosyaRiyouKikan
+    form_class = RiyosyaRiyouKikanForm
+    template_name = 'csc_manager/riyosya_taisyo.html'
+    success_url = "riyosya_list"
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.created_by = self.request.user
+        post.created_at = timezone.now()
+        post.updated_by = self.request.user
+        post.updated_at = timezone.now()
+        post.save()

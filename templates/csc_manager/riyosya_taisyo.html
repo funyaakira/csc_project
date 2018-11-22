@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item active">退所</li>
+{% endblock %}
+
+{% block content %}
+{% for error in form.non_field_errors %}
+    <small><div class="text-danger">{{ error }}</div></small>
+{% endfor %}
+
+{{ form.errors }}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+      <div class="row">
+        <div class="col">
+          <h3>{{ riyosyariyoukikan.riyosya.name }}</h3>
+          <div class="form-control-sm" for="{{ form.first_day.name }}">
+            利用期間
+          </div>
+          <div class="form-inline">
+            {{ riyosyariyoukikan.start_day }} ～ {{ form.last_day }}
+          </div>
+          <div class="form-control-sm" for="{{ form.first_day.name }}">
+            退所理由
+          </div>
+          <div class="form-inline">
+            {{ form.memo }}
+          </div>
+          <button type="submit" class="btn btn-success">登録</button>
+        </div>
+      </div>
+  </form>
+{% endblock %}

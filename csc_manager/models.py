@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
@@ -36,6 +37,15 @@ start_kbn = (
     (5, '夕食から'),
 )
 
+last_kbn = (
+    (0, '不明'),
+    (1, '朝食まで'),
+    (2, '朝おやつまで'),
+    (3, '昼食まで'),
+    (4, '昼おやつまで'),
+    (5, '夕食まで'),
+)
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
@@ -51,8 +61,6 @@ class CareManager(models.Model):
 
 
 class Riyosya(models.Model):
-    def __str__(self):
-        return self.name
     name = models.CharField(_("氏名"), max_length=200)
     furigana = models.CharField(_("ふりがな"), max_length=200)
     sex = models.IntegerField(_("性別"), choices=gender, default=None)
@@ -64,10 +72,17 @@ class Riyosya(models.Model):
     first_day = models.DateField(_("利用開始日"), null=True, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
     taisyo_flg = models.BooleanField(default=False)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='riyosya', default=None, null=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
+
+    def __str__(self):
+        return self.name
+
+    def get_riyoukikan_latest_id(self):
+        return RiyosyaRiyouKikan.objects.filter(riyosya=self).latest('id').id
 
 
 class RiyosyaRenrakusaki(models.Model):
@@ -87,15 +102,16 @@ class RiyosyaRenrakusaki(models.Model):
 
 
 class RiyosyaRiyouKikan(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.PROTECT, default=None)
-    start_day = models.DateField(_("入所日"), null=True, default=None)
-    # start_kbn = models.IntegerField(_("開始区分"), choices=start_kbn, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.PROTECT, default=None, blank=True)
+    start_day = models.DateField(_("入所日"), default=None, blank=True)
+    start_kbn = models.IntegerField(_("入所時間区分"), choices=start_kbn, default=0, blank=True)
     last_day = models.DateField(_("退所日"), null=True, default=None)
-    # last_kbn = models.DateField(_("退所日"), null=True, default=None)
+    last_kbn = models.IntegerField(_("退所時間区分"), choices=last_kbn, null=True, default=None)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='riyosya_riyoukikan', default=None)
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
+    updated_at = models.DateTimeField(null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='riyosya_riyoukikan', default=None, blank=True)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None, blank=True)
 
 
 class Shift_knd(models.Model):

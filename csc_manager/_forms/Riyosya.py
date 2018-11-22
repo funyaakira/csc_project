@@ -1,6 +1,6 @@
 from django import forms
 
-from ..models import Riyosya
+from ..models import Riyosya, start_kbn
 from ..libs.funcs import wareki_to_seireki
 
 
@@ -117,9 +117,17 @@ class RiyosyaForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
     )
 
+    start_kbn = forms.IntegerField(
+        label='入所時間区分',
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm col-3'},
+            choices=start_kbn
+        )
+    )
+
     class Meta:
         model = Riyosya
-        fields = ['first_day', 'start_kbn', 'name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo']
+        fields = ['first_day', 'name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo', 'memo']
         widgets = {
             # 'first_day': datetimepicker.DatePickerInput(
             #     format='%Y-%m-%d',
@@ -137,7 +145,12 @@ class RiyosyaForm(forms.ModelForm):
             'addr': forms.TextInput(attrs={'class': 'form-control form-control-sm col-12'}),
             'tel': forms.TextInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'youkaigodo': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
+            'memo': forms.Textarea(attrs={'row': 5,
+                                          'placeholder': 'メモを入力してください',
+                                          'class': 'form-control form-control-sm col-12'
+                                         })
         }
+
 
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -147,6 +160,7 @@ class RiyosyaForm(forms.ModelForm):
             raise forms.ValidationError('氏名に村山明は使用できません')
 
         return name
+
 
     def clean(self):
         try:
@@ -163,13 +177,3 @@ class RiyosyaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #
-        # self.name = forms.CharField(max_length=10,
-        #                 widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-4 is-valid'}))
-        # self.name.label_classes = ('form-control-sm', )
-        # self.name.label = '氏名'
-        # print(self.name.label)
-        # print(dir(self.name.label))
-        # for field in self.fields.values():
-        #     # my_class = field.widget.attrs['class']
-        #     field.widget.attrs['class'] = 'form-control'

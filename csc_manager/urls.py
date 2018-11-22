@@ -7,7 +7,7 @@ from django.urls import reverse
 from . import views
 from ._views.Event import EventListView, EventCreateView
 from ._views.Shift import ShiftDayView, ShiftIndivView
-from ._views.Riyosya import RiyosyaListView, RiyosyaNewView
+from ._views.Riyosya import RiyosyaListView, RiyosyaNewView, RiyosyaTaisyoView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -30,6 +30,9 @@ urlpatterns = [
 
     # 利用者 - 新規入所
 	path('riyosya_new/', RiyosyaNewView.as_view(), name='riyosya_new'),
+
+    # 利用者 - 退所
+	path('riyosya_taisyo/riyosyariyoukikan/<int:pk>/', RiyosyaTaisyoView.as_view(), name='riyosya_taisyo'),
 
     # イベント - 一覧(当月)
 	path('event_list/', EventListView.as_view(), name='event_list'),
