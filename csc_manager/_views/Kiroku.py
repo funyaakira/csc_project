@@ -18,7 +18,12 @@ def kiroku_home(request):
     if hour >= 0 and hour < 9:
         day -= 1
 
-    return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night[0][0])
+    if hour >= 18 or hour < 9:
+        now_day_night = day_night[1][0]
+    else:
+        now_day_night = day_night[0][0]
+
+    return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=now_day_night)
 
 
 class KirokuDayListView(ListView):
@@ -45,3 +50,9 @@ class KirokuDayListView(ListView):
         ).order_by('furigana')
 
         return queryset
+
+
+# class KirokuCreateView(CreateView):
+#     model = Kiroku
+#     context_object_name = 'kiroku'
+#     template_name = 'csc_manager/kiroku_create.html'

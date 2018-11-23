@@ -66,6 +66,9 @@ urlpatterns = [
     # 記録 - 一覧 - 日指定
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
+    # # 記録 - 新規
+    # path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuCreateView.as_view(), name='kiroku_day_list'),
+
     # イベント - 新規
     path('event_create/', EventCreateView.as_view(), name='event_create'),
 
