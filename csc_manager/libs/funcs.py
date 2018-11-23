@@ -3,6 +3,9 @@ from datetime import datetime, date
 
 def seireki_to_wareki(arg):
 
+    if arg == None:
+        return ''
+
     syouwaGannen = date(1926, 12, 25)
     heiseiGnanen = date(1989, 1, 8)
 

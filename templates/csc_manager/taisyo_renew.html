@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'taisyo_list' %}">退所者一覧</a></li>
+  <li class="breadcrumb-item active">再入所</li>
+{% endblock %}
+
+{% block content %}
+{% for error in form.non_field_errors %}
+    <small><div class="text-danger">{{ error }}</div></small>
+{% endfor %}
+
+{# {{ form.errors }} #}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+      <div class="row">
+        <div class="col-6">
+          <h5 class="mb-3">{{ riyosya.name }}  /  再入所</h5>
+          {{ form.riyosya.as_hidden }}
+          <div class="border rounded mb-3 py-3 px-3">
+
+            <div class="form-group">
+              <div class="form-control-sm">
+                再入所日
+              </div>
+                {% if form.is_bound %}
+                  {% if form.start_day.errors %}
+                    <div class="form-inline">{{ form.start_day|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}</div>
+                    {% for error in form.start_day.errors %}
+                      <small><div class="text-danger">{{ error }}</div></small>
+                    {% endfor %}
+                  {% else %}
+                    <div class="form-inline">{{ form.start_day|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}</div>
+                  {% endif %}
+                {% else %}
+                  <div class="form-inline">{{ form.start_day }} {{ form.start_kbn }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">登録</button>
+          </div>
+        </div>
+      </div>
+  </form>
+{% endblock %}

@@ -2,6 +2,7 @@ from django import forms
 
 from ..models import RiyosyaRiyouKikan
 
+
 class RiyosyaRiyouKikanForm(forms.ModelForm):
     class Meta:
         model = RiyosyaRiyouKikan
@@ -15,4 +16,16 @@ class RiyosyaRiyouKikanForm(forms.ModelForm):
                 attrs={'class': 'form-control form-control-sm col-12',
                        'row': 5,
                        'placeholder': '特別な退所理由がある場合は入力してください',}),
+        }
+
+
+class RiyosyaRiyouKikanForm_Renew(forms.ModelForm):
+    class Meta:
+        model = RiyosyaRiyouKikan
+        fields = ['riyosya',
+                  'start_day',
+                  'start_kbn',]
+        widgets = {
+            'start_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-3'}),
+            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
         }

@@ -54,7 +54,7 @@ class Kyotaku(models.Model):
 
 
 class CareManager(models.Model):
-    kyotaku = models.ForeignKey(Kyotaku, related_name='kyotaku', on_delete=models.PROTECT)
+    kyotaku = models.ForeignKey(Kyotaku, related_name='kyotaku', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     def __str__(self):
         return self.kyotaku.name + ' - ' + self.name
@@ -86,7 +86,7 @@ class Riyosya(models.Model):
 
 
 class RiyosyaRenrakusaki(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='renrakusakis', on_delete=models.PROTECT, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='renrakusakis', on_delete=models.CASCADE, default=None)
     name =  models.CharField(_("氏名"), max_length=200)
     furigana = models.CharField(_("ふりがな"), max_length=200, null=True)
     zokugara = models.CharField(_("続柄"), max_length=200)
@@ -102,7 +102,7 @@ class RiyosyaRenrakusaki(models.Model):
 
 
 class RiyosyaRiyouKikan(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.PROTECT, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.CASCADE, default=None)
     start_day = models.DateField(_("入所日"), default=None)
     start_kbn = models.IntegerField(_("入所時間区分"), choices=start_kbn, default=0)
     last_day = models.DateField(_("退所日"), null=True, default=None)
@@ -113,6 +113,10 @@ class RiyosyaRiyouKikan(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='riyosya_riyoukikan', default=None)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
+
+class RiyosyaTest(models.Model):
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans_test', on_delete=models.CASCADE, default=None)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
 
 class Shift_knd(models.Model):
     def __str__(self):

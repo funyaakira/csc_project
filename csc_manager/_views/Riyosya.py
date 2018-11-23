@@ -3,9 +3,9 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.db import transaction
 
-from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki
+from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender
 from .._forms.Riyosya import RiyosyaForm
-from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm
+from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
 
 
@@ -13,7 +13,21 @@ from ..libs.funcs import wareki_to_seireki
 class RiyosyaListView(ListView):
     model = Riyosya
     context_object_name = 'riyosyas'
-    template_name = 'csc_manager/riyosyas.html'
+    template_name = 'csc_manager/riyosyas_list.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['riyosya_count'] = Riyosya.objects.filter(
+                taisyo_flg=False).count
+
+        kwargs['riyosya_man_count'] = Riyosya.objects.filter(
+                taisyo_flg=False,
+                sex=gender[0][0]).count
+
+        kwargs['riyosya_woman_count'] = Riyosya.objects.filter(
+                taisyo_flg=False,
+                sex=gender[1][0]).count
+
+        return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         queryset = Riyosya.objects.filter(
@@ -110,6 +124,63 @@ class RiyosyaTaisyoView(UpdateView):
         # Riyosya taisyo_flg 更新
         r = Riyosya.objects.get(id=post.riyosya.id)
         r.taisyo_flg = True
+        r.last_day = post.last_day
+        r.save()
+
+        return redirect('riyosya_list')
+
+
+# 退所者 - 退所者一覧
+class TaisyoListView(ListView):
+    model = Riyosya
+    context_object_name = 'riyosyas'
+    template_name = 'csc_manager/taisyo_list.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['riyosya_count'] = Riyosya.objects.filter(
+                taisyo_flg=True).count
+
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        queryset = Riyosya.objects.filter(
+            taisyo_flg=True,
+        ).order_by('-last_day')
+
+        return queryset
+
+
+# 退所者 - 再入所
+class TaisyoRenewView(CreateView):
+    model = RiyosyaRiyouKikan
+    form_class = RiyosyaRiyouKikanForm_Renew
+    template_name = 'csc_manager/taisyo_renew.html'
+    success_url = "riyosya_list"
+
+    def get_initial(self):
+        return {
+            'riyosya':self.kwargs.get('pk'),
+        }
+
+    def get_context_data(self, **kwargs):
+        kwargs['riyosya'] = Riyosya.objects.get(id=self.kwargs.get('pk'))
+
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.created_by = self.request.user
+        post.created_at = timezone.now()
+        post.updated_by = self.request.user
+        post.updated_at = timezone.now()
+        post.save()
+
+        # Riyosya taisyo_flg 更新
+        r = Riyosya.objects.get(id=post.riyosya.id)
+        r.taisyo_flg = False
+        r.last_day = None
+        r.updated_by = self.request.user
+        r.updated_at = timezone.now()
         r.save()
 
         return redirect('riyosya_list')

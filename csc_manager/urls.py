@@ -7,7 +7,7 @@ from django.urls import reverse
 from . import views
 from ._views.Event import EventListView, EventCreateView
 from ._views.Shift import ShiftDayView, ShiftIndivView
-from ._views.Riyosya import RiyosyaListView, RiyosyaNewView, RiyosyaTaisyoView
+from ._views.Riyosya import RiyosyaListView, RiyosyaNewView, RiyosyaTaisyoView, TaisyoListView, TaisyoRenewView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -25,14 +25,20 @@ urlpatterns = [
     # シフトGogleSpreadSheetからの受信インターフェース
 	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
 
-    # 利用者 - 一覧
+    # 利用者 - 利用者 - 一覧
 	path('riyosya_list/', RiyosyaListView.as_view(), name='riyosya_list'),
 
-    # 利用者 - 新規入所
+    # 利用者 - 利用者 - 新規入所
 	path('riyosya_new/', RiyosyaNewView.as_view(), name='riyosya_new'),
 
-    # 利用者 - 退所
+    # 利用者 - 利用者 - 退所
 	path('riyosya_taisyo/riyosyariyoukikan/<int:pk>/', RiyosyaTaisyoView.as_view(), name='riyosya_taisyo'),
+
+    # 利用者 - 退所者 - 退所者一覧
+    path('taisyo_list/', TaisyoListView.as_view(), name='taisyo_list'),
+
+    # 利用者 - 退所者 - 再入所
+    path('taisyo_renew/riyosya/<int:pk>/', TaisyoRenewView.as_view(), name='taisyo_renew'),
 
     # イベント - 一覧(当月)
 	path('event_list/', EventListView.as_view(), name='event_list'),

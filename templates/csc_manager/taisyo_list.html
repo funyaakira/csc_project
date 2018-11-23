@@ -8,26 +8,18 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active">利用者</li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item active">退所者一覧</li>
 {% endblock %}
 
 {% block content %}
-  <div class="mb-4">
-    <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規入所</a>
-    <a href="{% url 'taisyo_list' %}" class="btn btn-info">退所者一覧</a>
-  </div>
-
-  <div class="mb-4">
-    <div class="">
-      入所者数: {{ riyosya_count }} 名、 男: {{ riyosya_man_count }} 名、 女: {{ riyosya_woman_count }} 名
-    </div>
-  </div>
 
   <table class="table">
     <thead class="thead-inverse">
       <tr>
         <th>氏名</th>
-        <th>誕生日/年齢</th>
+        <th>退所日</th>
+        <th>誕生日</th>
         <th>連絡先</th>
         <th>ケアマネ</th>
         <th style="width: 10%"></th>
@@ -44,11 +36,16 @@
         </td>
         <td>
           <div>
+            {{ riyosya.last_day|seireki_to_wareki }}
+          </div>
+          <small class="text-muted d-block">{{ riyosya.last_day|default:"" }}</small>
+        </td>
+        <td>
+          <div>
             <div>
               {{ riyosya.birthday|seireki_to_wareki }}
             </div>
             <small class="text-muted d-block">{{ riyosya.birthday  }}</small>
-            <small class="text-muted d-block">{{ riyosya.birthday|calculate_age  }}歳</small>
           </div>
         </td>
         <td>
@@ -73,7 +70,7 @@
         </td>
         <td>
           <a href="#" class="btn btn-primary btn-sm mb-1" role="button">編集</a>
-          <a href="{% url 'riyosya_taisyo' riyosya.get_riyoukikan_latest_id %}" class="btn btn-primary btn-sm" role="button">退所</a>
+          <a href="{% url 'taisyo_renew' riyosya.id %}" class="btn btn-success btn-sm" role="button">再入所</a>
         </td>
       </tr>
       {% endfor %}
