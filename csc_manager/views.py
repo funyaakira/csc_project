@@ -1,12 +1,16 @@
+from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
-from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.views.generic import FormView, TemplateView
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.decorators import login_required
-
-from datetime import date
-
-from .models import Shift, Shift_knd
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
+from .models import Staff, Shift, Shift_knd
+import codecs
 
 
 @login_required
@@ -17,28 +21,52 @@ def home(request):
     return redirect('shift_day', year=year, month=month, day=day)
 
 
-# GoogleSpreadSheetのシフトデータを受け取る
-@csrf_exempt
-def receive_from_gas(request):
+def shift_upload(request):
 
-    shift_data = request.POST['shift_data']
-    shift_data_ary = shift_data.split('\r\n')
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        filepath = settings.MEDIA_ROOT + '/' + filename
+        import_shift(filepath)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'csc_manager/shift_upload.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+    return render(request, 'csc_manager/shift_upload.html')
+
+
+def import_shift(filepath):
 
     # とりあえず当月のデータを削除
-    dateF = shift_data_ary[0].split(",")[0]
+    f = codecs.open(filepath, 'r', 'utf-8')
+    firstLine = f.readline()
+    dateF = firstLine.split(",")[0]
     dateF = datetime.strptime(dateF, '%Y/%m/%d')
     dateT = dateF + relativedelta(months=1)
     Shift.objects.filter(date__gte=dateF, date__lt=dateT).delete()
+    f.close()
 
-    for shift_data in shift_data_ary:
-        date = shift_data.split(",")[0]
+    # シフトデータインポート
+    f =  codecs.open(filepath, 'r', 'utf-8')
+    line = f.readline()
+
+    while line:
+        date = line.split(",")[0]
         date = timezone.datetime.strptime(date, '%Y/%m/%d')
-        name = shift_data.split(",")[1]
-        short_name = shift_data.split(",")[2]
+        name = line.split(",")[1].strip()
+        short_name = line.split(",")[2].strip()
 
-        if short_name != '':
-            staff = Staff.objects.get(name=name)
-            shift_knd = Shift_knd.objects.get(short_name=short_name)
+        print(str(date) + ' ' + name + ' ' + short_name)
+        if short_name != '' and name != '':
+            try:
+                staff = Staff.objects.get(name=name)
+                shift_knd = Shift_knd.objects.get(short_name=short_name)
+            except Exception:
+                print(date)
+                print("エラー：" + name)
+                print("エラー：" + short_name)
+                return
 
             # 固定シフトが登録されている場合は、それを登録(休み以外)
             if shift_knd.catergory != '休':
@@ -47,14 +75,8 @@ def receive_from_gas(request):
 
             Shift(date=date, shift_knd=shift_knd, staff=staff).save()
 
-    return HttpResponse('正常終了しました')
+        line = f.readline()
 
+    f.close()
 
-# class TestView(TemplateView):
-#     template_name = 'csc_manager/test.html'
-#
-# class TestCreateView(CreateView):
-#     model = Test
-#     form_class = TestForm
-#     template_name = 'test.html'
-#     success_url = '/'
+    return None

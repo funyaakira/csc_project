@@ -1,9 +1,11 @@
 db.sqlite3
 manage.py
+media
 
 csc_project/__pycache__
 csc_project/__init__.py
 csc_project/wsgi.py
+csc_project/media
 
 csc_manager/migrations
 csc_manager/__pycache__

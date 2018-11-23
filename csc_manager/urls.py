@@ -16,14 +16,14 @@ urlpatterns = [
     # トップページ
 	path('', views.home, name='home'),
 
-    # シフト単日表示
+    # シフト - 単日表示
     path('shift/<int:year>/<int:month>/<int:day>/', ShiftDayView.as_view(), name='shift_day'),
 
-    # シフト個人カレンダー表示
+    # シフト - 個人カレンダー表示
     path('shift/indiv/<int:pk>/<int:year>/<int:month>/', ShiftIndivView.as_view(), name='shift_indiv'),
 
-    # シフトGogleSpreadSheetからの受信インターフェース
-	path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
+    # シフト - データアップロード
+    path('shift_upload/', views.shift_upload, name='shift_upload'),
 
     # 利用者 - 利用者 - 一覧
 	path('riyosya_list/', RiyosyaListView.as_view(), name='riyosya_list'),
@@ -50,7 +50,8 @@ urlpatterns = [
     path('event_create/', EventCreateView.as_view(), name='event_create'),
 
 
-
+    # # シフトGogleSpreadSheetからの受信インターフェース
+    # path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
     # path('test_create/', views.TestCreateView.as_view(), name='test_create'),
     #
     #
