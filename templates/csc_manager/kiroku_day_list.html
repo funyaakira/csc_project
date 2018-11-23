@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">記録</li>
+{% endblock %}
+
+{% block content %}
+<h3>{{ target_day }}</h3>
+<div class="mb-4">
+  <a href="{% url 'renraku_create' %}" class="btn btn-primary">新規記録</a>
+</div>
+
+<table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th style="width: 15%">利用者</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for riyosya in riyosyas %}
+    <tr>
+      <td>
+        {{ riyosya.name }}
+      </td>
+      <td>
+        {% if kirokus|get_kirokus_riyosya:riyosya %}
+          <table style="width: 100%">
+            {% for kiroku in kirokus|get_kirokus_riyosya:riyosya %}
+              <tr>
+                <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
+                <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                <td >{{ kiroku.memo }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+          <span class="alert-danger my-1">記録がありません</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

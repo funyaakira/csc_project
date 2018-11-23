@@ -52,6 +52,11 @@ riyosya_status = (
     (2, '入所予定'),
 )
 
+day_night = (
+    (0, '日勤'),
+    (1, '夜勤'),
+)
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
@@ -201,6 +206,19 @@ class Renraku_kojin(models.Model):
     staff = models.ForeignKey(Staff, related_name='renraku_kojins', on_delete=models.PROTECT)
     riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='renraku_kojins', on_delete=models.CASCADE, default=None)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+
+
+class Kiroku(models.Model):
+    exec_date = models.DateField(default=None, null=True)
+    date = models.DateField(default=None, null=True)
+    time = models.TimeField(default=None, null=True)
+    day_night = models.IntegerField(_("日勤夜勤区分"), choices=last_kbn, null=True, default=None)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='kirokus', on_delete=models.CASCADE, default=None)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='kirokus', default=None)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
 
 class Test(models.Model):
