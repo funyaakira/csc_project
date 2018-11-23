@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.shortcuts import redirect
 from django.db import transaction
 
-from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender
+from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender, riyosya_status
 from .._forms.Riyosya import RiyosyaForm
 from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
@@ -17,21 +17,21 @@ class RiyosyaListView(ListView):
 
     def get_context_data(self, **kwargs):
         kwargs['riyosya_count'] = Riyosya.objects.filter(
-                taisyo_flg=False).count
+                status=riyosya_status[0][0]).count
 
         kwargs['riyosya_man_count'] = Riyosya.objects.filter(
-                taisyo_flg=False,
+                status=riyosya_status[0][0],
                 sex=gender[0][0]).count
 
         kwargs['riyosya_woman_count'] = Riyosya.objects.filter(
-                taisyo_flg=False,
+                status=riyosya_status[0][0],
                 sex=gender[1][0]).count
 
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         queryset = Riyosya.objects.filter(
-            taisyo_flg=False,
+            status=riyosya_status[0][0],
         ).order_by('furigana')
 
         return queryset
@@ -121,9 +121,9 @@ class RiyosyaTaisyoView(UpdateView):
         post.updated_at = timezone.now()
         post.save()
 
-        # Riyosya taisyo_flg 更新
+        # Riyosya status 更新
         r = Riyosya.objects.get(id=post.riyosya.id)
-        r.taisyo_flg = True
+        r.status = riyosya_status[1][0]
         r.last_day = post.last_day
         r.save()
 
@@ -136,15 +136,9 @@ class TaisyoListView(ListView):
     context_object_name = 'riyosyas'
     template_name = 'csc_manager/taisyo_list.html'
 
-    def get_context_data(self, **kwargs):
-        kwargs['riyosya_count'] = Riyosya.objects.filter(
-                taisyo_flg=True).count
-
-        return super().get_context_data(**kwargs)
-
     def get_queryset(self):
         queryset = Riyosya.objects.filter(
-            taisyo_flg=True,
+            status=riyosya_status[1][0],
         ).order_by('-last_day')
 
         return queryset
@@ -175,9 +169,9 @@ class TaisyoRenewView(CreateView):
         post.updated_at = timezone.now()
         post.save()
 
-        # Riyosya taisyo_flg 更新
+        # Riyosya status 更新
         r = Riyosya.objects.get(id=post.riyosya.id)
-        r.taisyo_flg = False
+        r.status = riyosya_status[0][0]
         r.last_day = None
         r.updated_by = self.request.user
         r.updated_at = timezone.now()

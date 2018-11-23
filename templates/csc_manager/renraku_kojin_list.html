@@ -8,13 +8,14 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active">連絡</li>
+  <li class="breadcrumb-item"><a href="{% url 'renraku_list' %}">連絡</a></li>
+  <li class="breadcrumb-item active">個人連絡</li>
 {% endblock %}
 
 {% block content %}
 <div class="mb-4">
-  <a href="{% url 'renraku_create' %}" class="btn btn-primary">新規連絡</a>
-  <a href="{% url 'renraku_kojin_list' %}" class="btn btn-info">個人連絡へ</a>
+  <a href="{% url 'renraku_kojin_create' %}" class="btn btn-primary">新規個人連絡</a>
+  <a href="{% url 'renraku_list' %}" class="btn btn-info">全体連絡へ</a>
 </div>
 
   <table class="table">
@@ -22,20 +23,24 @@
       <tr>
         <th style="width: 15%">日付</th>
         <th style="width: 15%">スタッフ</th>
+        <th style="width: 15%">利用者</th>
         <th>内容</th>
       </tr>
     </thead>
     <tbody>
-      {% for renraku in renrakus %}
+      {% for renraku_kojin in renraku_kojins %}
       <tr>
         <td>
-          {{ renraku.date }}
+          {{ renraku_kojin.date }}
         </td>
         <td>
-          {{ renraku.staff.name }}
+          {{ renraku_kojin.staff.name }}
         </td>
         <td>
-          {{ renraku.memo }}
+          {{ renraku_kojin.riyosya.name }}
+        </td>
+        <td>
+          {{ renraku_kojin.memo }}
         </td>
       </tr>
       {% endfor %}

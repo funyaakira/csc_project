@@ -1,5 +1,5 @@
 from django import forms
-from ..models import Event, Riyosya
+from ..models import Event, Riyosya, riyosya_status
 
 class EventForm(forms.ModelForm):
     class Meta():
@@ -24,5 +24,5 @@ class EventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
 
-        self.fields['riyosya'].required = True
-        self.fields['riyosya'].queryset = Riyosya.objects.filter(taisyo_flg=False)
+        # self.fields['riyosya'].required = True
+        # self.fields['riyosya'].queryset = Riyosya.objects.filter(status=)

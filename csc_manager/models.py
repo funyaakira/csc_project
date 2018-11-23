@@ -46,6 +46,12 @@ last_kbn = (
     (5, '夕食まで'),
 )
 
+riyosya_status = (
+    (0, '入所中'),
+    (1, '退所'),
+    (2, '入所予定'),
+)
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
@@ -71,7 +77,7 @@ class Riyosya(models.Model):
     caremanager = models.ForeignKey(CareManager, verbose_name=_("担当ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("利用開始日"), null=True, default=None)
     last_day = models.DateField(_("最終退所日"), null=True, default=None)
-    taisyo_flg = models.BooleanField(default=False)
+    status = models.IntegerField(_("入所ステータス"), choices=riyosya_status, default=0)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(null=True)
@@ -145,10 +151,10 @@ class Syokumu(models.Model):
 class Staff(models.Model):
     def __str__(self):
         return self.name
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None, related_name='staff')
     name = models.CharField(max_length=200, null=True)
     syokumu = models.ForeignKey(Syokumu, on_delete=models.CASCADE, default=None)
-    fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None)
+    fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None, blank=True)
     del_flg = models.BooleanField(default=False)
 
 
@@ -188,6 +194,14 @@ class Renraku(models.Model):
     date = models.DateField(default=None)
     staff = models.ForeignKey(Staff, related_name='renrakus', on_delete=models.PROTECT)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+
+
+class Renraku_kojin(models.Model):
+    date = models.DateField(default=None)
+    staff = models.ForeignKey(Staff, related_name='renraku_kojins', on_delete=models.PROTECT)
+    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='renraku_kojins', on_delete=models.CASCADE, default=None)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+
 
 class Test(models.Model):
     name = models.CharField(max_length=200)
