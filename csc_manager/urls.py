@@ -8,6 +8,7 @@ from . import views
 from ._views.Event import EventListView, EventCreateView
 from ._views.Shift import ShiftDayView, ShiftIndivView
 from ._views.Riyosya import RiyosyaListView, RiyosyaNewView, RiyosyaTaisyoView, TaisyoListView, TaisyoRenewView
+from ._views.Renraku import RenrakuListView, RenrakuCreateView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -45,6 +46,12 @@ urlpatterns = [
 
     # イベント - 一覧(年月指定)
 	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
+
+    # 連絡 - 一覧
+	path('renraku_list/', RenrakuListView.as_view(), name='renraku_list'),
+
+    # 連絡 - 新規
+	path('renraku_create/', RenrakuCreateView.as_view(), name='renraku_create'),
 
     # イベント - 新規
     path('event_create/', EventCreateView.as_view(), name='event_create'),

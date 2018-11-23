@@ -183,6 +183,12 @@ class Shift(models.Model):
     def __str__(self):
         return str(self.date.strftime("%Y/%m/%d"))
 
+
+class Renraku(models.Model):
+    date = models.DateField(default=None)
+    staff = models.ForeignKey(Staff, related_name='renrakus', on_delete=models.PROTECT)
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+
 class Test(models.Model):
     name = models.CharField(max_length=200)
     sex = models.IntegerField(_("性別"), choices=gender, default=None)

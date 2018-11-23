@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">連絡</li>
+{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+  <a href="{% url 'renraku_create' %}" class="btn btn-primary">新規連絡</a>
+</div>
+
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>日付</th>
+        <th>スタッフ</th>
+        <th>内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for renraku in renrakus %}
+      <tr>
+        <td>
+          {{ renraku.date }}
+        </td>
+        <td>
+          {{ renraku.staff.name }}
+        </td>
+        <td>
+          {{ renraku.memo }}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
