@@ -14,7 +14,7 @@
 {% block content %}
 <h3>{{ target_day }}</h3>
 <div class="mb-4">
-  <a href="{% url 'renraku_create' %}" class="btn btn-primary">新規記録</a>
+  <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night %}" class="btn btn-primary">新規記録</a>
 </div>
 
 <table class="table">

@@ -9,15 +9,11 @@
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
   <li class="breadcrumb-item"><a href="{% url 'renraku_list' %}">連絡</a></li>
-  <li class="breadcrumb-item active">個人連絡</li>
+  <li class="breadcrumb-item"><a href="{% url 'renraku_kojin_list' %}">個人連絡</a></li>
+  <li class="breadcrumb-item active">{{ riyosya.name }}</li>
 {% endblock %}
 
 {% block content %}
-<div class="mb-4">
-  <a href="{% url 'renraku_kojin_create' %}" class="btn btn-primary">新規個人連絡</a>
-  <a href="{% url 'renraku_list' %}" class="btn btn-info">全体連絡へ</a>
-</div>
-
   <table class="table">
     <thead class="thead-inverse">
       <tr>

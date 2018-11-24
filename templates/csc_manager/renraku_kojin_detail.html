@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'renraku_kojin_list' %}">個人連絡</a></li>
+  <li class="breadcrumb-item active">連絡詳細</li>
+{% endblock %}
+
+{% block content %}
+<div class="border rounded mb-3 py-3 px-3">
+  <div class="my-3">
+    {{ renraku_kojin.date}} {{ renraku_kojin.staff.name }}
+  </div>
+  <div class="my-3">
+    {{ renraku_kojin.riyosya.name }}
+  </div>
+  <div class="my-3">
+    {{ renraku_kojin.memo | linebreaksbr }}
+  </div>
+</div>
+{% endblock %}

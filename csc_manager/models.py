@@ -53,8 +53,8 @@ riyosya_status = (
 )
 
 day_night = (
-    (0, '日勤'),
-    (1, '夜勤'),
+    (0, '日勤帯'),
+    (1, '夜勤帯'),
 )
 
 class Kyotaku(models.Model):
@@ -125,10 +125,6 @@ class RiyosyaRiyouKikan(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
 
-class RiyosyaTest(models.Model):
-    riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans_test', on_delete=models.CASCADE, default=None)
-    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
-
 class Shift_knd(models.Model):
     def __str__(self):
         return self.name
@@ -198,7 +194,7 @@ class Shift(models.Model):
 class Renraku(models.Model):
     date = models.DateField(default=None)
     staff = models.ForeignKey(Staff, related_name='renrakus', on_delete=models.PROTECT)
-    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True)
 
 
 class Renraku_kojin(models.Model):

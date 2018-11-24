@@ -8,8 +8,12 @@ from .._forms.Riyosya import RiyosyaForm
 from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 # 利用者 - トップ(一覧)
+@method_decorator(login_required, name='dispatch')
 class RiyosyaListView(ListView):
     model = Riyosya
     context_object_name = 'riyosyas'

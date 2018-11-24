@@ -8,7 +8,6 @@ admin.site.register(Event_knd)
 
 admin.site.register(Event)
 admin.site.register(Riyosya)
-admin.site.register(RiyosyaTest)
 
 @admin.register(Shift_knd)
 class Shift_kndAdmin(admin.ModelAdmin):

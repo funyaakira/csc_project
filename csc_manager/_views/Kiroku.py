@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from datetime import datetime, date
 
 from ..models import Riyosya, Kiroku, day_night, riyosya_status
+from .._forms.Kiroku import KirokuCreateForm
 
 
 @login_required
@@ -39,6 +40,7 @@ class KirokuDayListView(ListView):
 
         target_day = date(year, month, day)
         kwargs['target_day'] = date(year, month, day)
+        kwargs['day_night'] = day_night
         kwargs['kirokus'] = Kiroku.objects.filter(exec_date=target_day, day_night=day_night).order_by('date', 'time')
 
         return super().get_context_data(**kwargs)
@@ -52,7 +54,8 @@ class KirokuDayListView(ListView):
         return queryset
 
 
-# class KirokuCreateView(CreateView):
-#     model = Kiroku
-#     context_object_name = 'kiroku'
-#     template_name = 'csc_manager/kiroku_create.html'
+class KirokuCreateView(CreateView):
+    model = Kiroku
+    context_object_name = 'kiroku'
+    form_class = KirokuCreateForm
+    template_name = 'csc_manager/kiroku_create.html'

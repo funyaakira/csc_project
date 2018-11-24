@@ -7,9 +7,9 @@ from django.urls import reverse
 from . import views
 from ._views.Event import EventListView, EventCreateView
 from ._views.Shift import ShiftDayView, ShiftIndivView
-from ._views.Riyosya import RiyosyaListView, RiyosyaNewView, RiyosyaTaisyoView, TaisyoListView, TaisyoRenewView
-from ._views.Renraku import RenrakuListView, RenrakuCreateView, RenrakuKojinListView, RenrakuKojinCreateView
-from ._views.Kiroku import kiroku_home, KirokuDayListView
+from ._views.Riyosya import *
+from ._views.Renraku import *
+from ._views.Kiroku import kiroku_home, KirokuDayListView, KirokuCreateView
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -48,14 +48,23 @@ urlpatterns = [
     # イベント - 一覧(年月指定)
 	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
 
-    # 連絡 - 一覧
-	path('renraku_list/', RenrakuListView.as_view(), name='renraku_list'),
+    # 全体連絡 - 一覧
+	path('renraku_list/', RenrakuZentaiListView.as_view(), name='renraku_list'),
 
-    # 連絡 - 新規
-	path('renraku_create/', RenrakuCreateView.as_view(), name='renraku_create'),
+    # 全体連絡 - 詳細
+	path('renraku_detail/<int:pk>/', RenrakuZentaiDetailView.as_view(), name='renraku_detail'),
+
+    # 全体連絡 - 新規
+	path('renraku_create/', RenrakuZentaiCreateView.as_view(), name='renraku_create'),
 
     # 個人連絡 - 一覧
 	path('renraku_kojin_list/', RenrakuKojinListView.as_view(), name='renraku_kojin_list'),
+
+    # 個人連絡 - 一覧(利用者指定)
+	path('renraku_kojin_list/riyosya/<int:riyosya_pk>/', RenrakuKojinListRiyosyaView.as_view(), name='renraku_kojin_list_riyosya'),
+
+    # 個人連絡 - 詳細
+	path('renraku_kojin_detail/<int:pk>/', RenrakuKojinDetailView.as_view(), name='renraku_kojin_detail'),
 
     # 個人連絡 - 新規
 	path('renraku_kojin_create/', RenrakuKojinCreateView.as_view(), name='renraku_kojin_create'),
@@ -66,8 +75,8 @@ urlpatterns = [
     # 記録 - 一覧 - 日指定
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
-    # # 記録 - 新規
-    # path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuCreateView.as_view(), name='kiroku_day_list'),
+    # 記録 - 新規
+    path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuCreateView.as_view(), name='kiroku_create'),
 
     # イベント - 新規
     path('event_create/', EventCreateView.as_view(), name='event_create'),
