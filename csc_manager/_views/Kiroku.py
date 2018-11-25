@@ -67,25 +67,21 @@ class KirokuDayListView(ListView):
             queryset = Riyosya.objects.filter(
                 Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day__gt=target_day)
                 |
-                Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day=None)
+                Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day__isnull=True)
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='09:00:00', riyoukikans__start_time__lt='18:00:00')
                 |
-                Q(riyoukikans__start_day=target_day, riyoukikans__start_time=None)
+                Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte='09:00:00', riyoukikans__start_time__lt='18:00:00')
                 |
-                Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte='09:00:00', riyoukikans__last_time__lt='18:00:00')
-                |
-                Q(riyoukikans__last_day=target_day, riyoukikans__last_time=None)
+                Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='00:00:00', riyoukikans__start_time__lt='9:00:00', riyoukikans__last_day__isnull=True)
             ).order_by('furigana')
         elif self.kwargs.get('day_night') == day_night[1][0]:
             queryset = Riyosya.objects.filter(
                 Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__gt=target_day)
                 |
-                Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day=None)
+                Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__isnull=True)
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='18:00:00')
-                |
-                Q(riyoukikans__start_day=target_day, riyoukikans__start_time=None)
                 |
                 Q(riyoukikans__start_day=yokujitu, riyoukikans__start_time__lt='09:00:00')
                 |
