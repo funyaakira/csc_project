@@ -68,8 +68,10 @@ class RiyosyaNewView(CreateView):
         RiyosyaRiyouKikan(
             riyosya=post,
             start_day=post.first_day,
+            start_time=self.request.POST['start_time'],
             start_kbn= self.request.POST['start_kbn'],
             last_day=None,
+            last_time=None,
             last_kbn=None,
             created_by=self.request.user,
             created_at=timezone.now(),

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from datetime import time
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -137,3 +138,6 @@ LOGOUT_REDIRECT_URL = 'home'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+NIKKIN_START_TIME = time(9, 0, 0)
+YAKIN_START_TIME = time(18, 0, 0)

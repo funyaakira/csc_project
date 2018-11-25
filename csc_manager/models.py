@@ -115,8 +115,10 @@ class RiyosyaRenrakusaki(models.Model):
 class RiyosyaRiyouKikan(models.Model):
     riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='riyoukikans', on_delete=models.CASCADE, default=None)
     start_day = models.DateField(_("入所日"), default=None)
+    start_time = models.TimeField(_("入所時間"), null=True, default=None)
     start_kbn = models.IntegerField(_("入所時間区分"), choices=start_kbn, default=0)
     last_day = models.DateField(_("退所日"), null=True, default=None)
+    last_time = models.TimeField(_("退所時間"), null=True, default=None)
     last_kbn = models.IntegerField(_("退所時間区分"), choices=last_kbn, null=True, default=None)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -154,7 +156,7 @@ class Staff(models.Model):
         return self.name
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None, related_name='staff')
     name = models.CharField(max_length=200, null=True)
-    syokumu = models.ForeignKey(Syokumu, on_delete=models.CASCADE, default=None)
+    syokumu = models.ForeignKey(Syokumu, on_delete=models.CASCADE, default=None, null=True)
     fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None, blank=True)
     del_flg = models.BooleanField(default=False)
 

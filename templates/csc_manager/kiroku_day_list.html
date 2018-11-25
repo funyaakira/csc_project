@@ -12,9 +12,9 @@
 {% endblock %}
 
 {% block content %}
-<h3>{{ target_day }}</h3>
+<h2>{{ target_day }} ({{ day_night_name }})</h2>
 <div class="mb-4">
-  <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night %}" class="btn btn-primary">新規記録</a>
+  <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night_now %}" class="btn btn-primary">連続記録投入開始>></a>
 </div>
 
 <table class="table">
@@ -26,26 +26,26 @@
   </thead>
   <tbody>
     {% for riyosya in riyosyas %}
-    <tr>
-      <td>
-        {{ riyosya.name }}
-      </td>
-      <td>
-        {% if kirokus|get_kirokus_riyosya:riyosya %}
-          <table style="width: 100%">
-            {% for kiroku in kirokus|get_kirokus_riyosya:riyosya %}
-              <tr>
-                <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
-                <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
-                <td >{{ kiroku.memo }}</td>
-              </tr>
-            {% endfor %}
-          </table>
-        {% else %}
-          <span class="alert-danger my-1">記録がありません</span>
-        {% endif %}
-      </td>
-    </tr>
+        <tr>
+          <td>
+            {{ riyosya.name }}
+          </td>
+          <td>
+            {% if kirokus|get_kirokus_riyosya:riyosya %}
+              <table style="width: 100%">
+                {% for kiroku in kirokus|get_kirokus_riyosya:riyosya %}
+                  <tr>
+                    <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
+                    <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                    <td >{{ kiroku.memo }}</td>
+                  </tr>
+                {% endfor %}
+              </table>
+            {% else %}
+              <span class="alert-danger my-1">記録がありません</span>
+            {% endif %}
+          </td>
+        </tr>
     {% endfor %}
   </tbody>
 </table>

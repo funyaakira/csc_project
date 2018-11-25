@@ -7,10 +7,12 @@ class RiyosyaRiyouKikanForm(forms.ModelForm):
     class Meta:
         model = RiyosyaRiyouKikan
         fields = ['last_day',
+                  'last_time',
                   'last_kbn',
                   'memo',]
         widgets = {
             'last_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-5'}),
+            'last_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-5'}),
             'last_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-5'}),
             'memo': forms.Textarea(
                 attrs={'class': 'form-control form-control-sm col-12',
@@ -24,8 +26,10 @@ class RiyosyaRiyouKikanForm_Renew(forms.ModelForm):
         model = RiyosyaRiyouKikan
         fields = ['riyosya',
                   'start_day',
+                  'start_time',
                   'start_kbn',]
         widgets = {
             'start_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-3'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-3'}),
             'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
         }

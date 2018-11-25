@@ -20,36 +20,55 @@
 
 {# {{ form.errors }} #}
 
-  <form method="post" novalidate>
-    {% csrf_token %}
-      <div class="row">
-        <div class="col-6">
-          <h5 class="mb-3">{{ riyosya.name }}  /  再入所</h5>
-          {{ form.riyosya.as_hidden }}
-          <div class="border rounded mb-3 py-3 px-3">
-
-            <div class="form-group">
-              <div class="form-control-sm">
-                再入所日
-              </div>
-                {% if form.is_bound %}
-                  {% if form.start_day.errors %}
-                    <div class="form-inline">{{ form.start_day|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}</div>
-                    {% for error in form.start_day.errors %}
-                      <small><div class="text-danger">{{ error }}</div></small>
-                    {% endfor %}
-                  {% else %}
-                    <div class="form-inline">{{ form.start_day|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}</div>
-                  {% endif %}
-                {% else %}
-                  <div class="form-inline">{{ form.start_day }} {{ form.start_kbn }}</div>
-                {% endif %}
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-success">登録</button>
-          </div>
-        </div>
+<form method="post" novalidate>
+  {% csrf_token %}
+  <h5 class="mb-3">{{ riyosya.name }}  /  再入所</h5>
+  {{ form.riyosya.as_hidden }}
+  <div class="border rounded mb-3 py-3 px-3">
+    <div class="form-control-sm">
+      再入所日
+    </div>
+    {% if form.is_bound %}
+      <div class="form-group">
+      {{ form.start_day.label }}
+      {% if form.last_day.errors %}
+        {{ form.start_day|add_class:'is-invalid' }}
+        {% for error in form.start_day.errors %}
+          <small><div class="text-danger">{{ error }}</div></small>
+        {% endfor %}
+      {% else %}
+        {{ form.start_day|add_class:'is-valid' }}
+      {% endif %}
       </div>
-  </form>
+
+      <div class="form-group">
+      {{ form.start_time.label }}
+      {% if form.start_time.errors %}
+        {{ form.start_time|add_class:'is-invalid' }}
+        {% for error in form.start_time.errors %}
+          <small><div class="text-danger">{{ error }}</div></small>
+        {% endfor %}
+      {% else %}
+        {{ form.start_time|add_class:'is-valid' }}
+      {% endif %}
+      </div>
+      {{ form.start_kbn.label }}
+      {{ form.start_kbn}}
+    {% else %}
+      <div class="form-group">
+        {{ form.start_day.label }}
+        {{ form.start_day }}
+      </div>
+      <div class="form-group">
+        {{ form.start_time.label }}
+        {{ form.start_time }}
+      </div>
+      <div class="form-group">
+        {{ form.start_kbn.label }}
+        {{ form.start_kbn }}
+      </div>
+    {% endif %}
+  </div>
+  <button type="submit" class="btn btn-success">登録</button>
+</form>
 {% endblock %}

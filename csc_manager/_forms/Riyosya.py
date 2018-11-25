@@ -5,6 +5,11 @@ from ..libs.funcs import wareki_to_seireki
 
 
 class RiyosyaForm(forms.ModelForm):
+    start_time = forms.TimeField(
+        widget=forms.TimeInput(
+            attrs={'class': 'form-control form-control-sm col-2'},
+        )
+    )
     gengou = forms.IntegerField(
         widget=forms.Select(
             attrs={'class': 'form-control form-control-sm col-2'},
