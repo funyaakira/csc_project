@@ -71,7 +71,7 @@ class KirokuDayListView(ListView):
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='09:00:00', riyoukikans__start_time__lt='18:00:00')
                 |
-                Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='09:00:00', riyoukikans__start_time=None)
+                Q(riyoukikans__start_day=target_day, riyoukikans__start_time=None)
                 |
                 Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte='09:00:00', riyoukikans__last_time__lt='18:00:00')
                 |
@@ -81,9 +81,7 @@ class KirokuDayListView(ListView):
             queryset = Riyosya.objects.filter(
                 Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__gt=target_day)
                 |
-                Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day=None)
-                |
-                Q(riyoukikans__start_day=target_day, riyoukikans__last_day=None)
+                Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day=None)
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='18:00:00')
                 |
