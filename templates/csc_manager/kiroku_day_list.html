@@ -12,8 +12,19 @@
 {% endblock %}
 
 {% block content %}
-<h2>{{ target_day }} ({{ day_night_name }})</h2>
-<div class="mb-4">
+<h2 class="my-4">
+  <a href="{% url 'kiroku_day_list' prev_day.year prev_day.month prev_day.day prev_day_night %}">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  <a href="{% url 'kiroku_home' %}">
+    {{ target_day }} ({{ day_night_name }})
+  </a>
+  <a href="{% url 'kiroku_day_list' next_day.year next_day.month next_day.day next_day_night %}">
+    <i class="fas fa-angle-right"></i>
+  </a>
+</h2>
+
+<div class="my-4">
   <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night_now %}" class="btn btn-primary">連続記録投入開始>></a>
 </div>
 
