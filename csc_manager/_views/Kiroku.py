@@ -71,7 +71,7 @@ class KirokuDayListView(ListView):
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='09:00:00', riyoukikans__start_time__lt='18:00:00')
                 |
-                Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte='09:00:00', riyoukikans__start_time__lt='18:00:00')
+                Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte='09:00:00')
                 |
                 Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='00:00:00', riyoukikans__start_time__lt='9:00:00', riyoukikans__last_day__isnull=True)
             ).order_by('furigana')
