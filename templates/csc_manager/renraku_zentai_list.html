@@ -6,16 +6,18 @@
 
 {% endblock %}
 
+{% block nav_renraku %}active{% endblock %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active">連絡</li>
+  <li class="breadcrumb-item"><a href="{% url 'renraku_list' %}">連絡</a></li>
+  <li class="breadcrumb-item active">全体連絡</li>
 {% endblock %}
 
 {% block content %}
 <div class="mb-4">
   <a href="{% url 'renraku_create' %}" class="btn btn-primary">新規連絡</a>
-  <a href="{% url 'renraku_kojin_list' %}" class="btn btn-info">個人連絡へ</a>
-  <a href="{% url 'login' %}?next=/csc_manager/renraku_list/" class="btn btn-outline-secondary">ユーザー切り替え</a>
+  <a href="{% url 'login' %}?next={% url 'renraku_list' %}" class="btn btn-outline-secondary">ユーザー切り替え</a>
 </div>
 
   <table class="table">

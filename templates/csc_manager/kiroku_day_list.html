@@ -6,6 +6,8 @@
 
 {% endblock %}
 
+{% block nav_kiroku %}active{% endblock %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
   <li class="breadcrumb-item active">記録</li>
@@ -25,7 +27,7 @@
 </h2>
 
 <div class="my-4">
-  <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night_now %}" class="btn btn-primary">連続記録投入開始>></a>
+  <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night_now 0 %}" class="btn btn-primary">連続記録投入開始>></a>
 </div>
 
 <table class="table">

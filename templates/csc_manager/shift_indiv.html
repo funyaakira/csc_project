@@ -6,47 +6,58 @@
 
 {% endblock %}
 
+{% block nav_shift %}active{% endblock %}
+
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">Shift</a></li>
-  <li class="breadcrumb-item active">{{ staff.name }}</li>
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item"><a href="{% url 'home' %}">シフト</a></li>
+<li class="breadcrumb-item active">個人・月</li>
 {% endblock %}
 
 {% block content %}
-  <table class="table __table">
-    <thead>
+<h2>
+  <a href="{% url 'shift_indiv' staff.id prev_year prev_month %}">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  {{ staff.name }} {{ year }}年 {{ month }}月
+  <a href="{% url 'shift_indiv' staff.id next_year next_month %}">
+    <i class="fas fa-angle-right"></i>
+  </a>
+</h2>
+<table class="table __table">
+  <thead>
+    <tr>
+      {% for w in week_names %}
+        <th>{{ w }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for week in days %}
       <tr>
-        {% for w in week_names %}
-          <th>{{ w }}</th>
+        {% for day in week %}
+          {% if month != day.month %}
+            <td class="calendar_td">
+            {{ day | date:"m/d" }}
+          {% else %}
+            <td class="{{ shifts_dic|shift_to_cssclass:day.day }} calendar_td">
+              <a href="{% url 'shift_day' day.year day.month day.day %}">
+                <div class="">
+                  {% if day == today %}
+                    <b>{{ day.day }}</b>
+                  {% else %}
+                    {{ day.day }}
+                  {% endif %}
+                </div>
+                <div class="">
+                  {{ shifts_dic|shift_to_name:day.day }}
+                </div>
+              </a>
+          {% endif %}
+          </td>
         {% endfor %}
       </tr>
-    </thead>
-    <tbody>
-      {% for week in days %}
-        <tr>
-          {% for day in week %}
-            {% if month != day.month %}
-              <td class="calendar_td">
-              {{ day | date:"m/d" }}
-            {% else %}
-              <td class="{{ shifts_dic|shift_to_cssclass:day.day }} calendar_td">
-                <a href="{% url 'shift_day' day.year day.month day.day %}">
-                  <div class="">
-                    {% if day == today %}
-                      <b>{{ day.day }}</b>
-                    {% else %}
-                      {{ day.day }}
-                    {% endif %}
-                  </div>
-                  <div class="">
-                    {{ shifts_dic|shift_to_name:day.day }}
-                  </div>
-                </a>
-            {% endif %}
-            </td>
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

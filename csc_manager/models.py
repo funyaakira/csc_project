@@ -208,11 +208,11 @@ class Renraku_kojin(models.Model):
 
 class Kiroku(models.Model):
     exec_date = models.DateField(default=None, null=True)
-    date = models.DateField(default=None, null=True)
-    time = models.TimeField(default=None, null=True)
+    date = models.DateField(_("日付"), default=None, null=True)
+    time = models.TimeField(_("時間"), default=None, null=True)
     day_night = models.IntegerField(_("日勤夜勤区分"), choices=last_kbn, null=True, default=None)
     riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='kirokus', on_delete=models.CASCADE, default=None)
-    memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.')
+    memo = models.TextField(_("内容"), max_length=4000, help_text='The max length of the text is 4000.')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='kirokus', default=None)

@@ -4,17 +4,34 @@
 
 {% endblock %}
 
+{% block nav_shift %}active{% endblock %}
+
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="#">Home</a></li>
-  <li class="breadcrumb-item active">Shift</li>
+<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+<li class="breadcrumb-item"><a href="{% url 'home' %}">シフト</a></li>
+
+<li class="breadcrumb-item active">日別</li>
 {% endblock %}
 
 {% block content %}
-  <table class="table __table">
+<h2>
+  <a href="{% url 'shift_day' prev_day.year prev_day.month prev_day.day %}">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  {{ target_day|date:"Y/m/d(l)" }}
+  <a href="{% url 'shift_day' next_day.year next_day.month next_day.day %}">
+    <i class="fas fa-angle-right"></i>
+  </a>
+</h2>
+<table class="table __table">
+  <thead>
     <tr>
-      <td colspan="2">{{ target_day|date:"Y/m/d ’l’" }}</td>
+      <th>業務</th>
+      <th>スタッフ</th>
     </tr>
-  {% for shift in shifts %}
+  </thead>
+{% for shift in shifts %}
+  <tbody>
     <tr>
       <td class="{{ shift.shift_knd.css_class }}">{{ shift.shift_knd.name }}</td>
       <td class="{{ shift.shift_knd.css_class }}">
@@ -25,136 +42,23 @@
         </a>
       </td>
     </tr>
-  {% endfor %}
-  </table>
+  </tbody>
+{% endfor %}
+</table>
 
- <p>
- {% if shift %}
-  <table class="table">
-    <tr>
-    <td colspan="2">{{ shift.date|date:"Y/m/d ’l’"  }} {{ test }}</td>
-    </tr>
-
-    {% if shift.kango1 is not None %}
-    <tr>
-    <td class="kango">看護1</td><td class="kango">{{ shift.kango1 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.kango2 is not None %}
-    <tr>
-    <td class="kango">看護2</td><td class="kango">{{ shift.kango2 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.soudanin is not None %}
-    <tr>
-    <td class="soudanin">相談員</td><td class="soudanin">{{ shift.soudanin }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.hayaban is not None %}
-    <tr>
-    <td class="hayaban">早番</td><td class="hayaban">{{ shift.hayaban }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.hayaban_e is not None %}
-    <tr>
-    <td class="hayaban">早番</td><td class="hayaban">{{ shift.hayaban_e }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin is not None %}
-    <tr>
-    <td class="nikkin">日勤</td><td class="nikkin">{{ shift.nikkin }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin_e is not None %}
-    <tr>
-    <td class="nikkin">日勤</td><td class="nikkin">{{ shift.nikkin_e }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin1 is not None %}
-    <tr>
-    <td class="nikkin">日勤1</td><td class="nikkin">{{ shift.nikkin1 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin2 is not None %}
-    <tr>
-    <td class="nikkin">日勤2</td><td class="nikkin">{{ shift.nikkin2 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.osoban is not None %}
-    <tr>
-    <td class="osoban">遅番</td><td class="osoban">{{ shift.osoban }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.osoban_e is not None %}
-    <tr>
-    <td class="osoban">遅番</td><td class="osoban">{{ shift.osoban_e }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin_e1 is not None %}
-    <tr>
-    <td class="nikkin_e">日勤その他1</td><td class="nikkin_e">{{ shift.nikkin_e1 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin_e2 is not None %}
-    <tr>
-    <td class="nikkin_e">日勤その他2</td><td class="nikkin_e">{{ shift.nikkin_e2 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.nikkin_e3 is not None %}
-    <tr>
-    <td class="nikkin_e">日勤その他3</td><td class="nikkin_e">{{ shift.nikkin_e3 }}</td>
-    </tr>
-    {% endif %}
-
-    {% if shift.yakin is not None %}
-    <tr>
-    <td class="yakin">夜勤</td><td class="yakin">{{ shift.yakin }}</td>
-    </tr>
-    {% endif %}
-
-    {% if events|length %}
-    <tr>
-      <td>イベント</td>
-      <td>
-        {% for event in events %}
-         <small class="text_muted">{{event.knd}}&nbsp;{{event.Riyosya|default_if_none:""}}&nbsp;
-         {{event.time|default_if_none:""}}{{event.ht_kbn|default_if_none:""}}&nbsp;
-         {{event.go_place|default_if_none:""}}{{event.naiyo|default_if_none:""}}</small>
-         </br>
-        {% endfor %}
-      </td>
-    </tr>
-    {% endif %}
-
-    <tr>
-    <td>メモ</td>
-    <td>
-      {% if shift.memo is not None %}
-      {{ shift.memo }}
-      {% endif %}
-    </td>
-    </tr>
-  </table>
- {% endif %}
-    <p class=".text-center">
-      <div>
-          <a href="{% url 'shift_day' prev_day.year prev_day.month prev_day.day %}"><i class="fas fa-arrow-left"></i>前日</a>
-          <a href="{% url 'home' %}">今日</a>
-          <a href="{% url 'shift_day' next_day.year next_day.month next_day.day %}">翌日<i class="fas fa-arrow-right"></i></a>
-      </div>
-    </p>
+<p class=".text-center">
+  <div>
+      <a href="{% url 'shift_day' prev_day.year prev_day.month prev_day.day %}">
+        <i class="fas fa-angle-left"></i>
+        前日
+      </a>
+      <a href="{% url 'home' %}">
+        今日
+      </a>
+      <a href="{% url 'shift_day' next_day.year next_day.month next_day.day %}">
+        翌日
+        <i class="fas fa-angle-right"></i>
+      </a>
+  </div>
 </p>
 {% endblock %}

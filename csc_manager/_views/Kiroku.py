@@ -109,8 +109,66 @@ class KirokuDayListView(ListView):
         return queryset
 
 
-class KirokuCreateView(CreateView):
+class KirokuRenzokuCreateView(CreateView):
     model = Kiroku
     context_object_name = 'kiroku'
     form_class = KirokuCreateForm
-    template_name = 'csc_manager/kiroku_create.html'
+    template_name = 'csc_manager/kiroku_renzoku_create.html'
+
+    def get_initial(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
+        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
+        riyosya_order_list = self.request.session['riyosya_order_list']
+        riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+
+        return {
+            'exec_date': date(year, month, day),
+            'day_night': self.kwargs.get('day_night'),
+            'riyosya': riyosya_id,
+            'date': date(year, month, day),
+            'time': datetime.now().strftime("%H:%M")
+        }
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
+        kwargs['target_day'] = date(year, month, day)
+
+        kwargs['day_night'] = self.kwargs.get('day_night')
+
+        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
+        riyosya_order_list = self.request.session['riyosya_order_list']
+        riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+        kwargs['riyosya'] = Riyosya.objects.get(id=riyosya_id)
+
+        riyosya_order_list_idx += 1
+        if len(riyosya_order_list) == riyosya_order_list_idx:
+            kwargs['go_to_back'] = True
+        else:
+            kwargs['riyosya_order_list_idx'] = riyosya_order_list_idx
+            riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+            kwargs['next_riyosya'] = Riyosya.objects.get(id=riyosya_id)
+            
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        form.save()
+
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+        day_night = self.kwargs.get('day_night')
+
+        riyosya_order_list = self.request.session['riyosya_order_list']
+        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
+        riyosya_order_list_idx += 1
+
+        if len(riyosya_order_list) == riyosya_order_list_idx:
+            return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
+        else:
+            return redirect('kiroku_renzoku_create', year=year, month=month, day=day, day_night=day_night, riyosya_order_list_idx=riyosya_order_list_idx)

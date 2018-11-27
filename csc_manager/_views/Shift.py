@@ -74,9 +74,18 @@ class ShiftIndivView(TemplateView):
         # テンプレートに渡す
         kwargs["staff"] = staff
         kwargs["days"] = days
+        kwargs["year"] = year
         kwargs["month"] = month
         kwargs["week_names"] = week_names
         kwargs["shifts_dic"] = shifts_dic
-        kwargs["today"] = date.today()
+
+        today = date.today()
+        kwargs["today"] = today
+
+        target_month = date(year, month, 1)
+        kwargs["prev_year"] = (target_month - relativedelta(months=1)).year
+        kwargs["prev_month"] = (target_month - relativedelta(months=1)).month
+        kwargs["next_year"] = (target_month + relativedelta(months=1)).year
+        kwargs["next_month"] = (target_month + relativedelta(months=1)).month
 
         return super().get_context_data(**kwargs)
