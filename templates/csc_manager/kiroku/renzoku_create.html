@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_kiroku %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'kiroku_home' %}">記録</a></li>
+  <li class="breadcrumb-item active">新規記録</li>
+{% endblock %}
+
+{% block content %}
+{% for error in form.non_field_errors %}
+    <small><div class="text-danger">{{ error }}</div></small>
+{% endfor %}
+
+{# {{ form.errors }} #}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <h2 class="mb-3">{{ riyosya.name }}</h2>
+  {{ form.exec_date.as_hidden }}
+  {{ form.day_night.as_hidden }}
+  {{ form.riyosya.as_hidden }}
+
+  <div class="row">
+    <div class="border rounded mb-3 py-3 px-3 col">
+    {% if form.is_bound %}
+
+      <div class="form-group">
+      {{ form.date.label }}
+      {% if form.time.errors %}
+        {{ form.date|add_class:'is-invalid' }}
+        {% for error in form.date.errors %}
+          <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      {% else %}
+        {{ form.date|add_class:'is-valid' }}
+      {% endif %}
+      </div>
+
+      <div class="form-group">
+      {{ form.time.label }}
+      {% if form.time.errors %}
+        {{ form.time|add_class:'is-invalid' }}
+        {% for error in form.time.errors %}
+          <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      {% else %}
+        {{ form.time|add_class:'is-valid' }}
+      {% endif %}
+      </div>
+
+      <div class="form-group">
+        {{ form.staff.label }}
+        {{ form.staff|add_class:'is-valid' }}
+      </div>
+
+      <div class="form-group">
+      {{ form.memo.label }}
+      {% if form.memo.errors %}
+        {{ form.memo|add_class:'is-invalid' }}
+        {% for error in form.memo.errors %}
+          <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      {% else %}
+        {{ form.memo|add_class:'is-valid' }}
+      {% endif %}
+      </div>
+    {% else %}
+      <div class="form-group">
+        {{ form.date.label }}
+        {{ form.date }}
+      </div>
+      <div class="form-group">
+        {{ form.time.label }}
+        {{ form.time }}
+      </div>
+      <div class="form-group">
+        {{ form.staff.label }}
+         <div class="form-inline">
+           {{ form.staff }}
+         </div>
+      </div>
+      <div class="form-group">
+        {{ form.memo.label }}
+        {{ form.memo }}
+      </div>
+    {% endif %}
+    </div>
+    <div class="border rounded mb-3 py-3 px-3 col">
+      <h4>今日の記録</h4>
+      <table class="table">
+        <thead>
+          <th style="width: 15%">時間</th>
+          <th>内容</th>
+        </thead>
+        <tbody>
+          {% for kiroku in kirokus %}
+          <tr>
+            {% if kiroku.day_night == 0 %}
+              <td>{{ kiroku.time|default:'' }}</td>
+              <td>{{ kiroku.memo }}</td>
+            {% else %}
+              <td class="text-danger">{{ kiroku.time|default:'' }}</td>
+              <td class="text-danger">{{ kiroku.memo }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if go_to_back %}
+    <button type="submit" class="btn btn-success">登録して一覧へ戻る>></button>
+    <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">登録しないで一覧へ戻る >></a>
+  {% else %}
+    <button type="submit" class="btn btn-success" name="commit">登録</button>
+    <button type="submit" class="btn btn-success" name="commit_next">登録して次へ >></button>
+    <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_order_list_idx %}" class="btn btn-primary">登録しないで次へ >></a>
+    <div>次は {{ next_riyosya.name }}</div>
+  {% endif %}
+
+</form>
+
+{% endblock %}

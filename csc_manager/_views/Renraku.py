@@ -19,7 +19,7 @@ class RenrakuZentaiListView(ListView):
     template_name = 'csc_manager/renraku_zentai_list.html'
 
     def get_queryset(self):
-        queryset = Renraku.objects.all().order_by('-date')
+        queryset = Renraku.objects.all().order_by('-date', '-id')
 
         return queryset
 
@@ -57,7 +57,7 @@ class RenrakuKojinListView(ListView):
     template_name = 'csc_manager/renraku_kojin_list.html'
 
     def get_queryset(self):
-        queryset = Renraku_kojin.objects.all().order_by('-date')
+        queryset = Renraku_kojin.objects.all().order_by('-date', '-id')
 
         return queryset
 

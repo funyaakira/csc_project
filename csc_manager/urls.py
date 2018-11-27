@@ -75,8 +75,14 @@ urlpatterns = [
     # 記録 - 一覧 - 日指定
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
+    # 記録 - 新規
+    path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:riyosya_id>', KirokuCreateView.as_view(), name='kiroku_create'),
+
     # 記録 - 新規 - 連続
     path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:riyosya_order_list_idx>/renzoku/', KirokuRenzokuCreateView.as_view(), name='kiroku_renzoku_create'),
+
+    # 記録 - 削除
+    path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
 
     # イベント - 新規
     path('event_create/', EventCreateView.as_view(), name='event_create'),

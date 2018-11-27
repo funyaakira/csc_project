@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_kiroku %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'kiroku_home' %}">記録</a></li>
+  <li class="breadcrumb-item active">削除</li>
+{% endblock %}
+
+{% block content %}
+{% for error in form.non_field_errors %}
+    <small><div class="text-danger">{{ error }}</div></small>
+{% endfor %}
+
+{{ form.errors }}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="border rounded mb-3 py-3 px-3">
+    {{ kiroku.date }}
+    {{ kiroku.time|default:'' }}
+    {{ kiroku.riyosya.name }}
+  </div>
+
+  <div class="border rounded mb-3 py-3 px-3">
+    {{ kiroku.memo }}
+  </div>
+
+  <button type="submit" class="btn btn-success">削除</button>
+
+</form>
+{% endblock %}

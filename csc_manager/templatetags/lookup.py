@@ -42,7 +42,7 @@ def get_events(evnets, date):
 def get_kirokus_day(kirokus, date):
     return kirokus.filter(exec_date=date).order_by('date', 'time')
 
-# 記録のオブジェクトリストを聞き数に
+
 @register.filter(name='get_kirokus_riyosya')
 def get_kirokus_riyosya(kirokus, riyosya):
     return kirokus.filter(riyosya=riyosya).order_by('date', 'time')

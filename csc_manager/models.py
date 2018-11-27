@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Max
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
 
 gender = (
     (1, '男'),
@@ -53,8 +54,8 @@ riyosya_status = (
 )
 
 day_night = (
-    (0, '日勤帯'),
-    (1, '夜勤帯'),
+    (settings._NIKKIN, '日勤帯'),
+    (settings._YAKIN, '夜勤帯'),
 )
 
 class Kyotaku(models.Model):
@@ -209,7 +210,8 @@ class Renraku_kojin(models.Model):
 class Kiroku(models.Model):
     exec_date = models.DateField(default=None, null=True)
     date = models.DateField(_("日付"), default=None, null=True)
-    time = models.TimeField(_("時間"), default=None, null=True)
+    time = models.TimeField(_("時間"), default=None, null=True, blank=True) # nullの場合は全日
+    disp_time = models.TimeField(_("並び用時間"), default=None, null=True, blank=True)
     day_night = models.IntegerField(_("日勤夜勤区分"), choices=last_kbn, null=True, default=None)
     riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='kirokus', on_delete=models.CASCADE, default=None)
     memo = models.TextField(_("内容"), max_length=4000, help_text='The max length of the text is 4000.')

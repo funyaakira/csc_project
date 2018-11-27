@@ -141,3 +141,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 NIKKIN_START_TIME = time(9, 0, 0)
 YAKIN_START_TIME = time(18, 0, 0)
+
+_NIKKIN = 0
+_YAKIN = 1

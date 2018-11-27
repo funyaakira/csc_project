@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_kiroku %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">記録</li>
+{% endblock %}
+
+{% block content %}
+<h2 class="my-4">
+  <a href="{% url 'kiroku_day_list' prev_day.year prev_day.month prev_day.day prev_day_night %}">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  <a href="{% url 'kiroku_home' %}">
+    {{ target_day }} ({{ day_night_name }})
+  </a>
+  <a href="{% url 'kiroku_day_list' next_day.year next_day.month next_day.day next_day_night %}">
+    <i class="fas fa-angle-right"></i>
+  </a>
+</h2>
+
+<div class="my-4">
+  <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night_now 0 %}" class="btn btn-primary">連続記録開始</a>
+</div>
+
+<table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th style="width: 15%">利用者</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for riyosya in riyosyas %}
+        <tr>
+          <td>
+            {{ riyosya.name }}
+
+          <td>
+            {% if kirokus|get_kirokus_riyosya:riyosya %}
+              <table style="width: 100%">
+                {% for kiroku in kirokus|get_kirokus_riyosya:riyosya %}
+                  <tr>
+                    {% if kiroku.day_night == 0 %}
+                      <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
+                      <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                      <td >{{ kiroku.memo }}</td>
+                    {% else %}
+                      <td class="text-danger" style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
+                      <td class="text-danger" style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                      <td class="text-danger">{{ kiroku.memo }}</td>
+                    {% endif %}
+                    <td style="width: 10%" >
+                      <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night_now kiroku.id %}" class="btn btn-light">削除</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+                <tr>
+                  <td colspan="4">
+                    <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night_now riyosya.id %}" class="btn btn-light btn-sm">追加</a>
+                  </td>
+                </tr>
+              </table>
+            {% else %}
+              <span class="alert-danger my-1">
+                <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night_now riyosya.id %}" class="btn btn-light alert-danger">
+                  記録がありません (クリックして記録を追加)
+                </a>
+              </span>
+            {% endif %}
+          </td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
