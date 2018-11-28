@@ -14,7 +14,7 @@ from ..models import Shift, Staff
 class ShiftDayView(ListView):
     model = Shift
     context_object_name = 'shifts'
-    template_name = 'csc_manager/shift_day.html'
+    template_name = 'csc_manager/shift/day.html'
 
     def get_context_data(self, **kwargs):
         kwargs['target_day'] = self.target_day
@@ -47,7 +47,7 @@ class ShiftDayView(ListView):
 # シフト個人カレンダー表示
 @method_decorator(login_required, name='dispatch')
 class ShiftIndivView(TemplateView):
-    template_name = 'csc_manager/shift_indiv.html'
+    template_name = 'csc_manager/shift/indiv.html'
 
     def get_context_data(self, **kwargs):
         # スタッフオブジェクトの取得・設定

@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 class RenrakuZentaiListView(ListView):
     model = Renraku
     context_object_name = 'renrakus'
-    template_name = 'csc_manager/renraku_zentai_list.html'
+    template_name = 'csc_manager/renraku/zentai/list.html'
 
     def get_queryset(self):
         queryset = Renraku.objects.all().order_by('-date', '-id')
@@ -28,7 +28,7 @@ class RenrakuZentaiListView(ListView):
 class RenrakuZentaiDetailView(DetailView):
     model = Renraku
     context_object_name = 'renraku'
-    template_name = 'csc_manager/renraku_zentai_detail.html'
+    template_name = 'csc_manager/renraku/zentai/detail.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -36,7 +36,7 @@ class RenrakuZentaiCreateView(CreateView):
     model = Renraku
     form_class = RenrakuCreateForm
     context_object_name = 'renrakus'
-    template_name = 'csc_manager/renraku_zentai_create.html'
+    template_name = 'csc_manager/renraku/zentai/create.html'
 
     def get_initial(self):
         return {
@@ -54,7 +54,7 @@ class RenrakuZentaiCreateView(CreateView):
 class RenrakuKojinListView(ListView):
     model = Renraku_kojin
     context_object_name = 'renraku_kojins'
-    template_name = 'csc_manager/renraku_kojin_list.html'
+    template_name = 'csc_manager/renraku/kojin/list.html'
 
     def get_queryset(self):
         queryset = Renraku_kojin.objects.all().order_by('-date', '-id')
@@ -66,7 +66,7 @@ class RenrakuKojinListView(ListView):
 class RenrakuKojinListRiyosyaView(ListView):
     model = Renraku_kojin
     context_object_name = 'renraku_kojins'
-    template_name = 'csc_manager/renraku_kojin_list_riyosya.html'
+    template_name = 'csc_manager/renraku/kojin/list_riyosya.html'
 
     def get_context_data(self, **kwargs):
         riyosya_id = self.kwargs.get('riyosya_pk')
@@ -86,7 +86,7 @@ class RenrakuKojinListRiyosyaView(ListView):
 class RenrakuKojinDetailView(DetailView):
     model = Renraku_kojin
     context_object_name = 'renraku_kojin'
-    template_name = 'csc_manager/renraku_kojin_detail.html'
+    template_name = 'csc_manager/renraku/kojin/detail.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -94,7 +94,7 @@ class RenrakuKojinCreateView(CreateView):
     model = Renraku_kojin
     form_class = RenrakuKojinCreateForm
     context_object_name = 'renrakus'
-    template_name = 'csc_manager/renraku_kojin_create.html'
+    template_name = 'csc_manager/renraku/kojin/create.html'
 
     def get_initial(self):
         return {

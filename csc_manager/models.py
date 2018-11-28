@@ -10,8 +10,8 @@ gender = (
 )
 
 ht_kbn = (
-    ("発", '発'),
-    ("着", '着'),
+    (0, '発'),
+    (1, '着'),
 )
 
 shift_catergory = (
@@ -174,7 +174,7 @@ class Event(models.Model):
     date = models.DateField(_('日付'), default=None)
     knd  = models.ForeignKey(Event_knd, verbose_name=_('イベント種類'), on_delete=models.PROTECT)
     riyosya = models.ForeignKey(Riyosya, verbose_name=_('対象利用者'), on_delete=models.PROTECT, null=True, blank=True)
-    time = models.TimeField(verbose_name=_('開始時間'), null=True, blank=True)
+    time = models.TimeField(verbose_name=_('時間'), null=True, blank=True)
     ht_kbn  = models.CharField(_('発着'), max_length=1, null=True, blank=True, choices=ht_kbn, default=None)
     go_place = models.ForeignKey(Gaibu, verbose_name=_('行き先'), on_delete=models.PROTECT, null=True, blank=True,)
     d_staff = models.ForeignKey(Staff, verbose_name=_('運転手'), on_delete=models.PROTECT, null=True, blank=True, related_name="d_staff")

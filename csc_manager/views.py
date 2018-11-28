@@ -33,7 +33,7 @@ def shift_upload(request):
         return render(request, 'csc_manager/shift_upload.html', {
             'uploaded_file_url': uploaded_file_url
         })
-    return render(request, 'csc_manager/shift_upload.html')
+    return render(request, 'csc_manager/shift/upload.html')
 
 
 def import_shift(filepath):

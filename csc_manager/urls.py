@@ -25,7 +25,7 @@ urlpatterns = [
     path('shift/indiv/<int:pk>/<int:year>/<int:month>/', ShiftIndivView.as_view(), name='shift_indiv'),
 
     # シフト - データアップロード
-    path('shift_upload/', views.shift_upload, name='shift_upload'),
+    path('shift/upload/', views.shift_upload, name='shift_upload'),
 
     # 利用者 - 利用者 - 一覧
 	path('riyosya_list/', RiyosyaListView.as_view(), name='riyosya_list'),

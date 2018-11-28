@@ -1,15 +1,15 @@
 from django.views.generic import ListView, CreateView, UpdateView
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from datetime import datetime, date, timedelta
 
 from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender, riyosya_status
 from .._forms.Riyosya import RiyosyaForm
 from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
 
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 
 # 利用者 - トップ(一覧)
@@ -17,7 +17,7 @@ from django.utils.decorators import method_decorator
 class RiyosyaListView(ListView):
     model = Riyosya
     context_object_name = 'riyosyas'
-    template_name = 'csc_manager/riyosyas_list.html'
+    template_name = 'csc_manager/riyosya/list.html'
 
     def get_context_data(self, **kwargs):
         kwargs['riyosya_count'] = Riyosya.objects.filter(
@@ -45,8 +45,14 @@ class RiyosyaListView(ListView):
 class RiyosyaNewView(CreateView):
     model = Riyosya
     form_class = RiyosyaForm
-    template_name = 'csc_manager/riyosya_new.html'
+    template_name = 'csc_manager/riyosya/new.html'
     success_url = "riyosya_list"
+
+    def get_initial(self):
+        return {
+            'first_day': date.today(),
+            'start_time': datetime.now().strftime("%H:%M"),
+        }
 
     def form_valid(self, form):
 
@@ -118,8 +124,14 @@ class RiyosyaNewView(CreateView):
 class RiyosyaTaisyoView(UpdateView):
     model = RiyosyaRiyouKikan
     form_class = RiyosyaRiyouKikanForm
-    template_name = 'csc_manager/riyosya_taisyo.html'
+    template_name = 'csc_manager/riyosya/taisyo.html'
     success_url = "riyosya_list"
+
+    def get_initial(self):
+        return {
+            'last_day': date.today(),
+            'last_time': datetime.now().strftime("%H:%M"),
+        }
 
     def form_valid(self, form):
         post = form.save(commit=False)
@@ -140,7 +152,7 @@ class RiyosyaTaisyoView(UpdateView):
 class TaisyoListView(ListView):
     model = Riyosya
     context_object_name = 'riyosyas'
-    template_name = 'csc_manager/taisyo_list.html'
+    template_name = 'csc_manager/riyosya/taisyo/list.html'
 
     def get_queryset(self):
         queryset = Riyosya.objects.filter(
@@ -154,7 +166,7 @@ class TaisyoListView(ListView):
 class TaisyoRenewView(CreateView):
     model = RiyosyaRiyouKikan
     form_class = RiyosyaRiyouKikanForm_Renew
-    template_name = 'csc_manager/taisyo_renew.html'
+    template_name = 'csc_manager/riyosya/taisyo/renew.html'
     success_url = "riyosya_list"
 
     def get_initial(self):

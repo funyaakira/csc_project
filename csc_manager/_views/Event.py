@@ -5,13 +5,13 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 import calendar
 
-from ..models import Event
+from ..models import Event, Event_knd, Staff
 from .._forms.Event import EventForm
 
 
 # イベント - 一覧
 class EventListView(TemplateView):
-    template_name = 'csc_manager/event_list.html'
+    template_name = 'csc_manager/event/list.html'
 
     def get_context_data(self, **kwargs):
 
@@ -45,11 +45,37 @@ class EventListView(TemplateView):
 class EventCreateView(CreateView):
     model = Event
     form_class = EventForm
-    template_name = 'csc_manager/event_create.html'
+    template_name = 'csc_manager/event/create.html'
+
+    def get_initial(self):
+        return {
+            'date': date.today(),
+            'time': datetime.now().strftime("%H:%M"),
+        }
+
+    def get_context_data(self, **kwargs):
+        kwargs["event_knds"] = Event_knd.objects.all().order_by('id')
+
+        return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        print('form_valid')
-        form.save()
+
+        event = form.save(commit=False)
+
+        if self.request.POST['nyusyo_riyosya_name']:
+            event.naiyo = self.request.POST['nyusyo_riyosya_name']
+        print(self.request.POST['ht_kbn_nyusyo'])
+        if self.request.POST['ht_kbn_nyusyo']:
+            event.ht_kbn = self.request.POST['ht_kbn_nyusyo']
+
+        if self.request.POST['d_staff_nyusyo']:
+            event.d_staff = Staff.objects.get(id=self.request.POST['d_staff_nyusyo'])
+
+        if self.request.POST['t_staff_nyusyo']:
+            event.t_staff = Staff.objects.get(id=self.request.POST['t_staff_nyusyo'])
+
+        event.save()
+
         # post = form.save(commit=False)
         # post.created_by = self.request.user
         # post.created_at = timezone.now()
