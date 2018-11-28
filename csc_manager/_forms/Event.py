@@ -20,22 +20,6 @@ class EventForm(forms.ModelForm):
             'naiyo': forms.TextInput(attrs={'class': 'form-control col-4'}),
         }
 
-    ht_kbn_nyusyo = forms.ChoiceField(
-        widget=forms.Select(attrs={'class': 'form-control col-2'}),
-        choices=ht_kbn,
-    )
-
-    d_staff_nyusyo = forms.ModelChoiceField(
-        widget=forms.Select(attrs={'class': 'form-control col-4'}),
-        required=False,
-        queryset=Staff.objects.all()
-    )
-
-    t_staff_nyusyo = forms.ModelChoiceField(
-        widget=forms.Select(attrs={'class': 'form-control col-4'}),
-        required=False,
-        queryset=Staff.objects.all()
-    )
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)

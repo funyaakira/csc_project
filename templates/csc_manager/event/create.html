@@ -22,104 +22,92 @@
 
 {{ form.errors }}
 
-<script type="text/javascript">
-
-  var events = [];
-  {% for evnet_knd in event_knds %}
-  events.push('{{ evnet_knd.css_class }}')
-  {% endfor %}
-
-  function click_event_knd(my, id) {
-    for (var i = 0; i < events.length; i++) {
-      if (events[i] != my) {
-        $('#'+events[i]).collapse('hide');
-      }
-    }
-    $('#id_knd').val(id)
-  }
-</script>
-
 <div class="row">
   <div class="col">
     <form method="post" class="col-6" novalidate>
       <h2 class="mb-3">イベント新規作成</h2>
       {% csrf_token %}
       <div class="form-group">
-        {% for evnet_knd in event_knds %}
-        <a class="btn btn-primary" data-toggle="collapse" href="#{{ evnet_knd.css_class }}"
-          aria-expanded="false" aria-controls="{{ evnet_knd.css_class }}" id="btn_{{ evnet_knd.css_class }}"
-          onclick="click_event_knd('{{ evnet_knd.css_class }}', {{ evnet_knd.id }});">
-            {{ evnet_knd.name }}
+        {% for event_knd in event_knds %}
+        <a class="btn btn-primary" href="{% url 'event_create' event_knd.id %}">
+          {{ event_knd.name }}
         </a>
         {% endfor %}
       </div>
 
       {{ form.knd.as_hidden }}
 
-      {% if form.is_bound %}
-        {% if form.date.errors %}
-          <div class="form-group">
-            {{ form.date.label }}
-            {{ form.date|add_class:'is-invalid' }}
-          </div>
-          {% for error in form.date.errors %}
-            <small><div class="text-danger">・{{ error }}</div></small>
-          {% endfor %}
-        {% else %}
-          <div class="form-group">
-            {{ form.date.label }}
-            {{ form.date|add_class:'is-valid' }}
-          </div>
-        {% endif %}
+      {% if event_knd_id != 0 %}
+        {% if form.is_bound %}
+          {% if form.date.errors %}
+            <div class="form-group">
+              {{ form.date.label }}
+              {{ form.date|add_class:'is-invalid' }}
+            </div>
+            {% for error in form.date.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            <div class="form-group">
+              {{ form.date.label }}
+              {{ form.date|add_class:'is-valid' }}
+            </div>
+          {% endif %}
 
-        {% if form.time.errors %}
-          <div class="form-group">
-            {{ form.time.label }}
-            {{ form.time|add_class:'is-invalid' }}
-          </div>
-          {% for error in form.date.errors %}
-            <small><div class="text-danger">・{{ error }}</div></small>
-          {% endfor %}
+          {% if form.time.errors %}
+            <div class="form-group">
+              {{ form.time.label }}
+              {{ form.time|add_class:'is-invalid' }}
+            </div>
+            {% for error in form.date.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            <div class="form-group">
+              {{ form.time.label }}
+              {{ form.time|add_class:'is-valid' }}
+            </div>
+          {% endif %}
         {% else %}
           <div class="form-group">
-            {{ form.time.label }}
-            {{ form.time|add_class:'is-valid' }}
+            {{ form.date.label }}
+            {{ form.date }}
+          </div>
+          <div class="form-group">
+          {{ form.time.label }}
+          {{ form.time }}
           </div>
         {% endif %}
-      {% else %}
-        <div class="form-group">
-          {{ form.date.label }}
-          {{ form.date }}
-        </div>
-        <div class="form-group">
-        {{ form.time.label }}
-        {{ form.time }}
-        </div>
       {% endif %}
 
-        <div class="collapse my-3" id="nyusyo">
+      {% if event_knd_id == 1 %}
+        <div class="my-3" id="nyusyo">
           <div class="form-group">
             発着
-            {{ form.ht_kbn_nyusyo }}
+            {{ form.ht_kbn }}
           </div>
 
           <div class="form-group">
-            入所者氏名
-            <input type="text" name="nyusyo_riyosya_name" value="" class="form-control">
+            入所者氏名を入力
+            {{ form.naiyo}}
+            または、退所者から選択
+            {{ form.riyosya }}
           </div>
 
           <div class="form-group">
             運転手
-            {{ form.d_staff_nyusyo }}
+            {{ form.d_staff }}
           </div>
 
           <div class="form-group">
             付添
-            {{ form.t_staff_nyusyo }}
+            {{ form.t_staff }}
           </div>
         </div>
+      {% endif %}
 
-        <div class="collapse my-3" id="taisyo">
+      {% if event_knd_id == 2 %}
+        <div class="my-3" id="taisyo">
           <div class="form-group">
             発着
             {{ form.ht_kbn_nyusyo }}
@@ -140,8 +128,10 @@
             {{ form.t_staff }}
           </div>
         </div>
+      {% endif %}
 
-        <div class="collapse my-3" id="gaisyutu">
+      {% if event_knd_id == 3 %}
+        <div class="my-3" id="gaisyutu">
           <div class="form-group">
             発着
             {{ form.ht_kbn }}
@@ -167,7 +157,11 @@
             {# {{ form.naiyo }} #}
           </div>
         </div>
-      <button type="submit" class="btn btn-success">登録</button>
+      {% endif %}
+
+      {% if event_knd_id != 0 %}
+        <button type="submit" class="btn btn-success">登録</button>
+      {% endif %}
     </form>
   </div>
 </div>

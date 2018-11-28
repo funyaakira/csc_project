@@ -37,6 +37,9 @@ class EventListView(TemplateView):
         # テンプレートに渡す
         kwargs["days"] = days
         kwargs["events"] = events
+        kwargs['target_YM'] = date(year, month, 1)
+        kwargs['prev_YM'] = date(year, month, 1) - relativedelta(months=1)
+        kwargs['next_YM'] = date(year, month, 1) + relativedelta(months=1)
 
         return super().get_context_data(**kwargs)
 
@@ -51,10 +54,12 @@ class EventCreateView(CreateView):
         return {
             'date': date.today(),
             'time': datetime.now().strftime("%H:%M"),
+            'knd': self.kwargs.get('event_knd_id'),
         }
 
     def get_context_data(self, **kwargs):
         kwargs["event_knds"] = Event_knd.objects.all().order_by('id')
+        kwargs['event_knd_id'] = self.kwargs.get('event_knd_id')
 
         return super().get_context_data(**kwargs)
 
@@ -62,17 +67,6 @@ class EventCreateView(CreateView):
 
         event = form.save(commit=False)
 
-        if self.request.POST['nyusyo_riyosya_name']:
-            event.naiyo = self.request.POST['nyusyo_riyosya_name']
-        print(self.request.POST['ht_kbn_nyusyo'])
-        if self.request.POST['ht_kbn_nyusyo']:
-            event.ht_kbn = self.request.POST['ht_kbn_nyusyo']
-
-        if self.request.POST['d_staff_nyusyo']:
-            event.d_staff = Staff.objects.get(id=self.request.POST['d_staff_nyusyo'])
-
-        if self.request.POST['t_staff_nyusyo']:
-            event.t_staff = Staff.objects.get(id=self.request.POST['t_staff_nyusyo'])
 
         event.save()
 

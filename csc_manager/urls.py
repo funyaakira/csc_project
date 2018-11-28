@@ -85,7 +85,7 @@ urlpatterns = [
     path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
 
     # イベント - 新規
-    path('event_create/', EventCreateView.as_view(), name='event_create'),
+    path('event_create/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
 
 
     # # シフトGogleSpreadSheetからの受信インターフェース
