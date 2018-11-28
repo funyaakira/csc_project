@@ -29,7 +29,11 @@
       {% csrf_token %}
       <div class="form-group">
         {% for event_knd in event_knds %}
-        <a class="btn btn-primary" href="{% url 'event_create' event_knd.id %}">
+          {% if event_knd.id == event_knd_id %}
+            <a class="btn btn-secondary" href="#">
+          {% else %}
+            <a class="btn btn-primary" href="{% url 'event_create' event_knd.id %}">
+          {% endif %}
           {{ event_knd.name }}
         </a>
         {% endfor %}
@@ -110,7 +114,7 @@
         <div class="my-3" id="taisyo">
           <div class="form-group">
             発着
-            {{ form.ht_kbn_nyusyo }}
+            {{ form.ht_kbn }}
           </div>
 
           <div class="form-group">
@@ -127,6 +131,7 @@
             付添
             {{ form.t_staff }}
           </div>
+
         </div>
       {% endif %}
 
@@ -153,8 +158,55 @@
           </div>
 
           <div class="form-group">
-            行き先等
-            {# {{ form.naiyo }} #}
+            内容
+            {{ form.naiyo }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if event_knd_id == 4 %}
+        <div class="my-3" id="jusin">
+          <div class="form-group">
+            発着
+            {{ form.ht_kbn }}
+          </div>
+
+          <div class="form-group">
+            利用者を選択
+            {{ form.riyosya }}
+          </div>
+
+          <div class="form-group">
+            運転手
+            {{ form.d_staff }}
+          </div>
+
+          <div class="form-group">
+            付添
+            {{ form.t_staff }}
+          </div>
+
+          <div class="form-group">
+            内容
+            {{ form.naiyo }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if event_knd_id == 5 %}
+        <div class="my-3" id="ousin">
+          <div class="form-group">
+            内容
+            {{ form.naiyo }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if event_knd_id == 6 %}
+        <div class="my-3" id="ousin">
+          <div class="form-group">
+            内容
+            {{ form.naiyo }}
           </div>
         </div>
       {% endif %}

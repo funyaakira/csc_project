@@ -57,6 +57,11 @@ class EventCreateView(CreateView):
             'knd': self.kwargs.get('event_knd_id'),
         }
 
+    def get_form_kwargs(self):
+        kwargs = super(EventCreateView, self).get_form_kwargs()
+        kwargs['event_knd_id'] = self.kwargs.get('event_knd_id')
+        return kwargs
+
     def get_context_data(self, **kwargs):
         kwargs["event_knds"] = Event_knd.objects.all().order_by('id')
         kwargs['event_knd_id'] = self.kwargs.get('event_knd_id')

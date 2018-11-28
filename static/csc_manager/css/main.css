@@ -10,19 +10,40 @@ html {
   color: white;
   background-color: royalblue;
   border-style: solid;
-  border-color: cornflowerblue;
+  border-color: gray;
 }
 
 .taisyo {
   color: white;
   background-color: crimson;
   border-style: solid;
-  border-color: pink;
+  border-color: gray;
+}
+
+.gaisyutu {
+  color: black;
+  background-color: lightyellow;
+  border-style: solid;
+  border-color: gray;
 }
 
 .jusin {
-  color: white;
-  background-color: seagreen;
+  color: black;
+  background-color: lightgreen;
   border-style: solid;
-  border-color: mediumaquamarine;
+  border-color: gray;
+}
+
+.ousin {
+  color: black;
+  background-color: blanchedalmond;
+  border-style: solid;
+  border-color: gray;
+}
+
+.sonota {
+  color: black;
+  background-color: white;
+  border-style: solid;
+  border-color: gray;
 }

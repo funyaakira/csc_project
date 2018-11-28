@@ -101,6 +101,7 @@
           <th>内容</th>
         </thead>
         <tbody>
+        {% if kirokus %}
           {% for kiroku in kirokus %}
           <tr>
             {% if kiroku.day_night == 0 %}
@@ -112,6 +113,11 @@
             {% endif %}
           </tr>
           {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="2">まだありません</td>
+          </tr>
+        {% endif %}
         </tbody>
       </table>
     </div>

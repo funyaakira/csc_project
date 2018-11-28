@@ -48,6 +48,9 @@ urlpatterns = [
     # イベント - 一覧(年月指定)
 	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
 
+    # イベント - 新規
+    path('event_create/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
+
     # 全体連絡 - 一覧
 	path('renraku_list/', RenrakuZentaiListView.as_view(), name='renraku_list'),
 
@@ -84,8 +87,6 @@ urlpatterns = [
     # 記録 - 削除
     path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
 
-    # イベント - 新規
-    path('event_create/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
 
 
     # # シフトGogleSpreadSheetからの受信インターフェース

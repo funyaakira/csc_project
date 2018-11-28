@@ -9,7 +9,7 @@ class KirokuCreateForm(forms.ModelForm):
     staff = forms.CharField(
         label='記録者',
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-3', 'readonly':'readonly'},
+            attrs={'class': 'form-control col-4', 'readonly':'readonly'},
         )
     )
 

@@ -56,7 +56,7 @@
                 {{ event.knd.short_name }}
               </div>
               <div class="">
-                {{ event.time }} {{ event.ht_kbn }} {{ event.riyosya.name }} {{ event.d_staff.name }} {{ event.t_staff.name }} {{ event.naiyo }}
+                {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}  {{ event.d_staff.name }} {{ event.t_staff.name }} 
               </div>
           </div>
           {% endfor %}
