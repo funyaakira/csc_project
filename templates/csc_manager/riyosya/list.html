@@ -25,6 +25,7 @@
     </div>
   </div>
 
+  <div class="d-none d-lg-block">
   <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -83,5 +84,44 @@
       {% endfor %}
     </tbody>
   </table>
+</div>
 
+<div class="d-inline d-lg-none">
+  {% for riyosya in riyosyas %}
+  <div class="border rounded mb-3 py-3 px-3">
+    <div class="border-bottom">
+      <a href="{% url 'riyosya_detail' riyosya.id %}"  class="text-body">
+        <div>
+          {{ riyosya.name }}
+        </div>
+        <small class="text-muted d-block">{{ riyosya.furigana }}</small>
+      </a>
+      {{ riyosya.birthday|seireki_to_wareki }}
+      <small class="text-muted d-block">{{ riyosya.birthday  }}</small>
+    </div>
+
+    <div class="border-bottom">
+      {% for renrakusaki in riyosya.renrakusakis.all %}
+        {% if renrakusaki.primary_flg %}
+          <div>
+            {{ renrakusaki.name }}
+          </div>
+          <small class="text-muted d-block">{{ renrakusaki.zokugara }}</small>
+          <small class="text-muted d-block">{{ renrakusaki.tel }}</small>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="border-bottom">
+      <div>
+        {{ riyosya.caremanager.name }}
+      </div>
+      <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.name }}</small>
+      <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
+    </div>
+    <div class="my-1">
+      <a href="#" class="btn btn-primary btn-sm" role="button">編集</a>
+      <a href="{% url 'riyosya_taisyo' riyosya.get_riyoukikan_latest_id %}" class="btn btn-primary btn-sm" role="button">退所</a>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}
