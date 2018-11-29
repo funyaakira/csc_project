@@ -51,11 +51,13 @@
                     {% if kiroku.day_night == 0 %}
                       <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
                       <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
-                      <td >{{ kiroku.memo }}</td>
+                      <td>{{ kiroku.memo }}</td>
+                      <td style="width: 10%"><small>{{ kiroku.created_by.staff.name }}</small></td>
                     {% else %}
                       <td class="text-danger" style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
                       <td class="text-danger" style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
                       <td class="text-danger">{{ kiroku.memo }}</td>
+                      <td style="width: 10%" class="text-danger"><small>{{ kiroku.created_by.staff.name }}</small></td>
                     {% endif %}
                     <td style="width: 10%" >
                       <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night_now kiroku.id %}" class="btn btn-light">削除</a>
