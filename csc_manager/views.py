@@ -30,7 +30,7 @@ def shift_upload(request):
         filepath = settings.MEDIA_ROOT + '/' + filename
         import_shift(filepath)
         uploaded_file_url = fs.url(filename)
-        return render(request, 'csc_manager/shift_upload.html', {
+        return render(request, 'csc_manager/shift/upload.html', {
             'uploaded_file_url': uploaded_file_url
         })
     return render(request, 'csc_manager/shift/upload.html')
