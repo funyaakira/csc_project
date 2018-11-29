@@ -34,38 +34,38 @@
       <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container">
           <a class="navbar-brand" href="{% url 'home' %}">Ayumi Manager</a>
-          <div class="collapse navbar-collapse" id="Navber">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item {% block nav_home %}{% endblock %}"><a class="nav-link" href="{% url 'home' %}">ホーム</a></li>
-              <li class="nav-item {% block nav_shift %}{% endblock %}"><a class="nav-link" href="{% url 'home' %}">シフト</a></li>
-              <li class="nav-item {% block nav_event %}{% endblock %}"><a class="nav-link" href="{% url 'event_list' %}">イベント</a></li>
-              <li class="nav-item {% block nav_riyosya %}{% endblock %}"><a class="nav-link" href="{% url 'riyosya_list' %}">利用者</a></li>
-              <li class="nav-item {% block nav_kiroku %}{% endblock %}"><a class="nav-link" href="{% url 'kiroku_home' %}">記録</a></li>
-              <li class="nav-item dropdown {% block nav_renraku %}{% endblock %}">
-                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  連絡
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{% url 'renraku_list' %}">全体連絡</a>
-                  <a class="dropdown-item" href="{% url 'renraku_kojin_list' %}">個人連絡</a>
-                </div>
-              </li>
-            </ul>
-          </div>
+
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+
           <div class="collapse navbar-collapse" id="mainMenu">
             {% if user.is_authenticated %}
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ user.staff.name }}
-                  </a>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-                    <a class="dropdown-item" href="#">パスワード変更</a>
-                    <a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a>
-                  </div>
+                  <li class="nav-item {% block nav_home %}{% endblock %}"><a class="nav-link" href="{% url 'home' %}">ホーム</a></li>
+                  <li class="nav-item {% block nav_shift %}{% endblock %}"><a class="nav-link" href="{% url 'home' %}">シフト</a></li>
+                  <li class="nav-item {% block nav_event %}{% endblock %}"><a class="nav-link" href="{% url 'event_list' %}">イベント</a></li>
+                  <li class="nav-item {% block nav_riyosya %}{% endblock %}"><a class="nav-link" href="{% url 'riyosya_list' %}">利用者</a></li>
+                  <li class="nav-item {% block nav_kiroku %}{% endblock %}"><a class="nav-link" href="{% url 'kiroku_home' %}">記録</a></li>
+                  <li class="nav-item dropdown {% block nav_renraku %}{% endblock %}">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      連絡
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'renraku_list' %}">全体連絡</a>
+                      <a class="dropdown-item" href="{% url 'renraku_kojin_list' %}">個人連絡</a>
+                    </div>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      {{ user.staff.name }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
+                      <a class="dropdown-item" href="#">パスワード変更</a>
+                      <a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a>
+                    </div>
+                  </li>
                 </li>
               </ul>
             {% else %}

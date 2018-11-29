@@ -7,18 +7,18 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['date', 'knd', 'riyosya', 'time', 'ht_kbn', 'go_place', 'd_staff', 't_staff', 'naiyo']
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'form-control col-3'}),
+            'date': forms.DateInput(attrs={'class': 'form-control col-lg-3'}),
             'knd': forms.Select(
-                    attrs={'class': 'form-control col-3',
+                    attrs={'class': 'form-control col-lg-3',
                            'data-target': 'collapseExample',
                           }),
-            'riyosya': forms.Select(attrs={'class': 'form-control col-8'}),
-            'time': forms.TimeInput(attrs={'class': 'form-control col-3'}),
-            'ht_kbn': forms.Select(attrs={'class': 'form-control col-2'}),
-            'go_place': forms.Select(attrs={'class': 'form-control col-8'}),
-            'd_staff': forms.Select(attrs={'class': 'form-control col-8'}),
-            't_staff': forms.Select(attrs={'class': 'form-control col-8'}),
-            'naiyo': forms.TextInput(attrs={'class': 'form-control col-12'}),
+            'riyosya': forms.Select(attrs={'class': 'form-control col-lg-8'}),
+            'time': forms.TimeInput(attrs={'class': 'form-control col-lg-3'}),
+            'ht_kbn': forms.Select(attrs={'class': 'form-control col-lg-2'}),
+            'go_place': forms.Select(attrs={'class': 'form-control col-lg-8'}),
+            'd_staff': forms.Select(attrs={'class': 'form-control col-lg-8'}),
+            't_staff': forms.Select(attrs={'class': 'form-control col-lg-8'}),
+            'naiyo': forms.TextInput(attrs={'class': 'form-control col-lg-12'}),
         }
 
 

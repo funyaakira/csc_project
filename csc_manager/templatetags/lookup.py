@@ -46,3 +46,15 @@ def get_kirokus_day(kirokus, date):
 @register.filter(name='get_kirokus_riyosya')
 def get_kirokus_riyosya(kirokus, riyosya):
     return kirokus.filter(riyosya=riyosya).order_by('date', 'time')
+
+
+@register.filter(name='get_gender_name')
+def get_gender_name(id):
+    id -= 1 # indexを合わせるため1引く…
+    return models.gender[id][1]
+
+
+@register.filter(name='get_yokaigodo_name')
+def get_yokaigodo_name(id):
+    id -= 1 # indexを合わせるため1引く…
+    return models.youkaigodo[id][1]

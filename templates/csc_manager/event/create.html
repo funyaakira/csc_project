@@ -24,7 +24,7 @@
 
 <div class="row">
   <div class="col">
-    <form method="post" class="col-6" novalidate>
+    <form method="post" class="col-lg-6" novalidate>
       <h2 class="mb-3">イベント新規作成</h2>
       {% csrf_token %}
       <div class="form-group">
@@ -91,11 +91,14 @@
             {{ form.ht_kbn }}
           </div>
 
-          <div class="form-group">
-            入所者氏名を入力
-            {{ form.naiyo}}
-            または、退所者から選択
-            {{ form.riyosya }}
+          関係利用者
+          <div class="border rounded mb-3 py-3 px-3">
+            <div class="form-group">
+              入所予定者の氏名を入力
+              {{ form.naiyo}}
+              または、退所者から選択
+              {{ form.riyosya }}
+            </div>
           </div>
 
           <div class="form-group">
@@ -205,7 +208,7 @@
       {% if event_knd_id == 6 %}
         <div class="my-3" id="ousin">
           <div class="form-group">
-            内容
+            内容 (会議、事前訪問など)
             {{ form.naiyo }}
           </div>
         </div>

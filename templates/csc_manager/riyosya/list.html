@@ -39,10 +39,12 @@
       {% for riyosya in riyosyas %}
       <tr>
         <td>
-          <div>
-            {{ riyosya.name }}
-          </div>
-          <small class="text-muted d-block">{{ riyosya.furigana }}</small>
+          <a href="{% url 'riyosya_detail' riyosya.id %}"  class="text-body">
+            <div>
+              {{ riyosya.name }}
+            </div>
+            <small class="text-muted d-block">{{ riyosya.furigana }}</small>
+          </a>
         </td>
         <td>
           <div>

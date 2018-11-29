@@ -9,7 +9,7 @@ class KirokuCreateForm(forms.ModelForm):
     staff = forms.CharField(
         label='記録者',
         widget=forms.TextInput(
-            attrs={'class': 'form-control col-4', 'readonly':'readonly'},
+            attrs={'class': 'form-control col-lg-4', 'readonly':'readonly'},
         )
     )
 
@@ -17,8 +17,8 @@ class KirokuCreateForm(forms.ModelForm):
         model = Kiroku
         fields = ['exec_date', 'day_night', 'riyosya', 'date', 'time', 'memo']
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'form-control col-4'}),
-            'time': forms.TimeInput(attrs={'class': 'form-control col-4'}),
+            'date': forms.DateInput(attrs={'class': 'form-control col-lg-4'}),
+            'time': forms.TimeInput(attrs={'class': 'form-control col-lg-4'}),
             'memo': forms.Textarea(
                 attrs={'class': 'form-control col-12',
                        'row': 5,

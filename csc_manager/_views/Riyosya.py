@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
@@ -39,6 +39,12 @@ class RiyosyaListView(ListView):
         ).order_by('furigana')
 
         return queryset
+
+
+# 利用者 - 詳細
+class RiyosyaDetailView(DetailView):
+    model = Riyosya
+    template_name = 'csc_manager/riyosya/detail.html'
 
 
 # 利用者 - 新規入所
@@ -160,6 +166,12 @@ class TaisyoListView(ListView):
         ).order_by('-last_day')
 
         return queryset
+
+
+# 退所者 - 詳細
+class TaisyoDetailView(DetailView):
+    model = Riyosya
+    template_name = 'csc_manager/riyosya/taisyo/detail.html'
 
 
 # 退所者 - 再入所
