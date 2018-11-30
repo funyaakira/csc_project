@@ -40,12 +40,12 @@ def get_events(evnets, date):
 
 @register.filter(name='get_kirokus_day')
 def get_kirokus_day(kirokus, date):
-    return kirokus.filter(exec_date=date).order_by('date', 'time')
+    return kirokus.filter(exec_date=date).order_by('date', 'disp_time')
 
 
 @register.filter(name='get_kirokus_riyosya')
 def get_kirokus_riyosya(kirokus, riyosya):
-    return kirokus.filter(riyosya=riyosya).order_by('date', 'time')
+    return kirokus.filter(riyosya=riyosya).order_by('date', 'disp_time')
 
 
 @register.filter(name='get_gender_name')
