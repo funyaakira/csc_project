@@ -4,7 +4,7 @@
 // キャッシュ名とキャッシュファイルの指定
 var CACHE_NAME = 'pwa-sample-caches';
 var urlsToCache = [
-	'/ayumi_shift_manager/'
+	'/cache/'
 ];
 
 // インストール処理
