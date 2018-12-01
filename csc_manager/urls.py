@@ -19,6 +19,9 @@ urlpatterns = [
     # トップページ
 	path('', views.home, name='home'),
 
+    # トップページ
+	path('index.html', views.home, name='home'),
+
     # シフト - 単日表示
     path('shift/<int:year>/<int:month>/<int:day>/', ShiftDayView.as_view(), name='shift_day'),
 
