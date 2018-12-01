@@ -210,7 +210,7 @@ class Renraku_kojin(models.Model):
 class Kiroku(models.Model):
     exec_date = models.DateField(default=None, null=True)
     date = models.DateField(_("日付"), default=None, null=True)
-    time = models.TimeField(_("時間"), default=None, null=True, blank=True) # nullの場合は全日
+    time = models.TimeField(_("時間"), default=None, null=True, blank=True, help_text='全体の場合は空白にしてください。<br>入力した時間に応じて日付は自動で設定されます。') # nullの場合は全日
     disp_time = models.TimeField(_("並び用時間"), default=None, null=True, blank=True)
     day_night = models.IntegerField(_("日勤夜勤区分"), choices=last_kbn, null=True, default=None)
     riyosya = models.ForeignKey(Riyosya, verbose_name=_("利用者"), related_name='kirokus', on_delete=models.CASCADE, default=None)

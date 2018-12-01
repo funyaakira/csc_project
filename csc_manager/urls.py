@@ -88,7 +88,7 @@ urlpatterns = [
     path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:riyosya_id>', KirokuCreateView.as_view(), name='kiroku_create'),
 
     # 記録 - 新規 - 連続
-    path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:riyosya_order_list_idx>/renzoku/', KirokuRenzokuCreateView.as_view(), name='kiroku_renzoku_create'),
+    path('kiroku_renzoku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuRenzokuCreateView.as_view(), name='kiroku_renzoku_create'),
 
     # 記録 - 削除
     path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),

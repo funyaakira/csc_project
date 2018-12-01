@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 from ..models import Riyosya, Kiroku, riyosya_status
 
@@ -18,10 +18,12 @@ class KirokuCreateForm(forms.ModelForm):
         fields = ['exec_date', 'day_night', 'riyosya', 'date', 'time', 'memo']
         widgets = {
             'date': forms.DateInput(attrs={'class': 'form-control col-lg-4'}),
-            'time': forms.TimeInput(attrs={'class': 'form-control col-lg-4'}),
+            'time': forms.TimeInput(
+                attrs={'class': 'form-control col-lg-4',},
+                ),
             'memo': forms.Textarea(
                 attrs={'class': 'form-control col-12',
-                       'row': 5,
+                       'rows': 3,
                        'placeholder': '一般介護状況を入力してください。',}),
         }
 
@@ -43,16 +45,20 @@ class KirokuCreateForm(forms.ModelForm):
             workTimeF = datetime(year=exec_date.year, month=exec_date.month, day=exec_date.day, hour=n_s_time.hour)
             workTimeT = datetime(year=exec_date.year, month=exec_date.month, day=exec_date.day, hour=y_s_time.hour)
         else:
+            h_time = input_time or time(0, 0, 0)
+            if time(0, 0, 0) <= h_time < settings.NIKKIN_START_TIME:
+                input_date = next_date
+
             input_time = input_time or '00:00:00'
             workTimeF = datetime(year=exec_date.year, month=exec_date.month, day=exec_date.day, hour=y_s_time.hour)
             workTimeT = datetime(year=next_date.year, month=next_date.month, day=next_date.day, hour=n_s_time.hour)
 
-        input_dateTime = datetime.strptime(str(input_date) + ' '+ str(input_time), '%Y-%m-%d %H:%M:%S')
+        input_dateTime = datetime.strptime(str(input_date) + ' ' + str(input_time), '%Y-%m-%d %H:%M:%S')
 
         if not(workTimeF <= input_dateTime < workTimeT):
             workTimeT = workTimeT - timedelta(minutes=1)
-            self.add_error('date', '日時は%s～%sの範囲で入力してください。' % (workTimeF, workTimeT))
-            # raise forms.ValidationError('日付のエラーだよ')
+            self.add_error('time', '時間は%s～%sの範囲で入力してください。' %
+                (workTimeF.strftime('%H:%M'), workTimeT.strftime('%H:%M')))
 
         return cleaned_data
 

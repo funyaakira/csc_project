@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'kiroku_home' %}">記録</a></li>
-  <li class="breadcrumb-item active">新規記録</li>
+  <li class="breadcrumb-item"><a href="{% url 'kiroku_day_list' year month day day_night %}">記録 {{ target_day }} ({{ day_night_name }})</a></li>
+  <li class="breadcrumb-item active">連続記録</li>
 {% endblock %}
 
 {% block content %}
@@ -25,24 +25,13 @@
   {% csrf_token %}
   <h2 class="mb-3">{{ riyosya.name }}</h2>
   {{ form.exec_date.as_hidden }}
+  {{ form.date.as_hidden }}
   {{ form.day_night.as_hidden }}
   {{ form.riyosya.as_hidden }}
 
   <div class="row">
     <div class="border rounded mb-3 py-3 px-3 col-lg">
     {% if form.is_bound %}
-
-      <div class="form-group">
-      {{ form.date.label }}
-      {% if form.time.errors %}
-        {{ form.date|add_class:'is-invalid' }}
-        {% for error in form.date.errors %}
-          <div class="text-danger">{{ error }}</div>
-        {% endfor %}
-      {% else %}
-        {{ form.date|add_class:'is-valid' }}
-      {% endif %}
-      </div>
 
       <div class="form-group">
       {{ form.time.label }}
@@ -54,6 +43,7 @@
       {% else %}
         {{ form.time|add_class:'is-valid' }}
       {% endif %}
+      <small class="text-muted">{{ form.time.help_text|safe }}</small>
       </div>
 
       <div class="form-group">
@@ -74,12 +64,9 @@
       </div>
     {% else %}
       <div class="form-group">
-        {{ form.date.label }}
-        {{ form.date }}
-      </div>
-      <div class="form-group">
         {{ form.time.label }}
         {{ form.time }}
+        <small class="text-muted">{{ form.time.help_text|safe }}</small>
       </div>
       <div class="form-group">
         {{ form.staff.label }}
@@ -92,6 +79,36 @@
         {{ form.memo }}
       </div>
     {% endif %}
+    <small>ヘルプツール
+    <a href="#" onclick="document.getElementById('id_time').value='9:30';">
+      9:30
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_time').value='10:00';">
+      10:00
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_time').value='12:00';">
+      12:00
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_time').value='18:00';">
+      18:00
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_time').value='8:00';">
+      8:00
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_memo').value='BP/ P KT℃';">
+      バイタルフォーマット入力
+    </a>
+    ,
+    <a href="#" onclick="document.getElementById('id_memo').value='夜間巡回毎眠っている。';">
+      夜間巡回毎～
+    </a>
+    </small>
+
     </div>
     <div class="border rounded mb-3 py-3 px-3 col-lg">
       <h4>今日の記録</h4>
@@ -124,13 +141,17 @@
   </div>
 
   {% if go_to_back %}
-    <button type="submit" class="btn btn-success">登録して一覧へ戻る>></button>
+    <button type="submit" class="btn btn-success" name="commit">登録</button>
+    <button type="submit" class="btn btn-success" name="commit_next">登録して一覧へ戻る>></button>
     <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">登録しないで一覧へ戻る >></a>
   {% else %}
     <button type="submit" class="btn btn-success" name="commit">登録</button>
-    <button type="submit" class="btn btn-success" name="commit_next">登録して次へ >></button>
-    <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_order_list_idx %}" class="btn btn-primary">登録しないで次へ >></a>
-    <div>次は {{ next_riyosya.name }}</div>
+    <button type="submit" class="btn btn-success" name="commit_next">
+      登録して次({{ next_riyosya.name }})へ
+    </button>
+    <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_current_index %}" class="btn btn-primary">
+      登録しないで次({{ next_riyosya.name }})へ
+    </a>
   {% endif %}
 
 </form>

@@ -44,8 +44,6 @@ class KirokuDayListView(ListView):
         day_night_now = self.kwargs.get('day_night')
 
         target_day = date(year, month, day)
-        kwargs['target_day'] = target_day
-        kwargs['day_night_now'] = day_night_now
 
         if day_night_now == day_night[0][0]:
             kwargs['day_night_name'] = day_night[0][1]
@@ -65,7 +63,11 @@ class KirokuDayListView(ListView):
             kwargs['next_day'] = (target_day + timedelta(days=1))
             kwargs['next_day_night'] = day_night[0][0]
 
+        kwargs['target_day'] = target_day
+        kwargs['prev_day_1week'] = target_day - timedelta(days=7)
+        kwargs['day_night'] = day_night_now
         kwargs['kirokus'] = Kiroku.objects.filter(exec_date=target_day, day_night=day_night_now).order_by('date', 'disp_time')
+        kwargs['riyosya_ids'] = self.riyosya_ids # get_querysetで設定した利用者IDをカンマ区切りで連結したもの
 
         return super().get_context_data(**kwargs)
 
@@ -101,12 +103,18 @@ class KirokuDayListView(ListView):
                 Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte=settings.YAKIN_START_TIME)
             ).order_by('furigana')
 
-        # 連続投入用に利用者IDのリストを作ってsessionに格納しておく
-        riyosya_order_list = []
-        for r in queryset:
-            riyosya_order_list.append(r.id)
+        ## 連続投入用に利用者IDのリストを作ってsessionに格納しておく
+        # riyosya_order_list = []
+        # for r in queryset:
+        #     riyosya_order_list.append(r.id)
+        #
+        # self.request.session['riyosya_order_list'] = riyosya_order_list
 
-        self.request.session['riyosya_order_list'] = riyosya_order_list
+        # 連続投入用に利用者IDをカンマでつなげた文字列作成
+        l_riyosya_ids = []
+        for r in queryset:
+            l_riyosya_ids.append(str(r.id))
+        self.riyosya_ids = ','.join(l_riyosya_ids)
 
         return queryset
 
@@ -124,20 +132,12 @@ class KirokuCreateView(CreateView):
         riyosya_id = self.kwargs.get('riyosya_id')
         l_day_night = self.kwargs.get('day_night')
 
-        # 夜勤の場合はデフォルトの日付を翌日に設定
-        if l_day_night == day_night[0][0]:
-            def_date = date(year, month, day)
-            def_time = '12:00'
-        else:
-            def_date = date(year, month, day) + timedelta(days=1)
-            def_time = '00:00'
-
         return {
             'exec_date': date(year, month, day),
             'day_night': l_day_night,
             'riyosya': riyosya_id,
-            'date': def_date,
-            'time': def_time,
+            'date': date(year, month, day),
+            # 'time': def_time,
             'staff': self.request.user.staff.name,
         }
 
@@ -145,7 +145,7 @@ class KirokuCreateView(CreateView):
         year= self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
-        day_night = self.kwargs.get('day_night')
+        l_day_night = self.kwargs.get('day_night')
         exec_date = date(year, month, day)
 
         riyosya_id = self.kwargs.get('riyosya_id')
@@ -156,7 +156,9 @@ class KirokuCreateView(CreateView):
         kwargs['year'] = year
         kwargs['month'] = month
         kwargs['day'] = day
-        kwargs['day_night'] = day_night
+        kwargs['target_day'] = date(year, month, day)
+        kwargs['day_night'] = l_day_night
+        kwargs['day_night_name'] = day_night[l_day_night][1]
 
         return super().get_context_data(**kwargs)
 
@@ -170,6 +172,15 @@ class KirokuCreateView(CreateView):
                 kiroku.disp_time = '12:00'
             else:
                 kiroku.disp_time = '00:00'
+
+        if kiroku.day_night == settings._YAKIN:
+            if kiroku.time == None:
+                in_time = time(0, 0, 0)
+            else:
+                in_time = kiroku.time
+
+            if time(0, 0, 0) <= in_time < settings.NIKKIN_START_TIME:
+                kiroku.date += timedelta(days=1)
 
         kiroku.created_by = self.request.user
         kiroku.created_at = timezone.now()
@@ -189,6 +200,7 @@ class KirokuCreateView(CreateView):
         else:
             return redirect('kiroku_create', year=year, month=month, day=day, day_night=day_night, riyosya_id=riyosya.id)
 
+
 class KirokuRenzokuCreateView(CreateView):
     model = Kiroku
     context_object_name = 'kiroku'
@@ -200,25 +212,17 @@ class KirokuRenzokuCreateView(CreateView):
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
 
-        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
-        riyosya_order_list = self.request.session['riyosya_order_list']
-        riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+        riyosya_ids = self.kwargs.get('riyosya_ids').split(',')
+        riyosya_id_current_index = self.kwargs.get('riyosya_id_current_index')
+        riyosya_id = riyosya_ids[riyosya_id_current_index]
 
         l_day_night = self.kwargs.get('day_night')
-
-        # 夜勤の場合はデフォルトの日付を翌日に設定
-        if l_day_night == day_night[0][0]:
-            def_date = date(year, month, day)
-            def_time = None
-        else:
-            def_date = date(year, month, day) + timedelta(days=1)
-            def_time = None
 
         return {
             'exec_date': date(year, month, day),
             'day_night': l_day_night,
             'riyosya': riyosya_id,
-            'date': def_date,
+            'date': date(year, month, day),
             # 'time': datetime.now().strftime("%H:%M"),
             'time': None,
             'staff': self.request.user.staff.name,
@@ -228,27 +232,36 @@ class KirokuRenzokuCreateView(CreateView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
-
+        l_day_night = self.kwargs.get('day_night')
         exec_date = date(year, month, day)
-        kwargs['target_day'] = exec_date
 
-        kwargs['day_night'] = self.kwargs.get('day_night')
-
-        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
-        riyosya_order_list = self.request.session['riyosya_order_list']
-        riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+        riyosya_ids = self.kwargs.get('riyosya_ids')
+        riyosya_ids_list = riyosya_ids.split(',')
+        riyosya_id_current_index = int(self.kwargs.get('riyosya_id_current_index'))
+        riyosya_id = riyosya_ids_list[riyosya_id_current_index]
         riyosya = Riyosya.objects.get(id=riyosya_id)
-        kwargs['riyosya'] = riyosya
 
-        riyosya_order_list_idx += 1
-        if len(riyosya_order_list) == riyosya_order_list_idx:
+        riyosya_id_current_index += 1
+
+        if len(riyosya_ids_list) == riyosya_id_current_index:
             kwargs['go_to_back'] = True
         else:
-            kwargs['riyosya_order_list_idx'] = riyosya_order_list_idx
-            riyosya_id = riyosya_order_list[riyosya_order_list_idx]
+            kwargs['go_to_back'] = False
+            kwargs['riyosya_id_current_index'] = riyosya_id_current_index
+            riyosya_id = riyosya_ids_list[riyosya_id_current_index]
             kwargs['next_riyosya'] = Riyosya.objects.get(id=riyosya_id)
 
+
+        kwargs['riyosya'] = riyosya
+        kwargs['riyosya_ids'] = riyosya_ids
         kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time')
+        kwargs['target_day'] = exec_date
+        kwargs['year'] = year
+        kwargs['month'] = month
+        kwargs['day'] = day
+        kwargs['target_day'] = exec_date
+        kwargs['day_night'] = l_day_night
+        kwargs['day_night_name'] = day_night[l_day_night][1]
 
         return super().get_context_data(**kwargs)
 
@@ -263,6 +276,15 @@ class KirokuRenzokuCreateView(CreateView):
             else:
                 kiroku.disp_time = '00:00'
 
+        if kiroku.day_night == settings._YAKIN:
+            if kiroku.time == None:
+                in_time = time(0, 0, 0)
+            else:
+                in_time = kiroku.time
+
+            if time(0, 0, 0) <= in_time < settings.NIKKIN_START_TIME:
+                kiroku.date += timedelta(days=1)
+
         kiroku.created_by = self.request.user
         kiroku.created_at = timezone.now()
         kiroku.updated_by = self.request.user
@@ -274,17 +296,19 @@ class KirokuRenzokuCreateView(CreateView):
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
         day_night = self.kwargs.get('day_night')
-
-        riyosya_order_list = self.request.session['riyosya_order_list']
-        riyosya_order_list_idx = self.kwargs.get('riyosya_order_list_idx')
+        riyosya_ids = self.kwargs.get('riyosya_ids')
+        riyosya_ids_list = riyosya_ids.split(',')
+        riyosya_id_current_index = int(self.kwargs.get('riyosya_id_current_index'))
 
         if 'commit_next' in self.request.POST:
-            riyosya_order_list_idx += 1
+            riyosya_id_current_index += 1
 
-        if len(riyosya_order_list) == riyosya_order_list_idx:
+        if len(riyosya_ids_list) == riyosya_id_current_index:
             return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
         else:
-            return redirect('kiroku_renzoku_create', year=year, month=month, day=day, day_night=day_night, riyosya_order_list_idx=riyosya_order_list_idx)
+            return redirect('kiroku_renzoku_create',
+             year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids,
+             riyosya_id_current_index=riyosya_id_current_index)
 
 
 class KirokuDeleteView(DeleteView):
