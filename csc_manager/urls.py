@@ -10,6 +10,7 @@ from ._views.Shift import ShiftDayView, ShiftIndivView
 from ._views.Riyosya import *
 from ._views.Renraku import *
 from ._views.Kiroku import *
+from ._views.Print import *
 
 urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
@@ -94,18 +95,9 @@ urlpatterns = [
     path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
 
 
+	path('shift/sw.js', (TemplateView.as_view(template_name="csc_manager/sw.js",
+		content_type='application/javascript',)), name='sw.js'),
 
-    # # シフトGogleSpreadSheetからの受信インターフェース
-    # path('shift/receive_from_gas/', views.receive_from_gas, name='receive_from_gas'),
-    # path('test_create/', views.TestCreateView.as_view(), name='test_create'),
-    #
-    #
-    # path('test/', views.TestView.as_view(), name='test'),
-    #
-    #
-	# path('shift/sw.js', (TemplateView.as_view(template_name="ayumi_manager/sw.js",
-	# 	content_type='application/javascript',)), name='sw.js'),
-    #
-	# path('shift/manifest.json', (TemplateView.as_view(template_name="ayumi_manager/manifest.json",
-	# 	content_type='application/javascript',)), name='manifest.json'),
+	path('shift/manifest.json', (TemplateView.as_view(template_name="csc_manager/manifest.json",
+		content_type='application/javascript',)), name='manifest.json'),
 ]

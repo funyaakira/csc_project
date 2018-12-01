@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_print %}active{% endblock %}
+{% block prev_url %}{{ request.path }}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">印刷</li>
+{% endblock %}
+
+{% block content %}
+<h2>印刷</h2>
+
+<h3>
+  <a href="{% url 'print_haisetu_check' %}" class="btn btn-primary">排泄チェック表印刷</a>
+</h3>
+{% endblock %}
