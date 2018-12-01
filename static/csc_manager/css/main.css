@@ -47,3 +47,12 @@ html {
   border-style: solid;
   border-color: gray;
 }
+
+.form-control::placeholder{
+  color: #cccccc;
+  font-size: 0.8rem;
+}
+
+.my_border{
+  border: 1px solid #aaa;
+}

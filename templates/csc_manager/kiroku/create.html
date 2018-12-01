@@ -21,7 +21,6 @@
 {% endfor %}
 
 {# {{ form.errors }} #}
-
 <form method="post" novalidate>
   {% csrf_token %}
   <h2 class="mb-3">{{ riyosya.name }}</h2>
@@ -30,8 +29,9 @@
   {{ form.riyosya.as_hidden }}
   {{ form.date.as_hidden }}
 
-  <div class="row">
-    <div class="border rounded mb-3 py-3 px-3 col-lg">
+<div class="row">
+<div class="col-lg">
+    <div class="rounded mb-3 py-3 px-3 my_border">
 
     {% if form.is_bound %}
 
@@ -111,8 +111,15 @@
     </a>
     </small>
     </div>
+    <div class="mb-3">
+      <button type="submit" class="btn btn-success" name='commit'>登録</button>
+      <button type="submit" class="btn btn-success" name='commit_list'>登録して一覧に戻る</button>
+      <a href="{% url 'kiroku_day_list' year month day day_night %}" class="btn btn-primary">一覧に戻る</a>
+    </div>
+</div>
 
-    <div class="border rounded mb-3 py-3 px-3 col-lg">
+<div class="col col-lg">
+    <div class="rounded mb-3 py-3 px-3 my_border">
       <h4>今日の記録</h4>
       <table class="table">
         <thead>
@@ -140,9 +147,9 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <button type="submit" class="btn btn-success" name='commit'>登録</button>
-  <button type="submit" class="btn btn-success" name='commit_list'>登録して一覧に戻る</button>
-  <a href="{% url 'kiroku_day_list' year month day day_night %}" class="btn btn-primary">一覧に戻る</a>
+</div>
+</div>
+<row>
+</row>
 </form>
 {% endblock %}

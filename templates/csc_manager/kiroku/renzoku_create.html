@@ -29,8 +29,9 @@
   {{ form.day_night.as_hidden }}
   {{ form.riyosya.as_hidden }}
 
-  <div class="row">
-    <div class="border rounded mb-3 py-3 px-3 col-lg">
+<div class="row">
+<div class="col-lg">
+    <div class="rounded mb-3 py-3 px-3 my_border">
     {% if form.is_bound %}
 
       <div class="form-group">
@@ -107,10 +108,36 @@
     <a href="#" onclick="document.getElementById('id_memo').value='夜間巡回毎眠っている。';">
       夜間巡回毎～
     </a>
-    </small>
+  </div>
 
-    </div>
-    <div class="border rounded mb-3 py-3 px-3 col-lg">
+    </small>
+    {% if go_to_back %}
+      <div class="mb-1">
+        <button type="submit" class="btn btn-success" name="commit">登録</button>
+        <button type="submit" class="btn btn-success" name="commit_next">登録して一覧へ戻る</button>
+      </div>
+      <div>
+        <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">
+          登録しないで一覧へ戻る
+        </a>
+      </div>
+    {% else %}
+      <div class="mb-1">
+        <button type="submit" class="btn btn-success" name="commit">登録</button>
+        <button type="submit" class="btn btn-success" name="commit_next">
+          登録して次({{ next_riyosya.name }})へ
+        </button>
+      </div>
+      <div class="mb-3">
+        <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_current_index %}" class="btn btn-primary">
+          登録しないで次({{ next_riyosya.name }})へ
+        </a>
+      </div>
+    {% endif %}
+</div>
+
+<div class="col-lg">
+    <div class="rounded mb-3 py-3 px-3 my_border">
       <h4>今日の記録</h4>
       <table class="table">
         <thead>
@@ -138,22 +165,8 @@
         </tbody>
       </table>
     </div>
-  </div>
-
-  {% if go_to_back %}
-    <button type="submit" class="btn btn-success" name="commit">登録</button>
-    <button type="submit" class="btn btn-success" name="commit_next">登録して一覧へ戻る>></button>
-    <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">登録しないで一覧へ戻る >></a>
-  {% else %}
-    <button type="submit" class="btn btn-success" name="commit">登録</button>
-    <button type="submit" class="btn btn-success" name="commit_next">
-      登録して次({{ next_riyosya.name }})へ
-    </button>
-    <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_current_index %}" class="btn btn-primary">
-      登録しないで次({{ next_riyosya.name }})へ
-    </a>
-  {% endif %}
-
+</div>
+</div>
 </form>
 
 {% endblock %}
