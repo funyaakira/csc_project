@@ -16,13 +16,14 @@
     <link rel="manifest" href="https://funya.pw/wk/csc_project/static/csc_manager/pwa/manifest.json">
 
 
+<!--
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+JP">
     <link rel="stylesheet" href="{% static 'common/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'common/css/app.css' %}">
     <link rel="stylesheet" href="{% static 'csc_manager/css/main.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-
+-->
 
 
     <!--<link rel="manifest" href="manifest.json">-->
@@ -93,13 +94,13 @@
     <script src="{% static 'common/js/bootstrap.min.js' %}"></script> -->
     <script>
       // ServiceWorker登録：https://developers.google.com/web/fundamentals/primers/service-workers/?hl=ja
-      if ('serviceWorker' in navigator) {
-  	     navigator.serviceWorker.register("sw.js").then(function(registration) {
-  		       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-  	  }).catch(function(err) {
-  		    console.log('ServiceWorker registration failed: ', err);
-  	  });
-      }
+      // if ('serviceWorker' in navigator) {
+  	  //    navigator.serviceWorker.register("sw.js").then(function(registration) {
+  		//        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+  	  // }).catch(function(err) {
+  		//     console.log('ServiceWorker registration failed: ', err);
+  	  // });
+      // }
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
