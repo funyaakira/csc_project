@@ -2,7 +2,7 @@
 	"short_name": "あゆみマネージャー",
 	"name": "あゆみマネージャー",
 	"display": "standalone",
-	"start_url": "https://funya.pw/csc_manager/",
+	"start_url": "https://funya.pw/csc_manager/index.html",
 	"icons": [
 		{
 			"src": "https://funya.pw/wk/csc_project/static/csc_manager/pwa/app-icon-192.png",
