@@ -38,7 +38,12 @@
         {% for day in week %}
           {% if month != day.month %}
             <td class="calendar_td">
-            {{ day | date:"m/d" }}
+            <div class="d-none d-lg-block">
+              {{ day | date:"m/d" }}
+            </div>
+            <div class="d-inline d-lg-none">
+              {{ day | date:"d" }}
+            </div>
           {% else %}
             <td class="{{ shifts_dic|shift_to_cssclass:day.day }} calendar_td">
               <a href="{% url 'shift_day' day.year day.month day.day %}">
