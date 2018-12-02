@@ -38,12 +38,12 @@
           {{ renraku_kojin.staff.name }}
         </td>
         <td>
-          <a href="{% url 'renraku_kojin_list_riyosya' renraku_kojin.riyosya.id %}" class="text-body">
+          <a href="{% url 'renraku_kojin_list_riyosya' renraku_kojin.riyosya.id %}" class="text-dark">
             {{ renraku_kojin.riyosya.name }}
           </a>
         </td>
         <td>
-          <a href="{% url 'renraku_kojin_detail' renraku_kojin.id %}" class="text-body">
+          <a href="{% url 'renraku_kojin_detail' renraku_kojin.id %}" class="text-dark">
           {{ renraku_kojin.memo|truncatechars:100 }}
           </a>
         </td>
