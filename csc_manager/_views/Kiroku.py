@@ -6,11 +6,14 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse
+from django.core.files.storage import FileSystemStorage
+from django.shortcuts import redirect, render
 
 from datetime import datetime, date, timedelta
 
-from ..models import Riyosya, Kiroku, day_night, riyosya_status
+from ..models import Riyosya, Kiroku, day_night, riyosya_status, Staff
 from .._forms.Kiroku import *
+import codecs
 
 
 @login_required
@@ -129,88 +132,6 @@ class KirokuCreateView(CreateView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
-        riyosya_id = self.kwargs.get('riyosya_id')
-        l_day_night = self.kwargs.get('day_night')
-
-        return {
-            'exec_date': date(year, month, day),
-            'day_night': l_day_night,
-            'riyosya': riyosya_id,
-            'date': date(year, month, day),
-            # 'time': def_time,
-            'staff': self.request.user.staff.name,
-        }
-
-    def get_context_data(self, **kwargs):
-        year= self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
-        l_day_night = self.kwargs.get('day_night')
-        exec_date = date(year, month, day)
-
-        riyosya_id = self.kwargs.get('riyosya_id')
-        riyosya = Riyosya.objects.get(id=riyosya_id)
-
-        kwargs['riyosya'] = riyosya
-        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time')
-        kwargs['year'] = year
-        kwargs['month'] = month
-        kwargs['day'] = day
-        kwargs['target_day'] = date(year, month, day)
-        kwargs['day_night'] = l_day_night
-        kwargs['day_night_name'] = day_night[l_day_night][1]
-
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        kiroku = form.save(commit=False)
-
-        kiroku.disp_time = kiroku.time
-
-        if kiroku.time == None:
-            if kiroku.day_night == settings._NIKKIN:
-                kiroku.disp_time = '12:00'
-            else:
-                kiroku.disp_time = '00:00'
-
-        if kiroku.day_night == settings._YAKIN:
-            if kiroku.time == None:
-                in_time = time(0, 0, 0)
-            else:
-                in_time = kiroku.time
-
-            if time(0, 0, 0) <= in_time < settings.NIKKIN_START_TIME:
-                kiroku.date += timedelta(days=1)
-
-        kiroku.created_by = self.request.user
-        kiroku.created_at = timezone.now()
-        kiroku.updated_by = self.request.user
-        kiroku.updated_at = timezone.now()
-
-        riyosya = kiroku.riyosya
-        kiroku.save()
-
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
-        day_night = self.kwargs.get('day_night')
-
-        if 'commit_list' in self.request.POST:
-            return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
-        else:
-            return redirect('kiroku_create', year=year, month=month, day=day, day_night=day_night, riyosya_id=riyosya.id)
-
-
-class KirokuRenzokuCreateView(CreateView):
-    model = Kiroku
-    context_object_name = 'kiroku'
-    form_class = KirokuCreateForm
-    template_name = 'csc_manager/kiroku/renzoku_create.html'
-
-    def get_initial(self):
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        day = self.kwargs.get('day')
 
         riyosya_ids = self.kwargs.get('riyosya_ids').split(',')
         riyosya_id_current_index = self.kwargs.get('riyosya_id_current_index')
@@ -241,15 +162,26 @@ class KirokuRenzokuCreateView(CreateView):
         riyosya_id = riyosya_ids_list[riyosya_id_current_index]
         riyosya = Riyosya.objects.get(id=riyosya_id)
 
+        riyosya_id_prev_index = riyosya_id_current_index - 1
         riyosya_id_current_index += 1
+        kwargs['riyosya_id_current_index'] = riyosya_id_current_index
+        kwargs['riyosya_id_prev_index'] = riyosya_id_prev_index
 
         if len(riyosya_ids_list) == riyosya_id_current_index:
-            kwargs['go_to_back'] = True
+            kwargs['last_riyosya'] = True
+            riyosya_id = riyosya_ids_list[riyosya_id_prev_index]
+            kwargs['prev_riyosya'] = Riyosya.objects.get(id=riyosya_id)
         else:
-            kwargs['go_to_back'] = False
-            kwargs['riyosya_id_current_index'] = riyosya_id_current_index
-            riyosya_id = riyosya_ids_list[riyosya_id_current_index]
-            kwargs['next_riyosya'] = Riyosya.objects.get(id=riyosya_id)
+            kwargs['last_riyosya'] = False
+            if riyosya_id_current_index == 1:
+                kwargs['first_riyosya'] = True
+                riyosya_id = riyosya_ids_list[riyosya_id_current_index]
+                kwargs['next_riyosya'] = Riyosya.objects.get(id=riyosya_id)
+            else:
+                riyosya_id = riyosya_ids_list[riyosya_id_current_index]
+                kwargs['next_riyosya'] = Riyosya.objects.get(id=riyosya_id)
+                riyosya_id = riyosya_ids_list[riyosya_id_prev_index]
+                kwargs['prev_riyosya'] = Riyosya.objects.get(id=riyosya_id)
 
 
         kwargs['riyosya'] = riyosya
@@ -326,3 +258,81 @@ class KirokuDeleteView(DeleteView):
 
         return reverse('kiroku_day_list',  kwargs={'year': year, 'month': month, 'day': day, 'day_night': day_night})
         # return reverse('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
+
+
+def kiroku_upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        filepath = settings.MEDIA_ROOT + '/' + filename
+        import_kiroku(filepath)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'csc_manager/kiroku/upload.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+    return render(request, 'csc_manager/kiroku/upload.html')
+
+
+def import_kiroku(filepath):
+
+    # ケース記録データインポート
+    f =  codecs.open(filepath, 'r', 'utf-8')
+    line = f.readline()
+
+    while line:
+        data_l = line.split("\t")
+        print(data_l)
+
+        riyosya_name = data_l[0]
+        k_date = data_l[1]
+        k_time = data_l[2]
+        memo = data_l[3]
+        staff_name = data_l[4].strip()
+
+        riyosya = Riyosya.objects.get(name=riyosya_name)
+        staff = Staff.objects.get(short_name=staff_name)
+
+        # 特殊時間の設定
+        if k_time == 'x':
+            k_time = None
+            disp_time = time(12, 0, 0)
+        elif k_time == 'z':
+            k_time = None
+            disp_time = time(0, 0, 0)
+        else:
+            dt = datetime.strptime(k_time, '%H:%M')
+            k_time = time(hour=dt.hour, minute=dt.minute)
+            disp_time = k_time
+
+        dt = datetime.strptime(k_date, '%Y-%m-%d')
+        k_date = date(year=dt.year, month=dt.month, day=dt.day)
+
+        print(k_date, k_time, disp_time)
+        line = f.readline()
+
+        # exec_dateの設定
+        if time(0, 0, 0) <= disp_time < settings.NIKKIN_START_TIME:
+            exec_date = k_date - timedelta(days=1)
+        else:
+            exec_date = k_date
+
+        # day_nightの設定
+        if settings.NIKKIN_START_TIME <= disp_time < settings.YAKIN_START_TIME:
+            day_night = settings._NIKKIN
+        else:
+            day_night = settings._YAKIN
+
+        # オブジェクトを組み立てて更新
+        Kiroku(exec_date=exec_date,
+               date=k_date,
+               time=k_time,
+               disp_time=disp_time,
+               day_night=day_night,
+               riyosya=riyosya,
+               memo=memo,
+               created_by=staff.user).save()
+
+    f.close()
+
+    return None

@@ -7,12 +7,11 @@
 {% endblock %}
 
 {% block nav_kiroku %}active{% endblock %}
-{% block prev_url %}{{ request.path }}{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
   <li class="breadcrumb-item"><a href="{% url 'kiroku_day_list' year month day day_night %}">記録 {{ target_day }} ({{ day_night_name }})</a></li>
-  <li class="breadcrumb-item active">新規記録</li>
+  <li class="breadcrumb-item active">連続記録</li>
 {% endblock %}
 
 {% block content %}
@@ -21,44 +20,45 @@
 {% endfor %}
 
 {# {{ form.errors }} #}
+
 <form method="post" novalidate>
   {% csrf_token %}
-  <h2 class="mb-3">{{ riyosya.name }}</h2>
-  {{ form.exec_date.as_hidden }}
-  {{ form.day_night.as_hidden }}
-  {{ form.riyosya.as_hidden }}
-  {{ form.date.as_hidden }}
+
 
 <div class="row">
 <div class="col-lg">
-    <div class="rounded mb-3 py-3 px-3 my_border">
-
+  <h2 class="mb-3">{{ riyosya.name }}</h2>
+  {{ form.exec_date.as_hidden }}
+  {{ form.date.as_hidden }}
+  {{ form.day_night.as_hidden }}
+  {{ form.riyosya.as_hidden }}
+    <div class="rounded mb-3 py-2 px-3 my_border">
     {% if form.is_bound %}
 
       <div class="form-group">
-      {{ form.time.label }}
-      {% if form.time.errors %}
-        {{ form.time|add_class:'is-invalid' }}
-        {% for error in form.time.errors %}
-          <div class="text-danger">{{ error }}</div>
-        {% endfor %}
-      {% else %}
-        {{ form.time|add_class:'is-valid' }}
-      {% endif %}
-      <small class="text-muted">{{ form.time.help_text|safe }}</small>
+        <small>{{ form.time.label }}</small>
+        {% if form.time.errors %}
+          {{ form.time|add_class:'is-invalid' }}
+          {% for error in form.time.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+          {% endfor %}
+        {% else %}
+          {{ form.time|add_class:'is-valid' }}
+        {% endif %}
+        <small class="text-muted">{{ form.time.help_text|safe }}</small>
       </div>
 
       <div class="form-group">
-        {{ form.staff.label }}
+        <small>{{ form.staff.label }}</small>
         {{ form.staff|add_class:'is-valid' }}
       </div>
 
       <div class="form-group">
-      {{ form.memo.label }}
+      <small>{{ form.memo.label }}</small>
       {% if form.memo.errors %}
         {{ form.memo|add_class:'is-invalid' }}
         {% for error in form.memo.errors %}
-          <div class="text-danger">{{ error }}</div>
+          <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
       {% else %}
         {{ form.memo|add_class:'is-valid' }}
@@ -66,22 +66,22 @@
       </div>
     {% else %}
       <div class="form-group">
-        {{ form.time.label }}
+        <small>{{ form.time.label }}</small>
         {{ form.time }}
         <small class="text-muted">{{ form.time.help_text|safe }}</small>
       </div>
       <div class="form-group">
-        {{ form.staff.label }}
-         <div class="form-inline">
+        <small>{{ form.staff.label }}</small>
+        <div class="form-inline">
            {{ form.staff }}
          </div>
       </div>
       <div class="form-group">
-        {{ form.memo.label }}
+        <small>{{ form.memo.label }}</small>
         {{ form.memo }}
       </div>
     {% endif %}
-    <small>ヘルプツール
+    <small>help...
     <a href="#" onclick="document.getElementById('id_time').value='9:30';">
       9:30
     </a>
@@ -103,7 +103,7 @@
     </a>
     ,
     <a href="#" onclick="document.getElementById('id_memo').value='BP/ P KT℃';">
-      バイタルフォーマット入力
+      バイタル
     </a>
     ,
     <a href="#" onclick="document.getElementById('id_memo').value='夜間巡回毎眠っている。';">
@@ -111,20 +111,37 @@
     </a>
     </small>
     </div>
-    <div class="mb-3">
-      <button type="submit" class="btn btn-success" name='commit'>登録</button>
-      <button type="submit" class="btn btn-success" name='commit_list'>登録して一覧に戻る</button>
-      <a href="{% url 'kiroku_day_list' year month day day_night %}" class="btn btn-primary">一覧に戻る</a>
+
+    <div class="mb-1">
+      <button type="submit" class="btn btn-success" name="commit">登録</button>
+      {% if first_riyosya %}
+          <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">
+            一覧へ戻る
+          </a>
+      {% else %}
+          <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_prev_index %}" class="btn btn-primary">
+            前({{ prev_riyosya.name }})へ
+          </a>
+      {% endif %}
+      {% if last_riyosya %}
+          <a href="{% url 'kiroku_day_list' target_day.year target_day.month target_day.day day_night%}" class="btn btn-primary">
+            一覧へ戻る
+          </a>
+      {% else %}
+          <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_current_index %}" class="btn btn-primary">
+            次({{ next_riyosya.name }})へ
+          </a>
+      {% endif %}
     </div>
 </div>
 
-<div class="col col-lg">
-    <div class="rounded mb-3 py-3 px-3 my_border">
-      <h4>今日の記録</h4>
-      <table class="table">
+<div class="col-lg">
+      <h4 class="mb-3">今日の記録</h4>
+      <table class="table kiroku_detail">
         <thead>
           <th style="width: 15%">時間</th>
           <th>内容</th>
+          <th>記録者</th
         </thead>
         <tbody>
         {% if kirokus %}
@@ -133,9 +150,11 @@
             {% if kiroku.day_night == 0 %}
               <td>{{ kiroku.time|default:'' }}</td>
               <td>{{ kiroku.memo }}</td>
+              <td>{{ kiroku.created_by.staff.short_name }}
             {% else %}
               <td class="text-danger">{{ kiroku.time|default:'' }}</td>
               <td class="text-danger">{{ kiroku.memo }}</td>
+              <td class="text-danger" style="width: 20%">{{ kiroku.created_by.staff.short_name }}
             {% endif %}
           </tr>
           {% endfor %}
@@ -146,10 +165,8 @@
         {% endif %}
         </tbody>
       </table>
-    </div>
 </div>
 </div>
-<row>
-</row>
 </form>
+
 {% endblock %}

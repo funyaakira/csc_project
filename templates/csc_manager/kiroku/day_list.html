@@ -28,15 +28,12 @@
 </h2>
 
 <div class="my-4">
-  <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids 0 %}" class="btn btn-primary">
-    連続記録開始
-  </a>
   <a href="{% url 'kiroku_day_list' prev_day_1week.year prev_day_1week.month prev_day_1week.day 0 %}" class="btn btn-secondary">
     1週間前に移動
   </a>
 </div>
 
-<table class="table">
+<table class="table kiroku_detail">
   <thead class="thead-inverse">
     <tr>
       <th style="width: 15%">利用者</th>
@@ -58,27 +55,27 @@
                       <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
                       <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
                       <td>{{ kiroku.memo }}</td>
-                      <td style="width: 10%"><small>{{ kiroku.created_by.staff.name }}</small></td>
+                      <td style="width: 10%">{{ kiroku.created_by.staff.short_name }}</td>
                     {% else %}
                       <td class="text-danger" style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
                       <td class="text-danger" style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
                       <td class="text-danger">{{ kiroku.memo }}</td>
-                      <td style="width: 10%" class="text-danger"><small>{{ kiroku.created_by.staff.name }}</small></td>
+                      <td style="width: 10%" class="text-danger">{{ kiroku.created_by.staff.short_name }}</td>
                     {% endif %}
                     <td style="width: 10%" >
-                      <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night kiroku.id %}" class="btn btn-light">削除</a>
+                      <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night kiroku.id %}" class="btn btn-sm btn-secondary">削除</a>
                     </td>
                   </tr>
                 {% endfor %}
                 <tr>
                   <td colspan="4">
-                    <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night riyosya.id %}" class="btn btn-light btn-sm">追加</a>
+                    <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids forloop.counter0 %}" class="btn btn-secondary btn-sm">追加</a>
                   </td>
                 </tr>
               </table>
             {% else %}
               <span class="alert-danger my-1">
-                <a href="{% url 'kiroku_create' target_day.year target_day.month target_day.day day_night riyosya.id %}" class="btn btn-light alert-danger">
+                <a href="{% url 'kiroku_renzoku_create' target_day.year target_day.month target_day.day day_night riyosya_ids forloop.counter0 %}" class="btn btn-light btn-sm alert-danger">
                   記録がありません (クリックして記録を追加)
                 </a>
               </span>

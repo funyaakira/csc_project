@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_kiroku %}active{% endblock %}
+{% block prev_url %}{{ request.path }}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'kiroku_home' %}">記録</a></li>
+  <li class="breadcrumb-item active">ケース記録アップロード</li>
+{% endblock %}
+
+{% block content %}
+  <h2 class="mb-3">ケース記録アップロード</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="myfile">
+    <button type="submit">Upload</button>
+  </form>
+
+  {% if uploaded_file_url %}
+    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+  {% endif %}
+
+{% endblock %}

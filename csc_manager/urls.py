@@ -89,13 +89,13 @@ urlpatterns = [
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
     # 記録 - 新規
-    path('kiroku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:riyosya_id>', KirokuCreateView.as_view(), name='kiroku_create'),
-
-    # 記録 - 新規 - 連続
-    path('kiroku_renzoku_create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuRenzokuCreateView.as_view(), name='kiroku_renzoku_create'),
+    path('kiroku/create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuCreateView.as_view(), name='kiroku_renzoku_create'),
 
     # 記録 - 削除
     path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
+
+    # 記録 - アップロード
+    path('kiroku/upload/', kiroku_upload, name='kiroku_upload'),
 
 
 	path('shift/sw.js', (TemplateView.as_view(template_name="csc_manager/sw.js",

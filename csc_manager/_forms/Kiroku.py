@@ -22,7 +22,7 @@ class KirokuCreateForm(forms.ModelForm):
                 attrs={'class': 'form-control col-lg-4',},
                 ),
             'memo': forms.Textarea(
-                attrs={'class': 'form-control col-12',
+                attrs={'class': 'form-control col-12 form-control-sm',
                        'rows': 3,
                        'placeholder': '一般介護状況を入力してください。',}),
         }
