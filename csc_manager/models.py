@@ -157,8 +157,11 @@ class Staff(models.Model):
         return self.name
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, default=None, related_name='staff')
     name = models.CharField(max_length=200, null=True)
+    short_name = models.CharField(max_length=200, null=True, default=None, blank=True)
     syokumu = models.ForeignKey(Syokumu, on_delete=models.CASCADE, default=None, null=True)
     fixed_shift = models.ForeignKey(Shift_knd, on_delete=models.CASCADE, null=True, default=None, blank=True)
+    tel1 = models.CharField(max_length=200, null=True, default=None, blank=True)
+    tel2 = models.CharField(max_length=200, null=True, default=None, blank=True)
     del_flg = models.BooleanField(default=False)
 
 
