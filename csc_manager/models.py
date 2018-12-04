@@ -82,7 +82,7 @@ class Riyosya(models.Model):
     youkaigodo = models.IntegerField(_("要介護度"), choices=youkaigodo, default=None)
     caremanager = models.ForeignKey(CareManager, verbose_name=_("担当ケアマネージャー"), related_name='caremanager', on_delete=models.PROTECT, default=None)
     first_day = models.DateField(_("利用開始日"), null=True, default=None)
-    last_day = models.DateField(_("最終退所日"), null=True, default=None)
+    last_day = models.DateField(_("最終退所日"), null=True, default=None, blank=True)
     status = models.IntegerField(_("入所ステータス"), choices=riyosya_status, default=0)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
