@@ -238,7 +238,7 @@ class KirokuCreateView(CreateView):
         if len(riyosya_ids_list) == riyosya_id_current_index:
             return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
         else:
-            return redirect('kiroku_renzoku_create',
+            return redirect('kiroku_create',
              year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids,
              riyosya_id_current_index=riyosya_id_current_index)
 
@@ -257,7 +257,13 @@ class KirokuDeleteView(DeleteView):
         day_night = self.kwargs.get('day_night')
 
         return reverse('kiroku_day_list',  kwargs={'year': year, 'month': month, 'day': day, 'day_night': day_night})
-        # return reverse('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
+
+
+def kiroku_delete(request, year, month, day, day_night, riyosya_ids, riyosya_id_current_index, pk):
+
+    Kiroku.objects.get(id=pk).delete()
+
+    return redirect('kiroku_create', year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids, riyosya_id_current_index=riyosya_id_current_index)
 
 
 def kiroku_upload(request):

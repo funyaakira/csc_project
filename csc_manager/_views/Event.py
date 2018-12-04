@@ -91,3 +91,11 @@ class EventCreateView(CreateView):
         # post.save()
         #
         return redirect('event_list')
+
+
+# イベント - 削除
+def eventDelete(request, year, month, event_id):
+
+    Event.objects.get(id=event_id).delete()
+
+    return redirect('event_list', year=year, month=month)

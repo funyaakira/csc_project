@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.urls import reverse
 
 from . import views
-from ._views.Event import EventListView, EventCreateView
-from ._views.Shift import ShiftDayView, ShiftIndivView
+from ._views.Event import *
+from ._views.Shift import *
 from ._views.Riyosya import *
 from ._views.Renraku import *
 from ._views.Kiroku import *
@@ -61,6 +61,9 @@ urlpatterns = [
     # イベント - 新規
     path('event_create/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
 
+    # イベント - 削除
+    path('event/delete/<int:year>/<int:month>/<int:event_id>', eventDelete, name='event_delete'),
+
     # 全体連絡 - 一覧
 	path('renraku_list/', RenrakuZentaiListView.as_view(), name='renraku_list'),
 
@@ -89,18 +92,15 @@ urlpatterns = [
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
     # 記録 - 新規
-    path('kiroku/create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuCreateView.as_view(), name='kiroku_renzoku_create'),
+    path('kiroku/create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuCreateView.as_view(), name='kiroku_create'),
+
+    # # 記録 - 削除
+    # path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
 
     # 記録 - 削除
-    path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
+    path('kiroku/delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>/<int:pk>/', kiroku_delete, name='kiroku_delete'),
 
     # 記録 - アップロード
     path('kiroku/upload/', kiroku_upload, name='kiroku_upload'),
 
-
-	path('shift/sw.js', (TemplateView.as_view(template_name="csc_manager/sw.js",
-		content_type='application/javascript',)), name='sw.js'),
-
-	path('shift/manifest.json', (TemplateView.as_view(template_name="csc_manager/manifest.json",
-		content_type='application/javascript',)), name='manifest.json'),
 ]

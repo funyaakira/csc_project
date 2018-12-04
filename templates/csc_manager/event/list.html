@@ -56,7 +56,10 @@
                 {{ event.knd.short_name }}
               </div>
               <div class="">
-                {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}  {{ event.d_staff.name }} {{ event.t_staff.name }} 
+                {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}  {{ event.d_staff.name }} {{ event.t_staff.name }}
+                <a href="{% url 'event_delete' target_YM.year target_YM.month event.id %}">
+                  <i class="fas fa-trash-alt text-dark"></i>
+                </a>
               </div>
           </div>
           {% endfor %}
