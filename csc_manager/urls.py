@@ -59,7 +59,7 @@ urlpatterns = [
 	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
 
     # イベント - 新規
-    path('event_create/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
+    path('event_create/<int:year>/<int:month>/<int:day>/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
 
     # イベント - 削除
     path('event/delete/<int:year>/<int:month>/<int:event_id>', eventDelete, name='event_delete'),

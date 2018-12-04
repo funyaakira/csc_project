@@ -30,9 +30,6 @@
       <i class="fas fa-angle-right"></i>
     </a>
   </h2>
-  <div class="mb-4">
-    <a href="{% url 'event_create' 0 %}" class="btn btn-primary">新規イベント</a>
-  </div>
 
   <table class="table">
     <thead>
@@ -43,26 +40,32 @@
     </thead>
     <tbody>
     {% for day in days %}
-      <tr>
-        <td style="width:6rem">
+      <tr id="{{ day|date:"Y-m-d" }}">
+        <td style="width: 1rem">
           <div>
-            {{ day }}
+            {{ day|date:"m/d" }}
+          </div>
+          <div>
+            <a href="{% url 'event_create' day.year day.month day.day 0 %}">
+              <i class="fas fa-plus text-dark"></i>
+            </a>
           </div>
         </td>
         <td class="p-0">
           {% for event in events|get_events:day %}
           <div class="my-2">
-              <div class="rounded text-center float-left {{ event.knd.css_class }} mr-2" style="width: 4rem">
-                {{ event.knd.short_name }}
-              </div>
-              <div class="">
-                {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}  {{ event.d_staff.name }} {{ event.t_staff.name }}
-                <a href="{% url 'event_delete' target_YM.year target_YM.month event.id %}">
-                  <i class="fas fa-trash-alt text-dark"></i>
-                </a>
-              </div>
+            <div class="rounded text-center float-left {{ event.knd.css_class }} mr-2" style="width: 4rem">
+              {{ event.knd.short_name }}
+            </div>
+            <div class="">
+              {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}
+              <a href="{% url 'event_delete' target_YM.year target_YM.month event.id %}">
+                <i class="fas fa-trash-alt text-dark"></i>
+              </a>
+            </div>
           </div>
           {% endfor %}
+
         </td>
       </tr>
     {% endfor %}

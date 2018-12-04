@@ -25,14 +25,14 @@
 <div class="row">
   <div class="col">
     <form method="post" class="col-lg-6" novalidate>
-      <h2 class="mb-3">イベント新規作成</h2>
+      <h2 class="mb-3">{{ date }} イベント新規作成</h2>
       {% csrf_token %}
       <div class="form-group">
         {% for event_knd in event_knds %}
           {% if event_knd.id == event_knd_id %}
             <a class="btn btn-secondary" href="#">
           {% else %}
-            <a class="btn btn-primary" href="{% url 'event_create' event_knd.id %}">
+            <a class="btn btn-primary" href="{% url 'event_create' year month day event_knd.id %}">
           {% endif %}
           {{ event_knd.name }}
         </a>

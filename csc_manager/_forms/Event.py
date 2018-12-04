@@ -7,7 +7,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['date', 'knd', 'riyosya', 'time', 'ht_kbn', 'go_place', 'd_staff', 't_staff', 'naiyo']
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'form-control col-lg-3'}),
+            'date': forms.DateInput(attrs={'class': 'form-control col-lg-3', 'readonly':'readonly'}),
             'knd': forms.Select(
                     attrs={'class': 'form-control col-lg-3',
                            'data-target': 'collapseExample',

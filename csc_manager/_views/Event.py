@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView, CreateView
 from django.shortcuts import redirect
+from django.urls import reverse
 
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
@@ -35,6 +36,8 @@ class EventListView(TemplateView):
         events = Event.objects.filter(date__gte=dateF, date__lt=dateT)
 
         # テンプレートに渡す
+        kwargs["year"] = year
+        kwargs["month"] = month
         kwargs["days"] = days
         kwargs["events"] = events
         kwargs['target_YM'] = date(year, month, 1)
@@ -51,9 +54,13 @@ class EventCreateView(CreateView):
     template_name = 'csc_manager/event/create.html'
 
     def get_initial(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
         return {
-            'date': date.today(),
-            'time': datetime.now().strftime("%H:%M"),
+            'date': date(year, month, day),
+            # 'time': datetime.now().strftime("%H:%M"),
             'knd': self.kwargs.get('event_knd_id'),
         }
 
@@ -63,34 +70,32 @@ class EventCreateView(CreateView):
         return kwargs
 
     def get_context_data(self, **kwargs):
+        # 指定年月の取得
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
+
         kwargs["event_knds"] = Event_knd.objects.all().order_by('id')
         kwargs['event_knd_id'] = self.kwargs.get('event_knd_id')
+
+        kwargs["date"] = date(year, month, day)
+        kwargs["year"] = year
+        kwargs["month"] = month
+        kwargs["day"] = day
 
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        day = self.kwargs.get('day')
 
         event = form.save(commit=False)
 
-
         event.save()
-
-        # post = form.save(commit=False)
-        # post.created_by = self.request.user
-        # post.created_at = timezone.now()
-        # post.updated_by = self.request.user
-        # post.updated_at = timezone.now()
-        #
-        # # birthday設定
-        # gengou = self.request.POST['gengou']
-        # g_year = self.request.POST['g_year']
-        # month = self.request.POST['month']
-        # day = self.request.POST['day']
-        # post.birthday = wareki_to_seireki(gengou, g_year, month, day)
-        #
-        # post.save()
-        #
-        return redirect('event_list')
+        
+        target_Day = "-".join([str(year), str(month), str(day)])
+        return redirect(reverse('event_list')+ '#' + target_Day)
 
 
 # イベント - 削除
