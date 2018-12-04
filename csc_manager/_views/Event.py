@@ -33,7 +33,7 @@ class EventListView(TemplateView):
         # 指定月の条件でイベントオブジェクトを取得
         dateF = date(year, month, 1)
         dateT = dateF + relativedelta(months=1)
-        events = Event.objects.filter(date__gte=dateF, date__lt=dateT)
+        events = Event.objects.filter(date__gte=dateF, date__lt=dateT).order_by('time')
 
         # テンプレートに渡す
         kwargs["year"] = year
@@ -93,7 +93,7 @@ class EventCreateView(CreateView):
         event = form.save(commit=False)
 
         event.save()
-        
+
         target_Day = "-".join([str(year), str(month), str(day)])
         return redirect(reverse('event_list')+ '#' + target_Day)
 
