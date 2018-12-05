@@ -78,3 +78,8 @@ html {
 table.kiroku_detail td, th{
     font-size: 0.8rem;
 }
+
+
+.modal-open {
+    padding-right: 0px !important;
+}
