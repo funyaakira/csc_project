@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_kiroku %}active{% endblock %}
+{% block prev_url %}{{ request.path }}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item">記録 </li>
+  <li class="breadcrumb-item active">個人</li>
+{% endblock %}
+
+{% block content %}
+<h2 class="my-4">
+  <a href="{% url 'kiroku_kojin' prev_month.year prev_month.month riyosya.id %}">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  <a href="{% url 'kiroku_home' %}">
+    {{ riyosya.name }} {{ target_YM.year }}年 {{ target_YM.month }}月
+  </a>
+  <a href="{% url 'kiroku_kojin' next_month.year next_month.month riyosya.id %}">
+    <i class="fas fa-angle-right"></i>
+  </a>
+</h2>
+
+<table class="table kiroku_detail">
+  <thead class="thead-inverse">
+    <tr>
+      <th style="width: 15%">日付</th>
+      <th>内容</th>
+      <th style="width: 10%">記録者</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for kiroku in kirokus %}
+        <tr>
+          {% if kiroku.day_night == 0 %}
+            <td>
+              {{ kiroku.date|date:"n月j日" }} {{ kiroku.time|default:''}}
+            </td>
+            <td>
+              {{ kiroku.memo }}
+            </td>
+            <td>
+              {{ kiroku.created_by.staff.short_name }}
+            </td>
+          {% else %}
+            <td class="text-danger">
+              {{ kiroku.date|date:"n月j日" }} {{ kiroku.time|default:''}}
+            </td>
+            <td class="text-danger">
+              {{ kiroku.memo }}
+            </td>
+            <td class="text-danger">
+              {{ kiroku.created_by.staff.short_name }}
+            </td>
+          {% endif %}
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

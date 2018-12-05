@@ -44,8 +44,9 @@
     {% for riyosya in riyosyas %}
         <tr>
           <td>
-            {{ riyosya.name }}
-
+            <a href="{% url 'kiroku_kojin' target_day.year target_day.month riyosya.id %}">
+              {{ riyosya.name }}
+            </a>
           <td>
             {% if kirokus|get_kirokus_riyosya:riyosya %}
               <table style="width: 100%">

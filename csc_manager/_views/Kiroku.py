@@ -10,6 +10,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import redirect, render
 
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 
 from ..models import Riyosya, Kiroku, day_night, riyosya_status, Staff
 from .._forms.Kiroku import *
@@ -257,6 +258,41 @@ class KirokuDeleteView(DeleteView):
         day_night = self.kwargs.get('day_night')
 
         return reverse('kiroku_day_list',  kwargs={'year': year, 'month': month, 'day': day, 'day_night': day_night})
+
+
+class KirokuKojinListView(ListView):
+    model = Kiroku
+    context_object_name = 'kirokus'
+    template_name = 'csc_manager/kiroku/kojin.html'
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        riyosya_id = self.kwargs.get('riyosya_id')
+        target_YM = date(year, month, 1)
+
+        kwargs['target_YM'] = target_YM
+        kwargs['riyosya'] = Riyosya.objects.get(id=riyosya_id)
+        kwargs['prev_month'] = target_YM - relativedelta(months=1)
+        kwargs['next_month'] = target_YM + relativedelta(months=1)
+
+        return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        riyosya_id = self.kwargs.get('riyosya_id')
+        riyosya = Riyosya.objects.get(id=riyosya_id)
+
+        target_YM = date(year, month, 1)
+        next_YM = target_YM + relativedelta(months=1)
+
+        queryset = Kiroku.objects.filter(
+            riyosya=riyosya,
+            exec_date__gte=target_YM,
+            exec_date__lt=next_YM).order_by('date', 'disp_time')
+
+        return queryset
 
 
 def kiroku_delete(request, year, month, day, day_night, riyosya_ids, riyosya_id_current_index, pk):
