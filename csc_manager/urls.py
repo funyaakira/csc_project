@@ -58,11 +58,14 @@ urlpatterns = [
     # イベント - 一覧(年月指定)
 	path('event_list/<int:year>/<int:month>/', EventListView.as_view(), name='event_list'),
 
-    # イベント - 新規
-    path('event_create/<int:year>/<int:month>/<int:day>/<int:event_knd_id>', EventCreateView.as_view(), name='event_create'),
+    # イベント - 一覧(年月指定) - スクロール位置指定
+	path('event_list/<int:year>/<int:month>/<str:scroll_position>', EventListView.as_view(), name='event_list_with_scroll_postion'),
 
-    # イベント - 削除
-    path('event/delete/<int:year>/<int:month>/<int:event_id>', eventDelete, name='event_delete'),
+    # イベント - 新規 - スクロール位置指定
+    path('event_create/<int:year>/<int:month>/<int:day>/<int:event_knd_id>/<str:scroll_position>', EventCreateView.as_view(), name='event_create'),
+
+    # イベント - 削除 - スクロール位置指定
+    path('event/delete/<int:year>/<int:month>/<int:day>/<int:event_id>/<str:scroll_position>', eventDelete, name='event_delete'),
 
     # 全体連絡 - 一覧
 	path('renraku_list/', RenrakuZentaiListView.as_view(), name='renraku_list'),

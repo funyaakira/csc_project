@@ -32,7 +32,7 @@
           {% if event_knd.id == event_knd_id %}
             <a class="btn btn-secondary" href="#">
           {% else %}
-            <a class="btn btn-primary" href="{% url 'event_create' year month day event_knd.id %}">
+            <a class="btn btn-primary" href="{% url 'event_create' year month day event_knd.id scroll_position %}">
           {% endif %}
           {{ event_knd.name }}
         </a>

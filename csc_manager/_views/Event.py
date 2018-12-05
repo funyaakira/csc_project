@@ -74,6 +74,7 @@ class EventCreateView(CreateView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
+        scroll_position = self.kwargs.get('scroll_position')
 
         kwargs["event_knds"] = Event_knd.objects.all().order_by('id')
         kwargs['event_knd_id'] = self.kwargs.get('event_knd_id')
@@ -82,6 +83,7 @@ class EventCreateView(CreateView):
         kwargs["year"] = year
         kwargs["month"] = month
         kwargs["day"] = day
+        kwargs["scroll_position"] = scroll_position
 
         return super().get_context_data(**kwargs)
 
@@ -89,18 +91,18 @@ class EventCreateView(CreateView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
+        scroll_position = self.kwargs.get('scroll_position')
 
         event = form.save(commit=False)
 
         event.save()
 
-        target_Day = "-".join([str(year), str(month), str(day)])
-        return redirect(reverse('event_list')+ '#' + target_Day)
+        return redirect('event_list_with_scroll_postion', year=year, month=month, scroll_position=scroll_position)
 
 
 # イベント - 削除
-def eventDelete(request, year, month, event_id):
+def eventDelete(request, year, month, day, event_id, scroll_position):
 
     Event.objects.get(id=event_id).delete()
 
-    return redirect('event_list', year=year, month=month)
+    return redirect('event_list_with_scroll_postion', year=year, month=month, scroll_position=scroll_position)

@@ -2,18 +2,52 @@
 
 {% load lookup %}
 
-{% block title %}
-
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block nav_event %}active{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript">
+  window.addEventListener("DOMContentLoaded", function(){
+    // 画面読み込み時の初期処理とか書く。
+    window.scroll(0, {{ scroll_position }});
+  }, false);
+</script>
+{% endblock %}
+
+
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
   <li class="breadcrumb-item active">イベント</li>
 {% endblock %}
 
+
 {% block content %}
+
+<!-- モーダルの設定 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">削除の確認</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>削除します。よろしいですか？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        <a id="delete_confirm" href="#">
+          <button type="button" class="btn btn-primary" >削除</button>
+        </a>
+      </div><!-- /.modal-footer -->
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 {% for error in form.non_field_errors %}
     <small><div class="text-danger">{{ error }}</div></small>
@@ -40,13 +74,13 @@
     </thead>
     <tbody>
     {% for day in days %}
-      <tr id="{{ day|date:"Y-m-d" }}">
+      <tr id="{{ day|date:"Y-n-j" }}">
         <td style="width: 1rem">
           <div>
             {{ day|date:"m/d" }}
           </div>
           <div>
-            <a href="{% url 'event_create' day.year day.month day.day 0 %}">
+            <a id="add-{{ day|date:"Y-m-d" }}" href="#" onclick="document.getElementById('add-{{ day|date:"Y-m-d" }}').href='{% url 'event_create' day.year day.month day.day 0 'dummy' %}'.replace('dummy', window.scrollY)">
               <i class="fas fa-plus text-dark"></i>
             </a>
           </div>
@@ -59,8 +93,9 @@
             </div>
             <div class="">
               {{ event.time|default:'' }} {{ event.ht_kbn|default:'' }}  {{ event.riyosya.name|default:'' }} {{ event.naiyo|default:'' }}
-              <a href="{% url 'event_delete' target_YM.year target_YM.month event.id %}">
-                <i class="fas fa-trash-alt text-dark"></i>
+              <a href="#" data-toggle="modal" data-target="#myModal"
+                onclick="document.getElementById('delete_confirm').href='{% url 'event_delete' day.year day.month day.day event.id 'dummy' %}'.replace('dummy', window.scrollY)">
+                <i class="fas fa-trash-alt text-dark" ></i>
               </a>
             </div>
           </div>
