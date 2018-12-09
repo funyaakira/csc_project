@@ -5,9 +5,11 @@ from .models import *
 admin.site.register(Syokumu)
 admin.site.register(Staff)
 admin.site.register(Event_knd)
+admin.site.register(Event_knd)
+admin.site.register(Event_knd)
 
-admin.site.register(Event)
-admin.site.register(Riyosya)
+admin.site.register(Kyotaku)
+admin.site.register(CareManager)
 
 @admin.register(Shift_knd)
 class Shift_kndAdmin(admin.ModelAdmin):
