@@ -5,8 +5,6 @@ from .models import *
 admin.site.register(Syokumu)
 admin.site.register(Staff)
 admin.site.register(Event_knd)
-admin.site.register(Event_knd)
-admin.site.register(Event_knd)
 
 admin.site.register(Kyotaku)
 admin.site.register(CareManager)
