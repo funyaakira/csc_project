@@ -207,7 +207,7 @@ class RiyosyaNewView(CreateView):
 
         if self.request.POST['r_name_2']:
             RiyosyaRenrakusaki(
-                riyosya=post,
+                riyosya=riyosya,
                 name=self.request.POST['r_name_2'],
                 furigana=self.request.POST['r_furigana_2'],
                 zokugara=self.request.POST['r_zoku_2'],
@@ -250,7 +250,7 @@ class RiyosyaYoteiListView(ListView):
                 start_day__gt=self.target_day
             ).order_by('start_day')
         )
-        
+
         return queryset
 
 
