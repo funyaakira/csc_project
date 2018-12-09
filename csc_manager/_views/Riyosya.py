@@ -250,7 +250,7 @@ class RiyosyaYoteiListView(ListView):
                 start_day__gt=self.target_day
             ).order_by('start_day')
         )
-        print(queryset.query)
+        
         return queryset
 
 
