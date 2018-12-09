@@ -65,10 +65,14 @@ class Kyotaku(models.Model):
     tel = models.CharField(max_length=200)
     addr = models.CharField(max_length=200, default=None)
 
+    def __str__(self):
+        return self.name
+
 
 class CareManager(models.Model):
     kyotaku = models.ForeignKey(Kyotaku, related_name='kyotaku', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+
     def __str__(self):
         return self.kyotaku.name + ' - ' + self.name
 
