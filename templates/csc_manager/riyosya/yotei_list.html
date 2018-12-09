@@ -84,8 +84,9 @@
           <small class="text-muted d-block">{{ rr.riyosya.caremanager.kyotaku.tel }}</small>
         </td>
         <td>
-          <a href="#" class="btn btn-primary btn-sm mb-1" role="button">編集</a>
-          <a href="{% url 'riyosya_renew' rr.riyosya.id %}" class="btn btn-primary btn-sm mb-1" role="button">再利用</a>
+          {% if rr.last_day %}
+            <a href="{% url 'riyosya_renew' rr.riyosya.id %}" class="btn btn-primary btn-sm mb-1" role="button">再利用</a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
