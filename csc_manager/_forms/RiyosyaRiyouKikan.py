@@ -22,14 +22,30 @@ class RiyosyaRiyouKikanForm(forms.ModelForm):
 
 
 class RiyosyaRiyouKikanForm_Renew(forms.ModelForm):
+
     class Meta:
         model = RiyosyaRiyouKikan
-        fields = ['riyosya',
-                  'start_day',
-                  'start_time',
-                  'start_kbn',]
+
+        fields = ['riyosya', 'start_day', 'start_time','start_kbn',
+                  'last_day', 'last_time', 'last_kbn',]
+
         widgets = {
-            'start_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-3'}),
-            'start_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-3'}),
-            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
+            'start_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-2'}),
+            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
+            'last_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-2'}),
+            'last_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
         }
+
+    start_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )
+
+    last_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )

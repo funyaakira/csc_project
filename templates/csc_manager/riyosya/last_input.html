@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_riyosya %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  <li class="breadcrumb-item active">{{ rr.riyosya.name }} 退所日時登録</li>
+{% endblock %}
+
+{% block content %}
+<h2>{{ rr.riyosya.name }} - 退所日時登録</h2>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="rounded p-3 my-3 my_border col-6">
+    <div class="mb-3">
+      <small>・退所予定日時</small>
+      <div>
+        {{ rr.last_day}} {{ rr.last_time|default:'' }} {{ rr.get_last_kbn_display }}
+      </div>
+    </div>
+    <div class="mb-2">
+      <small>・実際の退所日時</small>
+      <div class="form-inline">
+        {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success my-1">登録</button>
+</form>
+{% endblock %}

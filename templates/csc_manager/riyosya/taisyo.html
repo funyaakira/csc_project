@@ -25,15 +25,17 @@
   {% csrf_token %}
   <h5 class="mb-3">{{ riyosyariyoukikan.riyosya.name }} / 退所処理</h5>
   <div class="border rounded mb-3 py-3 px-3">
+    利用予定期間
+    <div class="mb-3">
+      <div>
+        {{ riyosyariyoukikan.start_day }} {{ riyosyariyoukikan.start_time|default:"" }} {{ riyosyariyoukikan.get_start_kbn_display }} ～
+      </div>
+      <div>
+        {{ riyosyariyoukikan.last_day|default:"" }} {{ riyosyariyoukikan.last_time|default:"" }} {{ riyosyariyoukikan.get_last_kbn_display }}
+      </div>
+    </div>
 
-    <div class="form-control-sm" for="{{ form.first_day.name }}">
-      利用期間
-    </div>
-    <div class="form-inline">
-        <div class="form-control-sm">
-          {{ riyosyariyoukikan.start_day }} {{ riyosyariyoukikan.start_time|default:"" }} {{ riyosyariyoukikan.get_start_kbn_display }} ～
-        </div>
-    </div>
+
     {% if form.is_bound %}
       <div class="form-group">
       {{ form.last_day.label }}

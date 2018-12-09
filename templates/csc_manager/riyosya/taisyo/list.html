@@ -10,12 +10,18 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
   <li class="breadcrumb-item active">退所者一覧</li>
 {% endblock %}
 
 {% block content %}
-
+<h2>{{ target_day }} 退所者一覧</h2>
+<div class="mb-4">
+  <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規利用登録</a>
+  <a href="{% url 'riyosya_list' %}" class="btn btn-info">利用者一覧</a>
+  <a href="{% url 'riyosya_yotei_list' %}" class="btn btn-info">利用予定者一覧</a>
+  <a href="#" class="btn btn-secondary">退所者一覧</a>
+</div>
   <table class="table">
     <thead class="thead-inverse">
       <tr>

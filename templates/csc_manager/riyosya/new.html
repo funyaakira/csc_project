@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
-  <li class="breadcrumb-item active">新規入所</li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  <li class="breadcrumb-item active">新規利用登録</li>
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,8 @@
 {% endfor %}
 
 {# {{ form.errors }} #}
-
+<h2>{{ target_day }} 新規利用登録</h2>
+<hr>
   <form method="post" novalidate>
     {% csrf_token %}
       <div class="row">
@@ -32,27 +33,54 @@
           <div class="border rounded mb-3 py-3 px-3">
             <div class="form-group">
               <div class="form-control-sm" for="{{ form.first_day.name }}">
-                {{ form.first_day.label }}
+                利用開始予定日
               </div>
 
               {% if form.is_bound %}
-                {% if form.first_day.errors %}
+                {% if form.y_start_day.errors %}
                   <div class="form-inline">
-                    {{ form.first_day|add_class:'is-invalid' }} {{ form.start_time|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}
+                    {{ form.y_start_day|add_class:'is-invalid' }} {{ form.y_start_time|add_class:'is-invalid' }} {{ form.y_start_kbn|add_class:'is-invalid' }}
                   </div>
-                  {% for error in form.first_day.errors %}
+                  {% for error in form.y_start_day.errors %}
                     <small><div class="text-danger">・{{ error }}</div></small>
                   {% endfor %}
                 {% else %}
                 <div class="form-inline">
-                  {{ form.first_day|add_class:'is-valid' }} {{ form.start_time|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}
+                  {{ form.y_start_day|add_class:'is-valid' }} {{ form.y_start_time|add_class:'is-valid' }} {{ form.y_start_kbn|add_class:'is-valid' }}
                 </div>
                 {% endif %}
               {% else %}
                 <div class="form-inline">
-                  {{ form.first_day }} {{ form.start_time }} {{ form.start_kbn }}
+                  {{ form.y_start_day }} {{ form.y_start_time }} {{ form.y_start_kbn }}
                 </div>
               {% endif %}
+              <small><div class="text-muted">不明の場合は空白にしてください。</div></small>
+            </div>
+
+            <div class="form-group">
+              <div class="form-control-sm" for="{{ form.first_day.name }}">
+                利用終了予定日
+              </div>
+
+              {% if form.is_bound %}
+                {% if form.y_last_day.errors %}
+                  <div class="form-inline">
+                    {{ form.y_last_day|add_class:'is-invalid' }} {{ form.y_last_time|add_class:'is-invalid' }} {{ form.y_last_kbn|add_class:'is-invalid' }}
+                  </div>
+                  {% for error in form.y_last_day.errors %}
+                    <small><div class="text-danger">・{{ error }}</div></small>
+                  {% endfor %}
+                {% else %}
+                <div class="form-inline">
+                  {{ form.y_last_day|add_class:'is-valid' }} {{ form.y_last_time|add_class:'is-valid' }} {{ form.y_last_kbn|add_class:'is-valid' }}
+                </div>
+                {% endif %}
+              {% else %}
+                <div class="form-inline">
+                  {{ form.y_last_day }} {{ form.y_last_time }} {{ form.y_last_kbn }}
+                </div>
+              {% endif %}
+              <small><div class="text-muted">不明の場合は空白にしてください。</div></small>
             </div>
 
             <div class="form-group">
@@ -95,7 +123,11 @@
               <div class="form-control-sm" for="{{ form.sex.name }}">
                 {{ form.sex.label }}
               </div>
-              {{ form.sex }}
+              {% if form.is_bound %}
+                {{ form.sex|add_class:'is-valid' }}
+              {% else %}
+                {{ form.sex }}
+              {% endif %}
             </div>
 
             <div class="form-group">
@@ -103,7 +135,11 @@
                 生年月日
               </div>
               <div class="form-inline">
-                {{ form.gengou }} {{ form.g_year }}  年 {{ form.month }}  月 {{ form.day }} 日
+                {% if form.is_bound %}
+                  {{ form.gengou|add_class:'is-valid' }} {{ form.g_year|add_class:'is-valid' }}  年 {{ form.month|add_class:'is-valid' }}  月 {{ form.day|add_class:'is-valid' }} 日
+                {% else %}
+                  {{ form.gengou }} {{ form.g_year }}  年 {{ form.month }}  月 {{ form.day }} 日
+                {% endif %}
               </div>
             </div>
 

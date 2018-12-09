@@ -1,15 +1,57 @@
 from django import forms
 
-from ..models import Riyosya, start_kbn
+from ..models import Riyosya, RiyosyaRiyouKikan, start_kbn, last_kbn
 from ..libs.funcs import wareki_to_seireki
 
 
 class RiyosyaForm(forms.ModelForm):
-    start_time = forms.TimeField(
+
+    y_start_day = forms.DateField(
+        required=False,
+        input_formats=['%Y/%m/%d','%Y-%m-%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )
+
+    y_start_time = forms.TimeField(
+        required=False,
         widget=forms.TimeInput(
             attrs={'class': 'form-control form-control-sm col-2'},
         )
     )
+
+    y_start_kbn = forms.IntegerField(
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm col-4'},
+            choices=start_kbn
+        )
+    )
+
+    y_last_day = forms.DateField(
+        required=False,
+        input_formats=['%Y/%m/%d','%Y-%m-%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )
+
+    y_last_time = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(
+            attrs={'class': 'form-control form-control-sm col-2'},
+        )
+    )
+
+    y_last_kbn = forms.IntegerField(
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm col-4'},
+            choices=last_kbn
+        )
+    )
+
     gengou = forms.IntegerField(
         widget=forms.Select(
             attrs={'class': 'form-control form-control-sm col-2'},
@@ -122,17 +164,9 @@ class RiyosyaForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control form-control-sm col-3'})
     )
 
-    start_kbn = forms.IntegerField(
-        label='入所時間区分',
-        widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm col-3'},
-            choices=start_kbn
-        )
-    )
-
     class Meta:
         model = Riyosya
-        fields = ['first_day', 'name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo', 'memo']
+        fields = ['name', 'furigana', 'sex', 'caremanager', 'addr', 'tel', 'youkaigodo', 'memo']
         widgets = {
             'first_day': forms.DateInput(attrs={'class': 'form-control form-control-sm col-4'}),
             'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-3'}),
@@ -159,6 +193,10 @@ class RiyosyaForm(forms.ModelForm):
 
         return name
 
+    def clean_y_last_day(self):
+        y_last_day = self.cleaned_data['y_last_day']
+        print(y_last_day, 'Test')
+        return y_last_day
 
     def clean(self):
         try:
@@ -175,3 +213,43 @@ class RiyosyaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class RiyosyaStartInput(forms.ModelForm):
+
+    class Meta:
+        model = RiyosyaRiyouKikan
+
+        fields = ['start_day', 'start_time', 'start_kbn']
+
+        widgets = {
+            'start_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-3'}),
+            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
+        }
+
+    start_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )
+
+
+class RiyosyaLastInput(forms.ModelForm):
+
+    class Meta:
+        model = RiyosyaRiyouKikan
+
+        fields = ['last_day', 'last_time', 'last_kbn']
+
+        widgets = {
+            'last_time': forms.TimeInput(attrs={'class': 'form-control form-control-sm col-3'}),
+            'last_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
+        }
+
+    last_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3'},
+        )
+    )

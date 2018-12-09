@@ -34,11 +34,23 @@ urlpatterns = [
     # 利用者 - 利用者 - 一覧
 	path('riyosya_list/', RiyosyaListView.as_view(), name='riyosya_list'),
 
+    # 利用者 - 利用者 - 一覧 - 年月日指定(テスト用)
+	path('riyosya_list/<int:year>/<int:month>/<int:day>/', RiyosyaListView.as_view(), name='riyosya_list'),
+
+    # 利用者 - 利用者 - 実開始日時登録
+	path('riyosya/start/input/<int:pk>', RiyosyaStartInputView.as_view(), name='riyosya_start_input'),
+
+    # 利用者 - 利用者 - 実終了日時登録
+	path('riyosya/last/input/<int:pk>', RiyosyaLastInputView.as_view(), name='riyosya_last_input'),
+
     # 利用者 - 利用者 - 詳細
 	path('riyosya_detail/<int:pk>/', RiyosyaDetailView.as_view(), name='riyosya_detail'),
 
     # 利用者 - 利用者 - 新規入所
 	path('riyosya_new/', RiyosyaNewView.as_view(), name='riyosya_new'),
+
+    # 利用者 - 利用者 - 利用予定者一覧
+	path('riyosya/yotei/list', RiyosyaYoteiListView.as_view(), name='riyosya_yotei_list'),
 
     # 利用者 - 利用者 - 退所
 	path('riyosya_taisyo/riyosyariyoukikan/<int:pk>/', RiyosyaTaisyoView.as_view(), name='riyosya_taisyo'),

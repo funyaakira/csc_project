@@ -10,22 +10,17 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active">利用者一覧</li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  <li class="breadcrumb-item active">利用予定者一覧</li>
 {% endblock %}
 
 {% block content %}
-  <h2>{{ target_day }} 利用者一覧</h2>
+  <h2>{{ target_day }} 利用予定者一覧</h2>
   <div class="mb-4">
     <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規利用登録</a>
-    <a href="#" class="btn btn-secondary">利用者一覧</a>
-    <a href="{% url 'riyosya_yotei_list' %}" class="btn btn-info">利用予定者一覧</a>
+    <a href="{% url 'riyosya_list' %}" class="btn btn-info">利用者一覧</a>
+    <a href="#" class="btn btn-secondary">利用予定者一覧</a>
     <a href="{% url 'taisyo_list' %}" class="btn btn-info">退所者一覧</a>
-  </div>
-
-  <div class="mb-4">
-    <div class="">
-      入所者数: {{ riyosya_count }} 名、 男: {{ riyosya_man_count }} 名、 女: {{ riyosya_woman_count }} 名
-    </div>
   </div>
 
   <div class="d-none d-lg-block">
@@ -33,8 +28,8 @@
     <thead class="thead-inverse">
       <tr>
         <th>氏名</th>
+        <th>利用期間</th>
         <th>誕生日/年齢</th>
-        <th>利用予定</th>
         <th>連絡先</th>
         <th>ケアマネ</th>
         <th style="width: 10%"></th>
@@ -42,7 +37,7 @@
     </thead>
     <tbody>
       {% for rr in riyosya_riyoukians %}
-      <tr style="{% if rr.start_status == 2 or rr.last_day == target_day %}background-color: gainsboro{% endif %}">
+      <tr style="background-color: gainsboro">
         <td>
           <a href="{% url 'riyosya_detail' rr.riyosya.id %}"  class="text-dark">
             <div>
@@ -50,6 +45,14 @@
             </div>
             <small class="text-muted d-block">{{ rr.riyosya.furigana }}</small>
           </a>
+        </td>
+        <td>
+            <div>
+              {{ rr.start_day }} ~
+            </div>
+            <div>
+              {{ rr.last_day|default:'' }}
+            </div>
         </td>
         <td>
           <div>
@@ -60,18 +63,6 @@
             <small class="text-muted d-block">{{ rr.riyosya.birthday|calculate_age  }}歳</small>
           </div>
         </td>
-
-        <td>
-          <div>
-            {{ rr.start_day|seireki_to_wareki }} ～
-            <small class="text-muted">{{ rr.start_day }} ～</small>
-          </div>
-          <div>
-            {{ rr.last_day|seireki_to_wareki }}
-            <small class="text-muted">{{ rr.last_day|default:'' }}</small>
-          </div>
-        </td>
-
         <td>
           <div>
             {% for renrakusaki in rr.riyosya.renrakusakis.all %}
@@ -97,39 +88,10 @@
           {% if riyosya.l_date_time %}
             <a href="#" class="btn btn-secondary btn-sm" role="button">退所予定取消</a>
           {% else %}
-            <a href="{% url 'riyosya_taisyo' rr.id %}" class="btn btn-primary btn-sm" role="button">退所</a>
+            {# <a href="{% url 'riyosya_taisyo' riyosya.get_riyoukikan_latest_id %}" class="btn btn-primary btn-sm" role="button">退所</a> #}
           {% endif %}
         </td>
       </tr>
-        {% if rr.start_status == 2 %}
-          <tr style="background-color: gainsboro">
-            <td colspan="6">
-              <div class="mb-2">
-                <small>・利用予定期間 {{ rr.start_day }} {{ rr.start_time }} ～  {{ rr.last_day|default:'' }} {{ rr.last_time|default:'' }}
-              </div>
-              <div>
-                <a class="btn btn-warning" href="{% url 'riyosya_start_input' rr.id %}" role="button">
-                  <small>仮入所状態です。クリックして入所日時を入力してください。</small>
-                </a>
-              </div>
-            </td>
-          </tr>
-        {% endif %}
-
-        {% if rr.last_day == target_day %}
-          <tr style="background-color: gainsboro">
-            <td colspan="6">
-              <div class="mb-2">
-                <small>・利用予定期間 {{ rr.start_day }} {{ rr.start_time }} ～  {{ rr.last_day|default:'' }} {{ rr.last_time|default:'' }}
-              </div>
-              <div>
-                <a class="btn btn-warning" href="{% url 'riyosya_last_input' rr.id %}" role="button">
-                  <small>退所予定日です。クリックして退所日時を入力してください。</small>
-                </a>
-              </div>
-            </td>
-          </tr>
-        {% endif %}
       {% endfor %}
     </tbody>
   </table>
