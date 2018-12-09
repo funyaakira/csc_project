@@ -167,6 +167,7 @@ class KirokuCreateView(CreateView):
         riyosya_id_current_index += 1
         kwargs['riyosya_id_current_index'] = riyosya_id_current_index
         kwargs['riyosya_id_prev_index'] = riyosya_id_prev_index
+        kwargs['riyosya_id_curent_index_back_use'] = riyosya_id_current_index - 1
 
         if len(riyosya_ids_list) == riyosya_id_current_index:
             kwargs['last_riyosya'] = True
@@ -298,6 +299,9 @@ class KirokuKojinListView(ListView):
 def kiroku_delete(request, year, month, day, day_night, riyosya_ids, riyosya_id_current_index, pk):
 
     Kiroku.objects.get(id=pk).delete()
+
+    if riyosya_ids == 'list':
+        return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
 
     return redirect('kiroku_create', year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids, riyosya_id_current_index=riyosya_id_current_index)
 

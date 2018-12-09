@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_riyosya %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
+  <li class="breadcrumb-item active">再利用</li>
+{% endblock %}
+
+{% block content %}
+{% for error in form.non_field_errors %}
+    <small><div class="text-danger">{{ error }}</div></small>
+{% endfor %}
+
+{# {{ form.errors }} #}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <h5 class="mb-3">{{ riyosya.name }}  /  再利用</h5>
+  {{ form.riyosya.as_hidden }}
+  <div class="col-6 border rounded mb-3 py-3 px-3">
+
+    <!-- 再利用開始予定日 -->
+    <div class="form-group">
+      <div class="form-control-sm" for="{{ form.first_day.name }}">
+      再利用開始予定日
+      </div>
+
+      {% if form.is_bound %}
+        {% if form.start_day.errors or form.start_time.errors or form.start_kbn.errors %}
+          <div class="form-inline">
+              {% if form.start_day.errors %}
+                {{ form.start_day|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.start_day|add_class:'is-valid' }}
+              {% endif %}
+
+              {% if form.start_time.errors %}
+                {{ form.start_time|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.start_time|add_class:'is-valid' }}
+              {% endif %}
+
+              {% if form.start_kbn.errors %}
+                {{ form.start_kbn|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.start_kbn|add_class:'is-valid' }}
+              {% endif %}
+          </div>
+          {% for error in form.start_day.errors %}
+            <small><div class="text-danger">・入所予定日：{{ error }}</div></small>
+          {% endfor %}
+          {% for error in form.start_time.errors %}
+            <small><div class="text-danger">・入所予定時間：{{ error }}</div></small>
+          {% endfor %}
+          {% for error in form.start_kbn.errors %}
+            <small><div class="text-danger">・食事区分：{{ error }}</div></small>
+          {% endfor %}
+        {% else %}
+          <div class="form-inline">
+            {{ form.start_day|add_class:'is-valid' }} {{ form.start_time|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="form-inline">
+          {{ form.start_day }} {{ form.start_time }} {{ form.start_kbn }}
+        </div>
+      {% endif %}
+    </div>
+    <!-- 再利用開始予定日 ここまで-->
+
+    <!-- 再利用終了予定日 -->
+    <div class="form-group">
+      <div class="form-control-sm" for="{{ form.first_day.name }}">
+      再利用開始予定日
+      </div>
+
+      {% if form.is_bound %}
+        {% if form.last_day.errors or form.last_time.errors or form.last_kbn.errors %}
+          <div class="form-inline">
+              {% if form.last_day.errors %}
+                {{ form.last_day|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.last_day|add_class:'is-valid' }}
+              {% endif %}
+
+              {% if form.last_time.errors %}
+                {{ form.last_time|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.last_time|add_class:'is-valid' }}
+              {% endif %}
+
+              {% if form.last_kbn.errors %}
+                {{ form.last_kbn|add_class:'is-invalid' }}
+              {% else %}
+                {{ form.last_kbn|add_class:'is-valid' }}
+              {% endif %}
+          </div>
+          {% for error in form.last_day.errors %}
+            <small><div class="text-danger">・退所予定日：{{ error }}</div></small>
+          {% endfor %}
+          {% for error in form.last_time.errors %}
+            <small><div class="text-danger">・退所予定時間：{{ error }}</div></small>
+          {% endfor %}
+          {% for error in form.last_kbn.errors %}
+            <small><div class="text-danger">・食事区分：{{ error }}</div></small>
+          {% endfor %}
+        {% else %}
+          <div class="form-inline">
+            {{ form.last_day|add_class:'is-valid' }} {{ form.last_time|add_class:'is-valid' }} {{ form.last_kbn|add_class:'is-valid' }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="form-inline">
+          {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+        </div>
+      {% endif %}
+    </div>
+    <!-- 再利用終了予定日 ここまで-->
+
+  <button type="submit" class="btn btn-success">登録</button>
+</form>
+{% endblock %}

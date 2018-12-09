@@ -53,6 +53,8 @@ class RiyosyaListView(ListView):
                 Q(start_day__lte=self.target_day, last_day__isnull=True)
                 |
                 Q(start_day__lte=self.target_day, last_day__gte=self.target_day, last_status=settings._TAISYO_YOTEI)
+                |
+                Q(start_day__lte=self.target_day, last_day__lte=self.target_day, last_status=settings._TAISYO_YOTEI)
             ).order_by('riyosya__furigana')
         )
 
@@ -270,14 +272,22 @@ class RiyosyaTaisyoView(UpdateView):
 
     def form_valid(self, form):
         post = form.save(commit=False)
-        post.last_status = settings._TAISYO_KAKUTEI
+
+        if date.today() < post.last_day:
+            post.last_status = settings._TAISYO_YOTEI
+        else:
+            post.last_status = settings._TAISYO_KAKUTEI
+
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
 
         # Riyosya status 更新
         r = Riyosya.objects.get(id=post.riyosya.id)
-        r.status = riyosya_status[1][0]
+
+        if date.today() >= post.last_day:
+            r.status = settings._RIYOSYA_STATUS_TAISYO
+
         r.last_day = post.last_day
         r.save()
 
@@ -289,7 +299,7 @@ class RiyosyaTaisyoView(UpdateView):
 class TaisyoListView(ListView):
     model = Riyosya
     context_object_name = 'riyosyas'
-    template_name = 'csc_manager/riyosya/taisyo/list.html'
+    template_name = 'csc_manager/riyosya/taisyo_list.html'
 
     def get_context_data(self, **kwargs):
         kwargs['target_day'] = self.target_day
@@ -321,10 +331,10 @@ class TaisyoDetailView(DetailView):
 
 
 # 退所者 - 再入所
-class TaisyoRenewView(CreateView):
+class RiyosyaRenewView(CreateView):
     model = RiyosyaRiyouKikan
     form_class = RiyosyaRiyouKikanForm_Renew
-    template_name = 'csc_manager/riyosya/taisyo/renew.html'
+    template_name = 'csc_manager/riyosya/renew.html'
     success_url = "riyosya_list"
 
     def get_initial(self):

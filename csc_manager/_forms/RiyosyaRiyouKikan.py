@@ -44,6 +44,7 @@ class RiyosyaRiyouKikanForm_Renew(forms.ModelForm):
     )
 
     last_day = forms.DateField(
+        required=False,
         input_formats=['%Y/%m/%d'],
         widget=forms.DateInput(
             attrs={'class': 'form-control form-control-sm col-3'},

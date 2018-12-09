@@ -20,7 +20,7 @@
     <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規利用登録</a>
     <a href="{% url 'riyosya_list' %}" class="btn btn-info">利用者一覧</a>
     <a href="#" class="btn btn-secondary">利用予定者一覧</a>
-    <a href="{% url 'taisyo_list' %}" class="btn btn-info">退所者一覧</a>
+    <a href="{% url 'riyosya_taisyo_list' %}" class="btn btn-info">退所者一覧</a>
   </div>
 
   <div class="d-none d-lg-block">
@@ -85,11 +85,7 @@
         </td>
         <td>
           <a href="#" class="btn btn-primary btn-sm mb-1" role="button">編集</a>
-          {% if riyosya.l_date_time %}
-            <a href="#" class="btn btn-secondary btn-sm" role="button">退所予定取消</a>
-          {% else %}
-            {# <a href="{% url 'riyosya_taisyo' riyosya.get_riyoukikan_latest_id %}" class="btn btn-primary btn-sm" role="button">退所</a> #}
-          {% endif %}
+          <a href="{% url 'riyosya_renew' rr.riyosya.id %}" class="btn btn-primary btn-sm mb-1" role="button">再利用</a>
         </td>
       </tr>
       {% endfor %}

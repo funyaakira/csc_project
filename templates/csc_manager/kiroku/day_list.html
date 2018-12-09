@@ -64,7 +64,7 @@
                       <td style="width: 10%" class="text-danger">{{ kiroku.created_by.staff.short_name }}</td>
                     {% endif %}
                     <td style="width: 5%" >
-                      <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night riyosya_ids forloop.counter0 kiroku.id %}">
+                      <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night 'list' forloop.counter0 kiroku.id %}">
                         <i class="fas fa-trash-alt text-dark"></i>
                       </a>
                     </td>

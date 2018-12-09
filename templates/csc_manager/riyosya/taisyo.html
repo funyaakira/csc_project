@@ -47,6 +47,7 @@
       {% else %}
         {{ form.last_day|add_class:'is-valid' }}
       {% endif %}
+      <small>未来日を入力した場合は予定となります。</small>
       </div>
 
       <div class="form-group">
@@ -66,6 +67,7 @@
       <div class="form-group">
         {{ form.last_day.label }}
         {{ form.last_day }}
+        <small class="text-muted">未来日を入力した場合は予定となります。</small>
       </div>
       <div class="form-group">
         {{ form.last_time.label }}

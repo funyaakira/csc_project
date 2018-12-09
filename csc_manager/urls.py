@@ -55,14 +55,14 @@ urlpatterns = [
     # 利用者 - 利用者 - 退所
 	path('riyosya_taisyo/riyosyariyoukikan/<int:pk>/', RiyosyaTaisyoView.as_view(), name='riyosya_taisyo'),
 
-    # 利用者 - 退所者 - 退所者一覧
-    path('taisyo_list/', TaisyoListView.as_view(), name='taisyo_list'),
+    # 利用者 - 再利用
+    path('riyosya/renew/<int:pk>/', RiyosyaRenewView.as_view(), name='riyosya_renew'),
+
+    # 利用者 - 退所者一覧
+    path('riyosya/taisyo/list', TaisyoListView.as_view(), name='riyosya_taisyo_list'),
 
     # 利用者 - 退所者 - 詳細
 	path('taisyosya_detail/<int:pk>/', TaisyoDetailView.as_view(), name='taisyosya_detail'),
-
-    # 利用者 - 退所者 - 再入所
-    path('taisyo_renew/riyosya/<int:pk>/', TaisyoRenewView.as_view(), name='taisyo_renew'),
 
     # イベント - 一覧(当月)
 	path('event_list/', EventListView.as_view(), name='event_list'),

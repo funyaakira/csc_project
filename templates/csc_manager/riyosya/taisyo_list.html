@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_riyosya %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  <li class="breadcrumb-item active">退所者一覧</li>
+{% endblock %}
+
+{% block content %}
+<h2>{{ target_day }} 退所者一覧</h2>
+<div class="mb-4">
+  <a href="{% url 'riyosya_new' %}" class="btn btn-primary">新規利用登録</a>
+  <a href="{% url 'riyosya_list' %}" class="btn btn-info">利用者一覧</a>
+  <a href="{% url 'riyosya_yotei_list' %}" class="btn btn-info">利用予定者一覧</a>
+  <a href="#" class="btn btn-secondary">退所者一覧</a>
+</div>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>氏名</th>
+        <th>退所日</th>
+        <th>誕生日</th>
+        <th>連絡先</th>
+        <th>ケアマネ</th>
+        <th style="width: 10%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for riyosya in riyosyas %}
+      <tr>
+        <td>
+          <a href="{% url 'taisyosya_detail' riyosya.id %}"  class="text-body">
+            <div>
+              {{ riyosya.name }}
+            </div>
+            <small class="text-muted d-block">{{ riyosya.furigana }}</small>
+          </a>
+        </td>
+        <td>
+          <div>
+            {{ riyosya.last_day|seireki_to_wareki }}
+          </div>
+          <small class="text-muted d-block">{{ riyosya.last_day|default:"" }}</small>
+        </td>
+        <td>
+          <div>
+            <div>
+              {{ riyosya.birthday|seireki_to_wareki }}
+            </div>
+            <small class="text-muted d-block">{{ riyosya.birthday  }}</small>
+          </div>
+        </td>
+        <td>
+          <div>
+            {% for renrakusaki in riyosya.renrakusakis.all %}
+              {% if renrakusaki.primary_flg %}
+                <div>
+                  {{ renrakusaki.name }}
+                </div>
+                <small class="text-muted d-block">{{ renrakusaki.zokugara }}</small>
+                <small class="text-muted d-block">{{ renrakusaki.tel }}</small>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </td>
+        <td>
+          <div>
+            {{ riyosya.caremanager.name }}
+          </div>
+          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.name }}</small>
+          <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
+        </td>
+        <td>
+          <a href="#" class="btn btn-primary btn-sm mb-1" role="button">編集</a>
+          <a href="{% url 'riyosya_renew' riyosya.id %}" class="btn btn-primary btn-sm" role="button">再利用</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
