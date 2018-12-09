@@ -56,7 +56,6 @@ class RiyosyaListView(ListView):
             ).order_by('riyosya__furigana')
         )
 
-        print(queryset.query)
         self.nyusyo = queryset.filter(start_status=0)
         self.nyusyo_man = self.nyusyo.filter(riyosya__sex=1)
         self.nyusyo_woman = self.nyusyo.filter(riyosya__sex=2)
