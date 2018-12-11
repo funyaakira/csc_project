@@ -177,7 +177,7 @@
         </div>
         <small class="text-muted d-block">{{ rr.riyosya.furigana }}</small>
       </a>
-      {{ rr.riyosya.birthday|seireki_to_wareki }}
+      {{ rr.riyosya.birthday|seireki_to_wareki }} ({{ rr.riyosya.birthday|calculate_age }}歳)
       <small class="text-muted d-block">{{ rr.riyosya.birthday  }}</small>
     </div>
 
@@ -198,14 +198,6 @@
       </div>
       <small class="text-muted d-block">{{ rr.riyosya.caremanager.kyotaku.name }}</small>
       <small class="text-muted d-block">{{ rr.riyosya.caremanager.kyotaku.tel }}</small>
-    </div>
-    <div class="my-1">
-      <a href="#" class="btn btn-primary btn-sm" role="button">編集</a>
-      {% if riyosya.l_date_time %}
-        {{ rr.riyosya.l_date_time }} 退所予定
-      {% else %}
-        {# <a href="{% url 'riyosya_taisyo' riyosya.get_riyoukikan_latest_id %}" class="btn btn-primary btn-sm" role="button">退所</a> #}
-      {% endif %}
     </div>
   </div>
   {% endfor %}
