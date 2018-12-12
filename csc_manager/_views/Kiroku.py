@@ -188,7 +188,7 @@ class KirokuCreateView(CreateView):
 
         kwargs['riyosya'] = riyosya
         kwargs['riyosya_ids'] = riyosya_ids
-        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time', 'time')
+        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time', '-time')
         kwargs['target_day'] = exec_date
         kwargs['year'] = year
         kwargs['month'] = month
@@ -245,11 +245,11 @@ class KirokuCreateView(CreateView):
              riyosya_id_current_index=riyosya_id_current_index)
 
 
-class KirokuEditView(UpdateView):
-    model = Kiroku
-    context_object_name = 'kiroku'
-    form_class = KirokuEditForm
-    template_name = 'csc_manager/kiroku/edit.html'
+# class KirokuEditView(UpdateView):
+#     model = Kiroku
+#     context_object_name = 'kiroku'
+#     form_class = KirokuEditForm
+#     template_name = 'csc_manager/kiroku/edit.html'
 
     # def get_initial(self):
     #     year = self.kwargs.get('year')
@@ -272,12 +272,12 @@ class KirokuEditView(UpdateView):
     #         'staff': self.request.user.staff.name,
     #     }
 
-    def get_context_data(self, **kwargs):
-
-        kwargs['return_url'] = self.kwargs.get('return_url')
-        kwargs['scroll_position'] = self.kwargs.get('scroll_position')
-
-        return super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #
+    #     kwargs['return_url'] = self.kwargs.get('return_url')
+    #     kwargs['scroll_position'] = self.kwargs.get('scroll_position')
+    #
+    #     return super().get_context_data(**kwargs)
 
     # def form_valid(self, form):
     #     kiroku = form.save(commit=False)
