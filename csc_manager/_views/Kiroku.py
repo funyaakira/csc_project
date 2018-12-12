@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, DeleteView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -188,7 +188,7 @@ class KirokuCreateView(CreateView):
 
         kwargs['riyosya'] = riyosya
         kwargs['riyosya_ids'] = riyosya_ids
-        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time')
+        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=exec_date, riyosya=riyosya).order_by('date', 'disp_time', 'time')
         kwargs['target_day'] = exec_date
         kwargs['year'] = year
         kwargs['month'] = month
@@ -243,6 +243,86 @@ class KirokuCreateView(CreateView):
             return redirect('kiroku_create',
              year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids,
              riyosya_id_current_index=riyosya_id_current_index)
+
+
+class KirokuEditView(UpdateView):
+    model = Kiroku
+    context_object_name = 'kiroku'
+    form_class = KirokuEditForm
+    template_name = 'csc_manager/kiroku/edit.html'
+
+    # def get_initial(self):
+    #     year = self.kwargs.get('year')
+    #     month = self.kwargs.get('month')
+    #     day = self.kwargs.get('day')
+    #
+    #     riyosya_ids = self.kwargs.get('riyosya_ids').split(',')
+    #     riyosya_id_current_index = self.kwargs.get('riyosya_id_current_index')
+    #     riyosya_id = riyosya_ids[riyosya_id_current_index]
+    #
+    #     l_day_night = self.kwargs.get('day_night')
+    #
+    #     return {
+    #         'exec_date': date(year, month, day),
+    #         'day_night': l_day_night,
+    #         'riyosya': riyosya_id,
+    #         'date': date(year, month, day),
+    #         # 'time': datetime.now().strftime("%H:%M"),
+    #         'time': None,
+    #         'staff': self.request.user.staff.name,
+    #     }
+
+    def get_context_data(self, **kwargs):
+
+        kwargs['return_url'] = self.kwargs.get('return_url')
+        kwargs['scroll_position'] = self.kwargs.get('scroll_position')
+
+        return super().get_context_data(**kwargs)
+
+    # def form_valid(self, form):
+    #     kiroku = form.save(commit=False)
+    #
+    #     kiroku.disp_time = kiroku.time
+    #
+    #     if kiroku.time == None:
+    #         if kiroku.day_night == settings._NIKKIN:
+    #             kiroku.disp_time = '12:00'
+    #         else:
+    #             kiroku.disp_time = '00:00'
+    #
+    #     if kiroku.day_night == settings._YAKIN:
+    #         if kiroku.time == None:
+    #             in_time = time(0, 0, 0)
+    #         else:
+    #             in_time = kiroku.time
+    #
+    #         if time(0, 0, 0) <= in_time < settings.NIKKIN_START_TIME:
+    #             kiroku.date += timedelta(days=1)
+    #
+    #     kiroku.created_by = self.request.user
+    #     kiroku.created_at = timezone.now()
+    #     kiroku.updated_by = self.request.user
+    #     kiroku.updated_at = timezone.now()
+    #
+    #     kiroku.save()
+    #
+    #     year = self.kwargs.get('year')
+    #     month = self.kwargs.get('month')
+    #     day = self.kwargs.get('day')
+    #     day_night = self.kwargs.get('day_night')
+    #     riyosya_ids = self.kwargs.get('riyosya_ids')
+    #     riyosya_ids_list = riyosya_ids.split(',')
+    #     riyosya_id_current_index = int(self.kwargs.get('riyosya_id_current_index'))
+    #
+    #     if 'commit_next' in self.request.POST:
+    #         riyosya_id_current_index += 1
+    #
+    #     if len(riyosya_ids_list) == riyosya_id_current_index:
+    #         return redirect('kiroku_day_list', year=year, month=month, day=day, day_night=day_night)
+    #     else:
+    #         return redirect('kiroku_create',
+    #          year=year, month=month, day=day, day_night=day_night, riyosya_ids=riyosya_ids,
+    #          riyosya_id_current_index=riyosya_id_current_index)
 
 
 class KirokuDeleteView(DeleteView):
