@@ -272,10 +272,10 @@ class KirokuEditView(UpdateView):
         kiroku = form.save(commit=False)
         kiroku.updated_at=timezone.now()
         kiroku.save()
-        
+
         return_url = self.kwargs.get('return_url')
 
-        return redirect(return_url)
+        return redirect('/' + return_url)
 
     #     kiroku = form.save(commit=False)
     #
