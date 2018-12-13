@@ -1,5 +1,10 @@
 # coding=utf-8
 from django import template
+from django.conf import settings
+from django.db.models import Q
+
+from datetime import datetime, date, timedelta
+
 from ..libs.funcs import seireki_to_wareki as libs_seireki_to_wareki
 from ..libs.funcs import calculate_age as libs_calculate_age
 from .. import models
@@ -58,3 +63,56 @@ def get_gender_name(id):
 def get_yokaigodo_name(id):
     id -= 1 # indexを合わせるため1引く…
     return models.youkaigodo[id][1]
+
+
+@register.filter(name='get_bed_count')
+def get_bed_count(target_day):
+
+    queryset = models.Riyosya.objects.filter(
+        Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__gt=target_day)
+        |
+        Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__isnull=True)
+        |
+        Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte=settings.YAKIN_START_TIME)
+        |
+        Q(riyoukikans__start_day=(target_day+ timedelta(days=1)), riyoukikans__start_time__lt=settings.NIKKIN_START_TIME)
+        |
+        Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte=settings.YAKIN_START_TIME)
+    )
+
+    return queryset.count()
+
+
+@register.filter(name='get_riyosya_max_count')
+def get_riyosya_max_count(target_day):
+
+    queryset_day = models.Riyosya.objects.filter(
+        Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day__gt=target_day)
+        |
+        Q(riyoukikans__start_day__lt=target_day, riyoukikans__last_day__isnull=True)
+        |
+        Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte=settings.NIKKIN_START_TIME, riyoukikans__start_time__lt=settings.YAKIN_START_TIME)
+        |
+        Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte=settings.NIKKIN_START_TIME)
+        |
+        Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte='00:00:00', riyoukikans__start_time__lt=settings.NIKKIN_START_TIME, riyoukikans__last_day__isnull=True)
+    )
+
+    queryset_night = models.Riyosya.objects.filter(
+        Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__gt=target_day)
+        |
+        Q(riyoukikans__start_day__lte=target_day, riyoukikans__last_day__isnull=True)
+        |
+        Q(riyoukikans__start_day=target_day, riyoukikans__start_time__gte=settings.YAKIN_START_TIME)
+        |
+        Q(riyoukikans__start_day=(target_day+ timedelta(days=1)), riyoukikans__start_time__lt=settings.NIKKIN_START_TIME)
+        |
+        Q(riyoukikans__last_day=target_day, riyoukikans__last_time__gte=settings.YAKIN_START_TIME)
+    )
+
+    if queryset_day.count() >= queryset_night.count():
+        riyosya_max_count = queryset_day.count()
+    else:
+        riyosya_max_count = queryset_night.count()
+
+    return riyosya_max_count

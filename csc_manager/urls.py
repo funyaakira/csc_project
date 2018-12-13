@@ -64,6 +64,9 @@ urlpatterns = [
     # 利用者 - 退所者 - 詳細
 	path('taisyosya_detail/<int:pk>/', TaisyoDetailView.as_view(), name='taisyosya_detail'),
 
+    # 利用者 - 空きベッド推移
+	path('riyosya/tran_bed/<int:year>/<int:month>/', RiyosyaTranBedView.as_view(), name='riyosya_tran_bed'),
+
     # イベント - 一覧(当月)
 	path('event_list/', EventListView.as_view(), name='event_list'),
 
@@ -106,17 +109,20 @@ urlpatterns = [
     # 記録 - 一覧 - 日指定
     path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
 
+    # 記録 - 一覧 - 日指定 - スクロール位置指定
+    path('kiroku_day_list/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:scroll_position>/', KirokuDayListView.as_view(), name='kiroku_day_list'),
+
     # 記録 - 個人一覧 - 年月指定
     path('kiroku/kojin/<int:year>/<int:month>/<int:riyosya_id>/', KirokuKojinListView.as_view(), name='kiroku_kojin'),
 
     # 記録 - 新規
     path('kiroku/create/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>', KirokuCreateView.as_view(), name='kiroku_create'),
 
-    # # 記録 - 削除
-    # path('kiroku_delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<int:pk>/', KirokuDeleteView.as_view(), name='kiroku_delete'),
-
     # 記録 - 削除
     path('kiroku/delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>/<int:pk>/', kiroku_delete, name='kiroku_delete'),
+
+    # # 記録 - 修正
+    # path('kiroku/edit/<int:pk>/<path:return_url>/<str:scroll_position>', KirokuEditView.as_view(), name='kiroku_edit'),
 
     # 記録 - アップロード
     path('kiroku/upload/', kiroku_upload, name='kiroku_upload'),

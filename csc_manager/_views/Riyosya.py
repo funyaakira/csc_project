@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, TemplateView
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.conf import settings
@@ -12,6 +12,8 @@ from django.db.models import Q
 from django.db.models.functions import Concat
 
 from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
+import calendar
 
 from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender, riyosya_status
 from .._forms.Riyosya import RiyosyaForm, RiyosyaStartInput, RiyosyaLastInput
@@ -366,3 +368,29 @@ class RiyosyaRenewView(CreateView):
         r.save()
 
         return redirect('riyosya_list')
+
+
+
+# 利用者 - 空きベッド推移
+class RiyosyaTranBedView(TemplateView):
+    template_name = 'csc_manager/riyosya/tran_bed.html'
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+
+        # カレンダーの機能を利用して、指定年月のdateオブジェクトのリストを作成
+        days = [date(year, month, i+1)
+            for i in range(calendar.monthrange(year, month)[1])]
+
+        kwargs['year'] = year
+        kwargs['month'] = month
+        kwargs['days'] = days
+
+        target_month = date(year, month, 1)
+        kwargs["prev_year"] = (target_month - relativedelta(months=1)).year
+        kwargs["prev_month"] = (target_month - relativedelta(months=1)).month
+        kwargs["next_year"] = (target_month + relativedelta(months=1)).year
+        kwargs["next_month"] = (target_month + relativedelta(months=1)).month
+
+        return super().get_context_data(**kwargs)

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% load lookup %}
+
+{% block title %}{% endblock %}
+
+{% block nav_riyosya %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">利用者一覧</li>
+{% endblock %}
+
+{% block content %}
+
+  <h2>
+    <a href="{% url 'riyosya_tran_bed' prev_year prev_month %}">
+      <i class="fas fa-angle-left"></i>
+    </a>
+    {{ year }}年 {{ month }} 月 入所者数推移
+    <a href="{% url 'riyosya_tran_bed' next_year next_month %}">
+      <i class="fas fa-angle-right"></i>
+    </a>
+  </h2>
+
+  <canvas id="ChartDemo" class="mb-3"></canvas>
+  <script>
+    var ctx = document.getElementById("ChartDemo").getContext('2d');
+    var ChartDemo = new Chart(ctx, {
+     type: 'line',
+     data: {
+        labels: [
+        {% for day in days %}
+        "{{ day.day}}",
+        {% endfor %}
+        ],
+        datasets: [
+        {
+           label: "ベッド使用数",
+           borderColor: 'rgb(255, 20, 147)',
+           lineTension: 0, //<===追加
+           fill: false,    //<===追加
+           data: [
+           {% for day in days %}
+           {{ day|get_bed_count }},
+           {% endfor %}
+           ],
+        },
+        ]
+     },
+     options: {
+        responsive: true,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                min: 15,
+                max: 20
+              }
+            }
+          ]
+        }
+     }
+    });
+  </script>
+
+  <div class="d-none d-lg-block">
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>日付</th>
+        <th>日内最大利用者数</th>
+        <th>ベッド使用数</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for day in days %}
+      <tr>
+        <td>{{ day }}</td>
+        <td>{{ day|get_riyosya_max_count }}</td>
+        <td>{{ day|get_bed_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}
