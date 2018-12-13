@@ -158,7 +158,6 @@
               <td class="text-danger">{{ kiroku.created_by.staff.short_name }}
             {% endif %}
             <td style="width: 11%">
-              {{ request.get_full_path }}
               <a href="{% url 'kiroku_edit' kiroku.id request.get_full_path %}">
                 <i class="fas fa-pencil-alt text-dark"></i>
               </a>
