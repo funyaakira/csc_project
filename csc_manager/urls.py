@@ -121,8 +121,8 @@ urlpatterns = [
     # 記録 - 削除
     path('kiroku/delete/<int:year>/<int:month>/<int:day>/<int:day_night>/<str:riyosya_ids>/<int:riyosya_id_current_index>/<int:pk>/', kiroku_delete, name='kiroku_delete'),
 
-    # # 記録 - 修正
-    # path('kiroku/edit/<int:pk>/<path:return_url>/<str:scroll_position>', KirokuEditView.as_view(), name='kiroku_edit'),
+    # 記録 - 修正
+    path('kiroku/edit/<int:pk>/<path:return_url>/', KirokuEditView.as_view(), name='kiroku_edit'),
 
     # 記録 - アップロード
     path('kiroku/upload/', kiroku_upload, name='kiroku_upload'),

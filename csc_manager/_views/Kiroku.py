@@ -70,7 +70,7 @@ class KirokuDayListView(ListView):
         kwargs['target_day'] = target_day
         kwargs['prev_day_1week'] = target_day - timedelta(days=7)
         kwargs['day_night'] = day_night_now
-        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=target_day, day_night=day_night_now).order_by('date', 'disp_time')
+        kwargs['kirokus'] = Kiroku.objects.filter(exec_date=target_day, day_night=day_night_now).order_by('date', 'disp_time', '-time')
         kwargs['riyosya_ids'] = self.riyosya_ids # get_querysetで設定した利用者IDをカンマ区切りで連結したもの
 
         return super().get_context_data(**kwargs)
@@ -245,41 +245,38 @@ class KirokuCreateView(CreateView):
              riyosya_id_current_index=riyosya_id_current_index)
 
 
-# class KirokuEditView(UpdateView):
-#     model = Kiroku
-#     context_object_name = 'kiroku'
-#     form_class = KirokuEditForm
-#     template_name = 'csc_manager/kiroku/edit.html'
+class KirokuEditView(UpdateView):
+    model = Kiroku
+    context_object_name = 'kiroku'
+    form_class = KirokuEditForm
+    template_name = 'csc_manager/kiroku/edit.html'
 
-    # def get_initial(self):
-    #     year = self.kwargs.get('year')
-    #     month = self.kwargs.get('month')
-    #     day = self.kwargs.get('day')
-    #
-    #     riyosya_ids = self.kwargs.get('riyosya_ids').split(',')
-    #     riyosya_id_current_index = self.kwargs.get('riyosya_id_current_index')
-    #     riyosya_id = riyosya_ids[riyosya_id_current_index]
-    #
-    #     l_day_night = self.kwargs.get('day_night')
-    #
-    #     return {
-    #         'exec_date': date(year, month, day),
-    #         'day_night': l_day_night,
-    #         'riyosya': riyosya_id,
-    #         'date': date(year, month, day),
-    #         # 'time': datetime.now().strftime("%H:%M"),
-    #         'time': None,
-    #         'staff': self.request.user.staff.name,
-    #     }
+    def get_initial(self):
 
-    # def get_context_data(self, **kwargs):
-    #
-    #     kwargs['return_url'] = self.kwargs.get('return_url')
-    #     kwargs['scroll_position'] = self.kwargs.get('scroll_position')
-    #
-    #     return super().get_context_data(**kwargs)
+        staffName = self.object.created_by.staff.name
+        time = self.object.time
 
-    # def form_valid(self, form):
+        if time is not None:
+            time = "{0}:{1:02d}".format(time.hour, time.minute)
+
+        return {
+            'staff': staffName,
+            'time': time,
+        }
+
+    def get_context_data(self, **kwargs):
+        kwargs['return_url'] = self.kwargs.get('return_url')
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        kiroku = form.save(commit=False)
+        kiroku.updated_at=timezone.now()
+        kiroku.save()
+        
+        return_url = self.kwargs.get('return_url')
+
+        return redirect(return_url)
+
     #     kiroku = form.save(commit=False)
     #
     #     kiroku.disp_time = kiroku.time
@@ -371,7 +368,7 @@ class KirokuKojinListView(ListView):
         queryset = Kiroku.objects.filter(
             riyosya=riyosya,
             exec_date__gte=target_YM,
-            exec_date__lt=next_YM).order_by('date', 'disp_time')
+            exec_date__lt=next_YM).order_by('date', 'disp_time', '-time')
 
         return queryset
 

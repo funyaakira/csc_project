@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, time
 
 from ..models import Riyosya, Kiroku, riyosya_status
 
+
 class KirokuCreateForm(forms.ModelForm):
     staff = forms.CharField(
         label='記録者',
@@ -62,6 +63,32 @@ class KirokuCreateForm(forms.ModelForm):
 
         return cleaned_data
 
+
+class KirokuEditForm(forms.ModelForm):
+    staff = forms.CharField(
+        label='記録者',
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-lg-4', 'readonly':'readonly'},
+        )
+    )
+    time = forms.CharField(
+        label='時間',
+        required=False,
+        widget=forms.TextInput(
+            attrs={'class': 'form-control col-lg-4', 'readonly':'readonly'},
+        )
+    )
+    class Meta():
+        model = Kiroku
+        fields = ['memo']
+        widgets = {
+            'memo': forms.Textarea(
+                attrs={'class': 'form-control col-12 form-control-sm',
+                       'rows': 3,
+                       'placeholder': '一般介護状況を入力してください。',}),
+        }
+
+
 class KirokuDeleteForm(forms.ModelForm):
     class Meta():
         model = Kiroku
@@ -74,6 +101,9 @@ class KirokuDeleteForm(forms.ModelForm):
                        'row': 5,
                        'placeholder': '一般介護状況を入力してください。',}),
         }
+
+
+
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)

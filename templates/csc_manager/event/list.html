@@ -6,7 +6,6 @@
 
 {% block nav_event %}active{% endblock %}
 
-
 {% block script %}
 <script type="text/javascript">
   window.addEventListener("DOMContentLoaded", function(){
@@ -15,8 +14,6 @@
   }, false);
 </script>
 {% endblock %}
-
-
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -80,7 +77,8 @@
             {{ day|date:"m/d" }}
           </div>
           <div>
-            <a id="add-{{ day|date:"Y-m-d" }}" href="#" onclick="document.getElementById('add-{{ day|date:"Y-m-d" }}').href='{% url 'event_create' day.year day.month day.day 0 'dummy' %}'.replace('dummy', window.scrollY)">
+            <a id="add-{{ day|date:"Y-m-d" }}" href="#"
+              onclick="document.getElementById('add-{{ day|date:"Y-m-d" }}').href='{% url 'event_create' day.year day.month day.day 0 'dummy' %}'.replace('dummy', window.scrollY)">
               <i class="fas fa-plus text-dark"></i>
             </a>
           </div>

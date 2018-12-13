@@ -2,12 +2,9 @@
 
 {% load lookup %}
 
-{% block title %}
-
-{% endblock %}
+{% block title %}{% endblock %}
 
 {% block nav_kiroku %}active{% endblock %}
-{% block prev_url %}{{ request.path }}{% endblock %}
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -36,7 +33,7 @@
 <table class="table kiroku_detail">
   <thead class="thead-inverse">
     <tr>
-      <th style="width: 15%">利用者</th>
+      <th style="width: 10%">利用者</th>
       <th>内容</th>
     </tr>
   </thead>
@@ -53,17 +50,20 @@
                 {% for kiroku in kirokus|get_kirokus_riyosya:riyosya %}
                   <tr>
                     {% if kiroku.day_night == 0 %}
-                      <td style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
-                      <td style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                      <td style="width: 5%">{{ kiroku.date|date:"m/d" }}</td>
+                      <td style="width: 5%">{{ kiroku.time|date:"H:i" }}</td>
                       <td>{{ kiroku.memo }}</td>
-                      <td style="width: 10%">{{ kiroku.created_by.staff.short_name }}</td>
+                      <td style="width: 6%">{{ kiroku.created_by.staff.short_name }}</td>
                     {% else %}
-                      <td class="text-danger" style="width: 10%">{{ kiroku.date|date:"m/d" }}</td>
-                      <td class="text-danger" style="width: 10%">{{ kiroku.time|date:"H:i" }}</td>
+                      <td class="text-danger" style="width: 5%">{{ kiroku.date|date:"m/d" }}</td>
+                      <td class="text-danger" style="width: 5%">{{ kiroku.time|date:"H:i" }}</td>
                       <td class="text-danger">{{ kiroku.memo }}</td>
-                      <td style="width: 10%" class="text-danger">{{ kiroku.created_by.staff.short_name }}</td>
+                      <td style="width: 6%" class="text-danger">{{ kiroku.created_by.staff.short_name }}</td>
                     {% endif %}
-                    <td style="width: 5%" >
+                    <td style="width:7%" >
+                      <a href="{% url 'kiroku_edit' kiroku.id request.path %}">
+                        <i class="fas fa-pencil-alt text-dark"></i>
+                      </a>
                       <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night 'list' forloop.counter0 kiroku.id %}">
                         <i class="fas fa-trash-alt text-dark"></i>
                       </a>

@@ -139,9 +139,9 @@
       <h4 class="mb-3">今日の記録</h4>
       <table class="table kiroku_detail">
         <thead>
-          <th style="width: 15%">時間</th>
+          <th style="width: 10%">時間</th>
           <th>内容</th>
-          <th style="width: 15%">記録者</th>
+          <th style="width: 14%">記録者</th>
           <th></th>
         </thead>
         <tbody>
@@ -157,7 +157,10 @@
               <td class="text-danger">{{ kiroku.memo }}</td>
               <td class="text-danger">{{ kiroku.created_by.staff.short_name }}
             {% endif %}
-            <td style="width: 5%">
+            <td style="width: 11%">
+              <a href="{% url 'kiroku_edit' kiroku.id request.path %}">
+                <i class="fas fa-pencil-alt text-dark"></i>
+              </a>
               <a href="{% url 'kiroku_delete' target_day.year target_day.month target_day.day day_night riyosya_ids riyosya_id_curent_index_back_use kiroku.id %}">
                 <i class="fas fa-trash-alt text-dark"></i>
               </a>
