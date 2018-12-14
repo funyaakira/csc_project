@@ -63,18 +63,20 @@
         </td>
 
         <td>
-          <div>
+          <a href="{% url 'riyosya_edit_riyoukikan' rr.id request.path %}" class="text-dark">
             <div>
-              {{ rr.start_day|seireki_to_wareki }} ～
+              <div>
+                {{ rr.start_day|seireki_to_wareki }} ～
+              </div>
+              <small class="text-muted">{{ rr.start_day }} ～</small>
             </div>
-            <small class="text-muted">{{ rr.start_day }} ～</small>
-          </div>
-          <div>
             <div>
-              {{ rr.last_day|seireki_to_wareki }}
+              <div>
+                {{ rr.last_day|seireki_to_wareki }}
+              </div>
+              <small class="text-muted">{{ rr.last_day|default:'' }}</small>
             </div>
-            <small class="text-muted">{{ rr.last_day|default:'' }}</small>
-          </div>
+          </a>
         </td>
 
         <td>

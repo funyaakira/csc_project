@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% load lookup %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block nav_riyosya %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  <li class="breadcrumb-item active">{{ rr.riyosya.name }} 利用期間修正</li>
+{% endblock %}
+
+{% block content %}
+{{ form.errors }}
+
+<h2>{{ rr.riyosya.name }} - 利用期間修正</h2>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <div class="rounded p-3 my-3 my_border col-6">
+    <div class="mb-3">
+      <small>入所日時</small>
+      <div class="form-inline">
+        {% if form.is_bound %}
+         {% if form.start_day.errors or form.start_time.errors %}
+            {{ form.start_day|add_class:'is-invalid' }} {{ form.start_time|add_class:'is-invalid' }} {{ form.start_kbn|add_class:'is-invalid' }}
+            {% for error in form.start_day.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+            {% for error in form.start_time.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            {{ form.start_day|add_class:'is-valid' }} {{ form.start_time|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}
+          {% endif %}
+        {% else %}
+          {{ form.start_day }} {{ form.start_time }} {{ form.start_kbn }}
+        {% endif %}
+      </div>
+      <small><div class="text-muted">入力例：2018/12/14 9:00</div></small>
+      <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+    </div>
+
+    <div class="mb-2">
+      <small>退所日時</small>
+      <div class="form-inline">
+        {% if form.is_bound %}
+         {% if form.last_day.errors or form.last_time.errors %}
+            {{ form.last_day|add_class:'is-invalid' }} {{ form.last_time|add_class:'is-invalid' }} {{ form.last_kbn|add_class:'is-invalid' }}
+            {% for error in form.last_day.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+            {% for error in form.last_time.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            {{ form.last_day|add_class:'is-valid' }} {{ form.last_time|add_class:'is-valid' }} {{ form.last_kbn|add_class:'is-valid' }}
+          {% endif %}
+        {% else %}
+          {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+        {% endif %}
+      </div>
+      <small><div class="text-muted">入力例：2018/12/21 15:00</div></small>
+      <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success my-1">修正</button>
+  <a href="/{{ return_url }}" class="btn btn-secondary">
+    戻る
+  </a>
+</form>
+{% endblock %}

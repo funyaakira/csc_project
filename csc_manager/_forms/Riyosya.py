@@ -262,3 +262,51 @@ class RiyosyaLastInput(forms.ModelForm):
                    'placeholder': 'HH:MM'},
         )
     )
+
+
+class RiyosyaEditRiyoukikan(forms.ModelForm):
+
+    class Meta:
+        model = RiyosyaRiyouKikan
+
+        fields = ['start_day', 'start_time', 'start_kbn',
+            'last_day', 'last_time', 'last_kbn']
+
+        widgets = {
+            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
+            'last_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
+        }
+
+    start_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        required=True,
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'YYYY/MM/DD'},
+        )
+    )
+
+    start_time = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'HH:MM'},
+        )
+    )
+
+    last_day = forms.DateField(
+        input_formats=['%Y/%m/%d'],
+        required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'YYYY/MM/DD'},
+        )
+    )
+
+    last_time = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'HH:MM'},
+        )
+    )

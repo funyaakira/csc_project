@@ -16,7 +16,7 @@ from dateutil.relativedelta import relativedelta
 import calendar
 
 from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender, riyosya_status
-from .._forms.Riyosya import RiyosyaForm, RiyosyaStartInput, RiyosyaLastInput
+from .._forms.Riyosya import RiyosyaForm, RiyosyaStartInput, RiyosyaLastInput, RiyosyaEditRiyoukikan
 from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
 
@@ -145,6 +145,55 @@ class RiyosyaLastInputView(UpdateView):
         riyosya.save()
 
         return redirect('riyosya_list')
+
+
+
+# 利用者 - 利用期間修正
+class RiyosyaEditRiyoukikanView(UpdateView):
+    model = RiyosyaRiyouKikan
+    form_class = RiyosyaEditRiyoukikan
+    context_object_name = 'rr'
+    template_name = 'csc_manager/riyosya/edit_riyoukikan.html'
+
+    def get_success_url(self):
+        return reverse('riyosya_list')
+
+    def get_context_data(self, **kwargs):
+        kwargs['return_url'] = self.kwargs.get('return_url')
+        return super().get_context_data(**kwargs)
+
+    def get_initial(self):
+        start_day = self.object.start_day
+        if start_day is not None:
+            start_day = "{}/{}/{}".format(start_day.year, start_day.month, start_day.day)
+
+        start_time = self.object.start_time
+        if start_time is not None:
+            start_time = "{0}:{1:02d}".format(start_time.hour, start_time.minute)
+
+        last_day = self.object.last_day
+        if last_day is not None:
+            last_day = "{}/{}/{}".format(last_day.year, last_day.month, last_day.day)
+
+        last_time = self.object.last_time
+        if last_time is not None:
+            last_time = "{0}:{1:02d}".format(last_time.hour, last_time.minute)
+
+        return {'start_day': start_day, 'start_time': start_time,
+            'last_day': last_day, 'last_time': last_time }
+
+    def form_valid(self, form):
+        form.save()
+
+        return_url = self.kwargs.get('return_url')
+
+        import socket
+        if socket.gethostname()=='AKIRA-PC':
+            return redirect(return_url)
+        else:
+            return redirect('/' + return_url)
+
+
 
 
 
