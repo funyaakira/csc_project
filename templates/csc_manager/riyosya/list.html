@@ -35,7 +35,7 @@
       <tr>
         <th>氏名</th>
         <th>誕生日/年齢</th>
-        <th>利用予定</th>
+        <th style="width: 20%">利用予定</th>
         <th>連絡先</th>
         <th>ケアマネ</th>
         <th style="width: 10%"></th>
@@ -64,11 +64,15 @@
 
         <td>
           <div>
-            {{ rr.start_day|seireki_to_wareki }} ～
+            <div>
+              {{ rr.start_day|seireki_to_wareki }} ～
+            </div>
             <small class="text-muted">{{ rr.start_day }} ～</small>
           </div>
           <div>
-            {{ rr.last_day|seireki_to_wareki }}
+            <div>
+              {{ rr.last_day|seireki_to_wareki }}
+            </div>
             <small class="text-muted">{{ rr.last_day|default:'' }}</small>
           </div>
         </td>
