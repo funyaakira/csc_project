@@ -130,8 +130,17 @@ class RiyosyaLastInputView(UpdateView):
         rr.last_status = settings._TAISYO_KAKUTEI
         rr.save()
 
+        # 今回の利用終了日以降に予定がある場合はRiyosya.statusを予定に更新
+        # ない場合は退所に更新
+        next_rr = RiyosyaRiyouKikan.objects.filter(riyosya=rr.riyosya, start_day__gt=rr.last_day)
+        print(next_rr)
+        if next_rr:
+            upd_status = settings._RIYOSYA_STATUS_YOTEI
+        else:
+            upd_status = settings._RIYOSYA_STATUS_TAISYO
+
         riyosya = Riyosya.objects.get(id=rr.riyosya.id)
-        riyosya.status = settings._RIYOSYA_STATUS_TAISYO
+        riyosya.status = upd_status
         riyosya.last_day = rr.last_day
         riyosya.save()
 
