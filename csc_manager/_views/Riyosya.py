@@ -179,11 +179,11 @@ class RiyosyaNewView(CreateView):
         # RiyosyaRiyouKikan 作成 (予定として登録)
         RiyosyaRiyouKikan(
             riyosya=riyosya,
-            start_day=self.request.POST['y_start_day'] if self.request.POST['y_start_day'] !='' else None,
+            start_day=datetime.strptime(self.request.POST['y_start_day'], '%Y/%m/%d') if self.request.POST['y_start_day'] !='' else None,
             start_time=self.request.POST['y_start_time'] if self.request.POST['y_start_time'] !='' else None,
             start_kbn=self.request.POST['y_start_kbn'],
             start_status=settings._RIYOSYA_STATUS_YOTEI,
-            last_day=self.request.POST['y_last_day'] if self.request.POST['y_last_day'] !='' else None,
+            last_day=datetime.strptime(self.request.POST['y_last_day'], '%Y/%m/%d') if self.request.POST['y_last_day'] !='' else None,
             last_time=self.request.POST['y_last_time'] if self.request.POST['y_last_time'] !='' else None,
             last_kbn=self.request.POST['y_last_kbn'],
             last_status=settings._RIYOSYA_STATUS_YOTEI,

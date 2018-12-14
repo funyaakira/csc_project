@@ -8,7 +8,7 @@ class RiyosyaForm(forms.ModelForm):
 
     y_start_day = forms.DateField(
         required=False,
-        input_formats=['%Y/%m/%d','%Y-%m-%d'],
+        input_formats=['%Y/%m/%d'],
         widget=forms.DateInput(
             attrs={'class': 'form-control form-control-sm col-3'},
         )
@@ -31,7 +31,7 @@ class RiyosyaForm(forms.ModelForm):
 
     y_last_day = forms.DateField(
         required=False,
-        input_formats=['%Y/%m/%d','%Y-%m-%d'],
+        input_formats=['%Y/%m/%d'],
         widget=forms.DateInput(
             attrs={'class': 'form-control form-control-sm col-3'},
         )
@@ -184,31 +184,26 @@ class RiyosyaForm(forms.ModelForm):
         }
 
 
-    def clean_name(self):
-        name = self.cleaned_data['name']
-
-        if name=="村山明":
-            self.fields["name"].widget.attrs['class'] += ' is-invalid'
-            raise forms.ValidationError('氏名に村山明は使用できません')
-
-        return name
-
-    def clean_y_last_day(self):
-        y_last_day = self.cleaned_data['y_last_day']
-        print(y_last_day, 'Test')
-        return y_last_day
-
     def clean(self):
-        try:
-            gengou = self.cleaned_data['gengou']
-            g_year = self.cleaned_data['g_year']
-            month = self.cleaned_data['month']
-            day = self.cleaned_data['day']
+        y_start_day = self.cleaned_data['y_start_day']
+        y_last_day = self.cleaned_data['y_last_day']
 
-            d = wareki_to_seireki(gengou, g_year, month, day)
-        except:
-            # raise forms.ValidationError('誕生日がおかしいです')
-            pass
+        if y_start_day == y_last_day:
+            self.add_error('y_start_day', '利用開始予定日と利用終了予定日が同日です。')
+            self.add_error('y_last_day', '利用開始予定日と利用終了予定日が同日です。')
+
+        if y_start_day > y_last_day:
+            self.add_error('y_start_day', '利用開始予定日と利用終了予定日が逆転しています。')
+            self.add_error('y_last_day', '利用開始予定日と利用終了予定日が逆転しています。')
+
+        gengou = self.cleaned_data['gengou']
+        g_year = self.cleaned_data['g_year']
+        month = self.cleaned_data['month']
+        day = self.cleaned_data['day']
+
+        d = wareki_to_seireki(gengou, g_year, month, day)
+        if d is None:
+            self.add_error('gengou', '誕生日の入力に誤りがあります。')
 
 
     def __init__(self, *args, **kwargs):

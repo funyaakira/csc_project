@@ -30,14 +30,29 @@ def seireki_to_wareki(arg):
 
 
 def wareki_to_seireki(gengou, g_year, month, day):
+    print(gengou, g_year, month, day)
+    try:
+        year = 0
+        if int(gengou) == 2:
+            year = int(g_year) + 1911
+        elif int(gengou) == 3:
+            print('xxxx')
+            syouwa_err = False
+            if int(g_year) == 1:
+                if int(month) == 12:
+                    if int(day) < 25:
+                        syouwa_err = True
+                else:
+                    syouwa_err = True
+                    
+            if not syouwa_err:
+                year = int(g_year) + 1925
 
-    year = 0
-    if gengou == '2':
-        year = int(g_year) + 1911
-    elif gengou == '3':
-        year = int(g_year) + 1925
+        returnDate = date(year, int(month), int(day))
+    except:
+        returnDate = None
 
-    return date(year, int(month), int(day))
+    return returnDate
 
 
 def calculate_age(born):
