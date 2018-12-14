@@ -248,7 +248,17 @@ class RiyosyaLastInput(forms.ModelForm):
 
     last_day = forms.DateField(
         input_formats=['%Y/%m/%d'],
+        required=True,
         widget=forms.DateInput(
-            attrs={'class': 'form-control form-control-sm col-3'},
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'YYYY/MM/DD'},
+        )
+    )
+
+    last_time = forms.TimeField(
+        required=True,
+        widget=forms.TimeInput(
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'HH:MM'},
         )
     )

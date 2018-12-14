@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load widget_tweaks %}
+
 {% load lookup %}
 
 {% block title %}
@@ -15,6 +17,8 @@
 {% endblock %}
 
 {% block content %}
+{# {{ form.errors }} #}
+
 <h2>{{ rr.riyosya.name }} - 退所日時登録</h2>
 
 <form method="post" novalidate>
@@ -29,7 +33,21 @@
     <div class="mb-2">
       <small>・実際の退所日時</small>
       <div class="form-inline">
-        {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+        {% if form.is_bound %}
+         {% if form.last_day.errors or form.last_time.errors %}
+            {{ form.last_day|add_class:'is-invalid' }} {{ form.last_time|add_class:'is-invalid' }} {{ form.last_kbn|add_class:'is-invalid' }}
+            {% for error in form.last_day.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+            {% for error in form.last_time.errors %}
+              <small><div class="text-danger">・{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            {{ form.last_day|add_class:'is-valid' }} {{ form.last_time|add_class:'is-valid' }} {{ form.last_kbn|add_class:'is-valid' }}
+          {% endif %}
+        {% else %}
+          {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+        {% endif %}
       </div>
     </div>
   </div>
