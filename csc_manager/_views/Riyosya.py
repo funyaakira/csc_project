@@ -361,7 +361,11 @@ class RiyosyaRenewView(CreateView):
 
         # Riyosya status 更新
         r = Riyosya.objects.get(id=post.riyosya.id)
-        r.status = settings._RIYOSYA_STATUS_YOTEI
+
+        ## 現在入所中の場合はステータスは更新しない(退所→予定の場合だけ更新)
+        if r.status != settings._RIYOSYA_STATUS_NYUSYO:
+            r.status = settings._RIYOSYA_STATUS_YOTEI
+
         r.last_day = None
         r.updated_by = self.request.user
         r.updated_at = timezone.now()
