@@ -390,7 +390,7 @@ class TaisyoDetailView(DetailView):
 
 
 
-# 退所者 - 再入所
+# 退所者 - 再利用
 class RiyosyaRenewView(CreateView):
     model = RiyosyaRiyouKikan
     form_class = RiyosyaRiyouKikanForm_Renew
@@ -398,8 +398,17 @@ class RiyosyaRenewView(CreateView):
     success_url = "riyosya_list"
 
     def get_initial(self):
+        r_id = self.kwargs.get('pk')
+        r = Riyosya.objects.get(id=r_id)
+        rr_id = r.get_riyoukikan_latest_id()
+        rr = RiyosyaRiyouKikan.objects.get(id=rr_id)
+
+        rr_next_day = rr.last_day + timedelta(days=1)
+        rr_next_day = "{}/{}/{}".format(rr_next_day.year, rr_next_day.month, rr_next_day.day)
+        
         return {
-            'riyosya':self.kwargs.get('pk'),
+            'start_day': rr_next_day,
+            'riyosya': r_id,
         }
 
     def get_context_data(self, **kwargs):
