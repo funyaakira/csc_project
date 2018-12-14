@@ -3,21 +3,22 @@ from django import forms
 from ..models import Riyosya, RiyosyaRiyouKikan, start_kbn, last_kbn
 from ..libs.funcs import wareki_to_seireki
 
-
 class RiyosyaForm(forms.ModelForm):
 
     y_start_day = forms.DateField(
         required=False,
         input_formats=['%Y/%m/%d'],
         widget=forms.DateInput(
-            attrs={'class': 'form-control form-control-sm col-3'},
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'YYYY/MM/DD'},
         )
     )
 
     y_start_time = forms.TimeField(
         required=False,
         widget=forms.TimeInput(
-            attrs={'class': 'form-control form-control-sm col-2'},
+            attrs={'class': 'form-control form-control-sm col-2',
+                   'placeholder': 'HH:MM'},
         )
     )
 
@@ -33,14 +34,16 @@ class RiyosyaForm(forms.ModelForm):
         required=False,
         input_formats=['%Y/%m/%d'],
         widget=forms.DateInput(
-            attrs={'class': 'form-control form-control-sm col-3'},
+            attrs={'class': 'form-control form-control-sm col-3',
+                   'placeholder': 'YYYY/MM/DD'},
         )
     )
 
     y_last_time = forms.TimeField(
         required=False,
         widget=forms.TimeInput(
-            attrs={'class': 'form-control form-control-sm col-2'},
+            attrs={'class': 'form-control form-control-sm col-2',
+                   'placeholder': 'HH:MM'},
         )
     )
 
@@ -192,9 +195,10 @@ class RiyosyaForm(forms.ModelForm):
             self.add_error('y_start_day', '利用開始予定日と利用終了予定日が同日です。')
             self.add_error('y_last_day', '利用開始予定日と利用終了予定日が同日です。')
 
-        if y_start_day > y_last_day:
-            self.add_error('y_start_day', '利用開始予定日と利用終了予定日が逆転しています。')
-            self.add_error('y_last_day', '利用開始予定日と利用終了予定日が逆転しています。')
+        if y_start_day is not None and y_last_day is not None:
+            if y_start_day > y_last_day:
+                self.add_error('y_start_day', '利用開始予定日と利用終了予定日が逆転しています。')
+                self.add_error('y_last_day', '利用開始予定日と利用終了予定日が逆転しています。')
 
         gengou = self.cleaned_data['gengou']
         g_year = self.cleaned_data['g_year']

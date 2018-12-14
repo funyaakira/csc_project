@@ -20,6 +20,7 @@
 {% endfor %}
 
 {# {{ form.errors }} #}
+
 <h2>{{ target_day }} 新規利用登録</h2>
 <hr>
   <form method="post" novalidate>
@@ -54,7 +55,9 @@
                   {{ form.y_start_day }} {{ form.y_start_time }} {{ form.y_start_kbn }}
                 </div>
               {% endif %}
-              <small><div class="text-muted">不明の場合は空白にしてください。</div></small>
+              <small><div class="text-muted">入力例：2018/12/14 9:00</div></small>
+              <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+
             </div>
 
             <div class="form-group">
@@ -80,7 +83,8 @@
                   {{ form.y_last_day }} {{ form.y_last_time }} {{ form.y_last_kbn }}
                 </div>
               {% endif %}
-              <small><div class="text-muted">不明の場合は空白にしてください。</div></small>
+              <small><div class="text-muted">入力例：2018/12/21 15:00</div></small>
+              <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
             </div>
 
             <div class="form-group">
