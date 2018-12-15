@@ -344,9 +344,9 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
 
         if last_day is not None:
             rrs = RiyosyaRiyouKikan.objects.filter(
-                Q(~Q(id=id),riyosya=riyosya,start_day__lte=last_day)
+                Q(~Q(id=id),riyosya=riyosya,start_day__lte=last_day,last_day__gte=last_day)
                 |
-                Q(~Q(id=id),riyosya=riyosya,start_day__isnull=True)
+                Q(~Q(id=id),riyosya=riyosya,start_day__lte=last_day,last_day__isnull=True)
                 )
 
             if rrs:
