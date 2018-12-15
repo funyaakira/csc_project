@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load lookup %}
+{% load widget_tweaks %}
 
 {% block title %}{% endblock %}
 
@@ -25,6 +26,7 @@
   </h2>
 
   <canvas id="ChartDemo" class="mb-3"></canvas>
+  <small><p class="alert alert-warning">※入所予定時間、退所予定時間が入力されてていない場合は、正確なグラフにはなりません。</p></small>
   <script>
     var ctx = document.getElementById("ChartDemo").getContext('2d');
     var ChartDemo = new Chart(ctx, {
@@ -73,6 +75,7 @@
         <th>日付</th>
         <th>日内最大利用者数</th>
         <th>ベッド使用数</th>
+        <th>入退所情報</th>
       </tr>
     </thead>
     <tbody>
@@ -81,6 +84,38 @@
         <td>{{ day }}</td>
         <td>{{ day|get_riyosya_max_count }}</td>
         <td>{{ day|get_bed_count }}</td>
+        <td>
+          {% for rs in day|get_nyusyo %}
+            <a href="{% url 'riyosya_edit_riyoukikan' rs.id request.path %}" class="text-dark">
+              <div class="">
+                <small>
+                  {% if rs.start_time %}
+                    入所：{{ rs.riyosya.name }} {{ rs.start_time }}
+                  {% else %}
+                    <div class="bg-warning">
+                    入所：{{ rs.riyosya.name }} {{ rs.start_time|default:'時間未設定' }}
+                    </div>
+                  {% endif %}
+                </small>
+              </div>
+            </a>
+          {% endfor %}
+          {% for rs in day|get_taisyo %}
+            <a href="{% url 'riyosya_edit_riyoukikan' rs.id request.path %}" class="text-dark">
+              <div class="">
+                <small>
+                  {% if rs.last_time %}
+                    退所：{{ rs.riyosya.name }} {{ rs.last_time }}
+                  {% else %}
+                    <div class="bg-warning">
+                    退所：{{ rs.riyosya.name }} {{ rs.last_time|default:'時間未設定' }}
+                    </div>
+                  {% endif %}
+                </small>
+              </div>
+            </a>
+          {% endfor %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

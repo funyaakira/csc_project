@@ -116,3 +116,18 @@ def get_riyosya_max_count(target_day):
         riyosya_max_count = queryset_night.count()
 
     return riyosya_max_count
+
+
+@register.filter(name='get_nyusyo')
+def get_nyusyo(target_day):
+    rrs = models.RiyosyaRiyouKikan.objects.filter(
+        Q(start_day=target_day)
+        )
+    return rrs
+
+@register.filter(name='get_taisyo')
+def get_taisyo(target_day):
+    rrs = models.RiyosyaRiyouKikan.objects.filter(
+        Q(last_day=target_day)
+        )
+    return rrs
