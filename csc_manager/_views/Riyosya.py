@@ -182,6 +182,12 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         return {'start_day': start_day, 'start_time': start_time,
             'last_day': last_day, 'last_time': last_time }
 
+    def get_form_kwargs(self):
+        kwargs = super(RiyosyaEditRiyoukikanView, self).get_form_kwargs()
+        kwargs['riyosya'] = self.object.riyosya
+        kwargs['id'] = self.object.id
+        return kwargs
+
     def form_valid(self, form):
         form.save()
 
@@ -405,7 +411,7 @@ class RiyosyaRenewView(CreateView):
 
         rr_next_day = rr.last_day + timedelta(days=1)
         rr_next_day = "{}/{}/{}".format(rr_next_day.year, rr_next_day.month, rr_next_day.day)
-        
+
         return {
             'start_day': rr_next_day,
             'riyosya': r_id,

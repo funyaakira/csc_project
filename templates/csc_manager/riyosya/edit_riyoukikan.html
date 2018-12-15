@@ -17,12 +17,13 @@
 {% endblock %}
 
 {% block content %}
-{{ form.errors }}
+{# {{ form.errors }} #}
 
 <h2>{{ rr.riyosya.name }} - 利用期間修正</h2>
 
 <form method="post" novalidate>
   {% csrf_token %}
+
   <div class="rounded p-3 my-3 my_border col-6">
     <div class="mb-3">
       <small>入所日時</small>
@@ -54,7 +55,7 @@
          {% if form.last_day.errors or form.last_time.errors %}
             {{ form.last_day|add_class:'is-invalid' }} {{ form.last_time|add_class:'is-invalid' }} {{ form.last_kbn|add_class:'is-invalid' }}
             {% for error in form.last_day.errors %}
-              <small><div class="text-danger">・{{ error }}</div></small>
+              <small><div class="text-danger">・{{ error|safe }}</div></small>
             {% endfor %}
             {% for error in form.last_time.errors %}
               <small><div class="text-danger">・{{ error }}</div></small>
