@@ -85,36 +85,21 @@
         <td>{{ day|get_riyosya_max_count }}</td>
         <td>{{ day|get_bed_count }}</td>
         <td>
-          {% for rs in day|get_nyusyo %}
+          {% for rs in day|get_nyutaisyo %}
             <a href="{% url 'riyosya_edit_riyoukikan' rs.id request.path %}" class="text-dark">
-              <div class="">
+              <div class="{% if rs.order_time is None %}bg-warning{% endif %}">
                 <small>
-                  {% if rs.start_time %}
-                    入所：{{ rs.riyosya.name }} {{ rs.start_time }}
+                  {% if rs.nyu == 0 %}
+                  入所：
                   {% else %}
-                    <div class="bg-warning">
-                    入所：{{ rs.riyosya.name }} {{ rs.start_time|default:'時間未設定' }}
-                    </div>
+                  退所：
                   {% endif %}
+                  {{ rs.riyosya.name }} {{ rs.order_time|default:'(時間未設定)' }}
                 </small>
               </div>
             </a>
           {% endfor %}
-          {% for rs in day|get_taisyo %}
-            <a href="{% url 'riyosya_edit_riyoukikan' rs.id request.path %}" class="text-dark">
-              <div class="">
-                <small>
-                  {% if rs.last_time %}
-                    退所：{{ rs.riyosya.name }} {{ rs.last_time }}
-                  {% else %}
-                    <div class="bg-warning">
-                    退所：{{ rs.riyosya.name }} {{ rs.last_time|default:'時間未設定' }}
-                    </div>
-                  {% endif %}
-                </small>
-              </div>
-            </a>
-          {% endfor %}
+
         </td>
       </tr>
       {% endfor %}

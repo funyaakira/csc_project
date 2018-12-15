@@ -1,7 +1,7 @@
 # coding=utf-8
 from django import template
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField, TimeField
 
 from datetime import datetime, date, timedelta
 
@@ -118,16 +118,19 @@ def get_riyosya_max_count(target_day):
     return riyosya_max_count
 
 
-@register.filter(name='get_nyusyo')
-def get_nyusyo(target_day):
+@register.filter(name='get_nyutaisyo')
+def get_nyutaisyo(target_day):
     rrs = models.RiyosyaRiyouKikan.objects.filter(
         Q(start_day=target_day)
-        )
-    return rrs
+        |
+        Q(last_day=target_day)).annotate(
+            nyu=Case(
+                When(start_day=target_day,then=0),
+                When(last_day=target_day,then=1), output_field=IntegerField()
+                ),
+            order_time=Case(
+                When(start_day=target_day,then='start_time'),
+                When(last_day=target_day,then='last_time'), output_field=TimeField()
+            )).order_by('order_time')
 
-@register.filter(name='get_taisyo')
-def get_taisyo(target_day):
-    rrs = models.RiyosyaRiyouKikan.objects.filter(
-        Q(last_day=target_day)
-        )
     return rrs
