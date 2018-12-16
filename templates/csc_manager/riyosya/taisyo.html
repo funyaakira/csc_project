@@ -39,7 +39,6 @@
     <div class="mb-3">
       <small>退所日時</small>
       <div class="form-inline">
-
         {% if form.is_bound %}
          {% if form.last_day.errors or form.last_time.errors %}
             {{ form.last_day|add_class:'is-invalid' }} {{ form.last_time|add_class:'is-invalid' }} {{ form.last_kbn|add_class:'is-invalid' }}
@@ -56,6 +55,7 @@
             {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
         {% endif %}
       </div>
+      <small><div class="text-muted">未来日を入力した場合は予定となります。</div></small>
     </div>
 
     <div class="form-group">
