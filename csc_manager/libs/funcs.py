@@ -30,7 +30,7 @@ def seireki_to_wareki(arg):
 
 
 def wareki_to_seireki(gengou, g_year, month, day):
-    print(gengou, g_year, month, day)
+    
     try:
         year = 0
         if int(gengou) == 2:
@@ -44,7 +44,7 @@ def wareki_to_seireki(gengou, g_year, month, day):
                         syouwa_err = True
                 else:
                     syouwa_err = True
-                    
+
             if not syouwa_err:
                 year = int(g_year) + 1925
 
