@@ -24,65 +24,42 @@
 <form method="post" novalidate>
   {% csrf_token %}
   <h5 class="mb-3">{{ riyosyariyoukikan.riyosya.name }} / 退所処理</h5>
-  <div class="border rounded mb-3 py-3 px-3">
-    利用予定期間
-    <div class="mb-3">
-      <div>
-        {{ riyosyariyoukikan.start_day }} {{ riyosyariyoukikan.start_time|default:"" }} {{ riyosyariyoukikan.get_start_kbn_display }} ～
+
+  <div class="rounded p-3 my-3 my_border col-6">
+    <small>利用予定期間</small>
+    <small>
+      <div class="mb-3">
+        <div>
+          {{ riyosyariyoukikan.start_day }} {{ riyosyariyoukikan.start_time|default:"" }} {{ riyosyariyoukikan.get_start_kbn_display }} ～
+          {{ riyosyariyoukikan.last_day|default:'' }} {{ riyosyariyoukikan.last_time|default:'' }} {{ riyosyariyoukikan.get_last_kbn_display|default:'' }}
+        </div>
       </div>
-      <div>
-        {{ riyosyariyoukikan.last_day|default:"" }} {{ riyosyariyoukikan.last_time|default:"" }} {{ riyosyariyoukikan.get_last_kbn_display }}
+    </small>
+
+    <div class="mb-3">
+      <small>退所日時</small>
+      <div class="form-inline">
+
+        {% if form.is_bound %}
+         {% if form.last_day.errors or form.last_time.errors %}
+            {{ form.last_day|add_class:'is-invalid' }} {{ form.last_time|add_class:'is-invalid' }} {{ form.last_kbn|add_class:'is-invalid' }}
+            {% for error in form.last_day.errors %}
+              <small><div class="text-danger">・退所日：{{ error }}</div></small>
+            {% endfor %}
+            {% for error in form.last_time.errors %}
+              <small><div class="text-danger">・退所時間：{{ error }}</div></small>
+            {% endfor %}
+          {% else %}
+            {{ form.last_day|add_class:'is-valid' }} {{ form.last_time|add_class:'is-valid' }} {{ form.last_kbn|add_class:'is-valid' }}
+          {% endif %}
+        {% else %}
+            {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
+        {% endif %}
       </div>
     </div>
 
-
-    {% if form.is_bound %}
-      <div class="form-group">
-      {{ form.last_day.label }}
-      {% if form.last_day.errors %}
-        {{ form.last_day|add_class:'is-invalid' }}
-        {% for error in form.last_day.errors %}
-          <small><div class="text-danger">{{ error }}</div></small>
-        {% endfor %}
-      {% else %}
-        {{ form.last_day|add_class:'is-valid' }}
-      {% endif %}
-      <small>未来日を入力した場合は予定となります。</small>
-      </div>
-
-      <div class="form-group">
-      {{ form.last_time.label }}
-      {% if form.last_time.errors %}
-        {{ form.last_time|add_class:'is-invalid' }}
-        {% for error in form.last_time.errors %}
-          <small><div class="text-danger">{{ error }}</div></small>
-        {% endfor %}
-      {% else %}
-        {{ form.last_time|add_class:'is-valid' }}
-      {% endif %}
-      </div>
-      {{ form.last_kbn.label }}
-      {{ form.last_kbn }}
-    {% else %}
-      <div class="form-group">
-        {{ form.last_day.label }}
-        {{ form.last_day }}
-        <small class="text-muted">未来日を入力した場合は予定となります。</small>
-      </div>
-      <div class="form-group">
-        {{ form.last_time.label }}
-        {{ form.last_time }}
-      </div>
-      <div class="form-group">
-        {{ form.last_kbn.label }}
-        {{ form.last_kbn }}
-      </div>
-    {% endif %}
-
     <div class="form-group">
-      <div class="form-control-sm" for="{{ form.first_day.name }}">
-        退所理由
-      </div>
+      <small>退所理由</small>
       <div class="form-inline">
         {{ form.memo }}
       </div>

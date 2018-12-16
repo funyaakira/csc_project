@@ -349,8 +349,8 @@ class RiyosyaTaisyoView(UpdateView):
 
     def get_initial(self):
         return {
-            'last_day': date.today(),
-            'last_time': datetime.now().strftime("%H:%M"),
+            'last_day': date.today().strftime('%Y/%m/%d'),
+            # 'last_time': datetime.now().strftime("%H:%M"),
         }
 
     def form_valid(self, form):
