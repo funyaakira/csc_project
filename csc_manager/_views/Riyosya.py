@@ -160,8 +160,12 @@ class RiyosyaEditRiyoukikanView(UpdateView):
 
     def get_context_data(self, **kwargs):
         kwargs['return_url'] = self.kwargs.get('return_url')
+
         if self.object.start_status == settings._RIYOSYA_STATUS_NYUSYO:
             kwargs['start_commit_msg'] = "開始日時は確定済みのため編集できません。"
+
+        if self.object.last_status == settings._TAISYO_KAKUTEI:
+            kwargs['last_commit_msg'] = "終了日時は確定済みのため編集できません。"
 
         return super().get_context_data(**kwargs)
 
@@ -190,6 +194,7 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         kwargs['riyosya'] = self.object.riyosya
         kwargs['id'] = self.object.id
         kwargs['start_status'] = self.object.start_status
+        kwargs['last_status'] = self.object.last_status
 
         return kwargs
 

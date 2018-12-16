@@ -73,8 +73,14 @@
           {{ form.last_day }} {{ form.last_time }} {{ form.last_kbn }}
         {% endif %}
       </div>
-      <small><div class="text-muted">入力例：2018/12/21 15:00</div></small>
-      <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+      {% if last_commit_msg %}
+        <div class="alert alert-warning p-1 col-10">
+          <small>{{ last_commit_msg }}</small>
+        </div>
+      {% else %}
+        <small><div class="text-muted">入力例：2018/12/21 15:00</div></small>
+        <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+      {% endif %}
     </div>
   </div>
   <button type="submit" class="btn btn-success my-1">修正</button>

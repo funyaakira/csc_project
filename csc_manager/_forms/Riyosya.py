@@ -329,6 +329,7 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         self.riyosya = kwargs.pop('riyosya')
         self.id = kwargs.pop('id')
         self.start_status = kwargs.pop('start_status')
+        self.last_status = kwargs.pop('last_status')
 
         super(RiyosyaEditRiyoukikan, self).__init__(*args, **kwargs)
 
@@ -336,6 +337,11 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
             self.fields['start_day'].widget.attrs['disabled'] = True
             self.fields['start_time'].widget.attrs['disabled'] = True
             self.fields['start_kbn'].widget.attrs['disabled'] = True
+
+        if self.last_status == settings._TAISYO_KAKUTEI:
+            self.fields['last_day'].widget.attrs['disabled'] = True
+            self.fields['last_time'].widget.attrs['disabled'] = True
+            self.fields['last_kbn'].widget.attrs['disabled'] = True
 
     def clean(self):
 
