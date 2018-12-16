@@ -226,7 +226,14 @@ class RiyosyaNewView(CreateView):
     def form_valid(self, form):
 
         riyosya = form.save(commit=False)
-        riyosya.status = settings._RIYOSYA_STATUS_YOTEI
+        y_start_day = self.request.POST['y_start_day']
+
+        if y_start_day:
+            riyosya.status = settings._RIYOSYA_STATUS_YOTEI
+        else:
+            # 利用開始予定日が入力されていない場合はとりあえず退所扱いとする。
+            riyosya.status = settings._RIYOSYA_STATUS_TAISYO
+
         riyosya.created_by = self.request.user
         riyosya.created_at = timezone.now()
         riyosya.updated_by = self.request.user
@@ -409,9 +416,12 @@ class RiyosyaRenewView(CreateView):
         rr_id = r.get_riyoukikan_latest_id()
         rr = RiyosyaRiyouKikan.objects.get(id=rr_id)
 
-        rr_next_day = rr.last_day + timedelta(days=1)
-        rr_next_day = "{}/{}/{}".format(rr_next_day.year, rr_next_day.month, rr_next_day.day)
-
+        if rr.last_day:
+            rr_next_day = rr.last_day + timedelta(days=1)
+            rr_next_day = "{}/{}/{}".format(rr_next_day.year, rr_next_day.month, rr_next_day.day)
+        else:
+            rr_next_day = None
+            
         return {
             'start_day': rr_next_day,
             'riyosya': r_id,
