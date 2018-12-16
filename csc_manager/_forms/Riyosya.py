@@ -191,16 +191,27 @@ class RiyosyaForm(forms.ModelForm):
 
     def clean(self):
         y_start_day = self.cleaned_data['y_start_day']
+        y_start_time = self.cleaned_data['y_start_time']
         y_last_day = self.cleaned_data['y_last_day']
-
-        if y_start_day == y_last_day:
-            self.add_error('y_start_day', '利用開始予定日と利用終了予定日が同日です。')
-            self.add_error('y_last_day', '利用開始予定日と利用終了予定日が同日です。')
+        y_last_time = self.cleaned_data['y_last_time']
 
         if y_start_day is not None and y_last_day is not None:
+            if y_start_day == y_last_day:
+                self.add_error('y_start_day', '利用開始予定日と利用終了予定日が同日です。')
+                self.add_error('y_last_day', '利用開始予定日と利用終了予定日が同日です。')
+
             if y_start_day > y_last_day:
                 self.add_error('y_start_day', '利用開始予定日と利用終了予定日が逆転しています。')
                 self.add_error('y_last_day', '利用開始予定日と利用終了予定日が逆転しています。')
+
+        if y_start_day is None and y_start_time is not None:
+            self.add_error('y_start_day', '利用開始予定時間のみの入力はできません。')
+
+        if y_last_day is None and y_last_time is not None:
+            self.add_error('y_last_day', '利用終了予定時間のみの入力はできません。')
+
+        if y_start_day is None and y_last_day is not None:
+            self.add_error('y_last_day', '利用終了のみの入力はできません。')
 
         gengou = self.cleaned_data['gengou']
         g_year = self.cleaned_data['g_year']
