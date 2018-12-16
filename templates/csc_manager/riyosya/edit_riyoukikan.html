@@ -41,11 +41,17 @@
             {{ form.start_day|add_class:'is-valid' }} {{ form.start_time|add_class:'is-valid' }} {{ form.start_kbn|add_class:'is-valid' }}
           {% endif %}
         {% else %}
-          {{ form.start_day }} {{ form.start_time }} {{ form.start_kbn }}
+            {{ form.start_day }} {{ form.start_time }} {{ form.start_kbn }}
         {% endif %}
       </div>
-      <small><div class="text-muted">入力例：2018/12/14 9:00</div></small>
-      <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+      {% if start_commit_msg %}
+        <div class="alert alert-warning p-1 col-10">
+          <small>{{ start_commit_msg }}</small>
+        </div>
+      {% else %}
+        <small><div class="text-muted">入力例：2018/12/14 9:00</div></small>
+        <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
+      {% endif %}
     </div>
 
     <div class="mb-2">

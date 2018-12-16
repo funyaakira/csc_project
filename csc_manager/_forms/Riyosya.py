@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 
 from django.db.models import Q
 
@@ -327,7 +328,14 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.riyosya = kwargs.pop('riyosya')
         self.id = kwargs.pop('id')
+        self.start_status = kwargs.pop('start_status')
+
         super(RiyosyaEditRiyoukikan, self).__init__(*args, **kwargs)
+
+        if self.start_status == settings._RIYOSYA_STATUS_NYUSYO:
+            self.fields['start_day'].widget.attrs['disabled'] = True
+            self.fields['start_time'].widget.attrs['disabled'] = True
+            self.fields['start_kbn'].widget.attrs['disabled'] = True
 
     def clean(self):
 

@@ -160,6 +160,9 @@ class RiyosyaEditRiyoukikanView(UpdateView):
 
     def get_context_data(self, **kwargs):
         kwargs['return_url'] = self.kwargs.get('return_url')
+        if self.object.start_status == settings._RIYOSYA_STATUS_NYUSYO:
+            kwargs['start_commit_msg'] = "開始日時は確定済みのため編集できません。"
+
         return super().get_context_data(**kwargs)
 
     def get_initial(self):
@@ -186,6 +189,8 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         kwargs = super(RiyosyaEditRiyoukikanView, self).get_form_kwargs()
         kwargs['riyosya'] = self.object.riyosya
         kwargs['id'] = self.object.id
+        kwargs['start_status'] = self.object.start_status
+
         return kwargs
 
     def form_valid(self, form):
@@ -421,7 +426,7 @@ class RiyosyaRenewView(CreateView):
             rr_next_day = "{}/{}/{}".format(rr_next_day.year, rr_next_day.month, rr_next_day.day)
         else:
             rr_next_day = None
-            
+
         return {
             'start_day': rr_next_day,
             'riyosya': r_id,
