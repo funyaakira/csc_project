@@ -136,6 +136,8 @@ class RiyosyaRiyouKikan(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='riyosya_riyoukikan', default=None)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='+', default=None)
 
+    def __str__(self):
+        return self.riyosya.name + str(self.start_day)
 
 
 class Shift_knd(models.Model):
