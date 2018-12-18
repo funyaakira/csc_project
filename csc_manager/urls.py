@@ -56,7 +56,7 @@ urlpatterns = [
 	path('riyosya_taisyo/riyosyariyoukikan/<int:pk>/', RiyosyaTaisyoView.as_view(), name='riyosya_taisyo'),
 
     # 利用者 - 再利用
-    path('riyosya/renew/<int:pk>/', RiyosyaRenewView.as_view(), name='riyosya_renew'),
+    path('riyosya/renew/<int:pk>/<str:prev_page>/', RiyosyaRenewView.as_view(), name='riyosya_renew'),
 
     # 利用者 - 利用期間修正
     path('riyosya/edit/riyoukikan/<int:pk>/<path:return_url>/<str:prev_page>/', RiyosyaEditRiyoukikanView.as_view(), name='riyosya_edit_riyoukikan'),

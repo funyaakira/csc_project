@@ -93,7 +93,7 @@
         </td>
         <td>
           {% if rr.last_day %}
-            <a href="{% url 'riyosya_renew' rr.riyosya.id %}" class="btn btn-primary btn-sm mb-1" role="button">再利用</a>
+            <a href="{% url 'riyosya_renew' rr.riyosya.id 'yotei_list' %}" class="btn btn-primary btn-sm mb-1" role="button">再利用</a>
           {% endif %}
         </td>
       </tr>

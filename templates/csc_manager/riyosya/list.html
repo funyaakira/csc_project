@@ -103,7 +103,7 @@
           {% if rr.start_status == 0 %}
             <a href="{% url 'riyosya_taisyo' rr.id %}" class="btn btn-primary btn-sm mb-1" role="button">退所</a>
             {% if rr.last_day %}
-              <a href="{% url 'riyosya_renew' rr.riyosya.id %}" class="btn btn-primary btn-sm" role="button">再利用</a>
+              <a href="{% url 'riyosya_renew' rr.riyosya.id 'main_list' %}" class="btn btn-primary btn-sm" role="button">再利用</a>
             {% endif %}
           {% endif %}
         </td>
