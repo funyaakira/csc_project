@@ -168,6 +168,18 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         if self.object.last_status == settings._TAISYO_KAKUTEI:
             kwargs['last_commit_msg'] = "終了日時は確定済みのため編集できません。"
 
+        riyosya = self.object.riyosya
+        today = date.today()
+        rrk_afters = RiyosyaRiyouKikan.objects.filter(
+            Q(riyosya=riyosya, start_day__gt=today)
+            |
+            Q(riyosya=riyosya, start_day__lte=today, last_day__gte=today)
+            |
+            Q(riyosya=riyosya, start_day__lte=today, last_day__isnull=True)
+        )
+
+        kwargs['rrk_afters'] = rrk_afters
+
         return super().get_context_data(**kwargs)
 
     def get_initial(self):

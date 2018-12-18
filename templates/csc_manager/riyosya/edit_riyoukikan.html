@@ -29,7 +29,7 @@
 
 <form method="post" novalidate>
   {% csrf_token %}
-
+  <div class="row">
   <div class="rounded p-3 my-3 my_border col-6">
     <div class="mb-3">
       <small>入所日時</small>
@@ -88,6 +88,15 @@
         <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
       {% endif %}
     </div>
+  </div>
+  <div class="rounded p-3 my-3 my_border col-6">
+    <small>今後の利用予定</small>
+    {% for rrk in rrk_afters %}
+      <div class="my_border rounded p-2 mb-1">
+        <small>{{ rrk.start_day }} ~ {{ rrk.last_day|default:'' }}</small>
+      </div>
+    {% endfor %}
+  </div>
   </div>
   <button type="submit" class="btn btn-success my-1">修正</button>
   <a href="/{{ return_url }}" class="btn btn-secondary">
