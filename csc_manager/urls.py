@@ -61,9 +61,6 @@ urlpatterns = [
     # 利用者 - 利用期間修正
     path('riyosya/edit/riyoukikan/<int:pk>/<path:return_url>/<str:prev_page>/', RiyosyaEditRiyoukikanView.as_view(), name='riyosya_edit_riyoukikan'),
 
-    # 利用者 - 利用期間修正 (遷移前の画面指定に年月が必要な場合)
-    path('riyosya/edit/riyoukikan/with/ym/<int:pk>/<path:return_url>/<str:prev_page>/<int:year>/<int:month>/', RiyosyaEditRiyoukikanView.as_view(), name='riyosya_edit_riyoukikan_with_ym'),
-
     # 利用者 - 退所者一覧
     path('riyosya/taisyo/list', TaisyoListView.as_view(), name='riyosya_taisyo_list'),
 

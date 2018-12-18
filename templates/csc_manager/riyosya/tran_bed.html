@@ -86,7 +86,7 @@
         <td>{{ day|get_bed_count }}</td>
         <td>
           {% for rs in day|get_nyutaisyo %}
-            <a href="{% url 'riyosya_edit_riyoukikan_with_ym' rs.id request.path 'tran_bed' year month %}" class="text-dark">
+            <a href="{% url 'riyosya_edit_riyoukikan' rs.id request.path 'tran_bed' %}" class="text-dark">
               <div class="{% if rs.order_time is None %}bg-warning{% endif %}">
                 <small>
                   {% if rs.nyu == 0 %}
