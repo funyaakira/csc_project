@@ -286,10 +286,6 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         fields = ['start_day', 'start_time', 'start_kbn',
             'last_day', 'last_time', 'last_kbn',]
 
-        widgets = {
-            'start_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
-            'last_kbn': forms.Select(attrs={'class': 'form-control form-control-sm col-4'}),
-        }
 
     start_day = forms.DateField(
         input_formats=['%Y/%m/%d'],
@@ -297,6 +293,14 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         widget=forms.DateInput(
             attrs={'class': 'form-control form-control-sm col-3',
                    'placeholder': 'YYYY/MM/DD'},
+        )
+    )
+
+    start_kbn = forms.IntegerField(
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm col-4',},
+            choices=start_kbn,
         )
     )
 
@@ -325,6 +329,14 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         )
     )
 
+    last_kbn = forms.IntegerField(
+        required=False,
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm col-4',},
+            choices=last_kbn,
+        )
+    )
+
     def __init__(self, *args, **kwargs):
         self.riyosya = kwargs.pop('riyosya')
         self.id = kwargs.pop('id')
@@ -334,13 +346,13 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         super(RiyosyaEditRiyoukikan, self).__init__(*args, **kwargs)
 
         if self.start_status == settings._RIYOSYA_STATUS_NYUSYO:
-            self.fields['start_day'].widget.attrs['disabled'] = True
-            self.fields['start_time'].widget.attrs['disabled'] = True
+            self.fields['start_day'].widget.attrs['readonly'] = True
+            self.fields['start_time'].widget.attrs['readonly'] = True
             self.fields['start_kbn'].widget.attrs['disabled'] = True
 
         if self.last_status == settings._TAISYO_KAKUTEI:
-            self.fields['last_day'].widget.attrs['disabled'] = True
-            self.fields['last_time'].widget.attrs['disabled'] = True
+            self.fields['last_day'].widget.attrs['readonly'] = True
+            self.fields['last_time'].widget.attrs['readonly'] = True
             self.fields['last_kbn'].widget.attrs['disabled'] = True
 
     def clean(self):
@@ -353,10 +365,11 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         last_time = c_data['last_time'] if 'last_time' in c_data else None
         riyosya = self.riyosya
         id = self.id
-        
-        if start_day == last_day:
-            self.add_error('start_day', '利用開始予定日と利用終了予定日が同日です。')
-            self.add_error('last_day', '利用開始予定日と利用終了予定日が同日です。')
+
+        if start_day and last_day:
+            if start_day == last_day:
+                self.add_error('start_day', '利用開始予定日と利用終了予定日が同日です。')
+                self.add_error('last_day', '利用開始予定日と利用終了予定日が同日です。')
 
         if start_day is not None and last_day is not None:
             if start_day > last_day:

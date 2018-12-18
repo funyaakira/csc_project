@@ -179,7 +179,7 @@ class RiyosyaEditRiyoukikanView(UpdateView):
             Q(riyosya=riyosya, start_day__lte=today, last_day__gte=today)
             |
             Q(riyosya=riyosya, start_day__lte=today, last_day__isnull=True)
-        )
+        ).order_by('start_day')
 
         kwargs['rrk_afters'] = rrk_afters
 
@@ -471,7 +471,7 @@ class RiyosyaRenewView(CreateView):
             Q(riyosya=riyosya, start_day__lte=today, last_day__gte=today)
             |
             Q(riyosya=riyosya, start_day__lte=today, last_day__isnull=True)
-        )
+        ).order_by('start_day')
 
         kwargs['rrk_afters'] = rrk_afters
 
