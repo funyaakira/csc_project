@@ -381,3 +381,18 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
                     j_last_day = rr.last_day if rr.last_day is not None else ''
 
                     self.add_error('last_day', '重複する利用期間：%s～%s' % (j_start_day, j_last_day))
+
+        if start_day is not None:
+            rrs = RiyosyaRiyouKikan.objects.filter(
+                Q(~Q(id=id),riyosya=riyosya,start_day__lte=start_day,last_day__gte=start_day)
+                |
+                Q(~Q(id=id),riyosya=riyosya,start_day__lte=start_day,last_day__isnull=True)
+                )
+
+            if rrs:
+                self.add_error('start_day', '利用開始予定日が他の利用期間と重複しています。')
+                for rr in rrs:
+                    j_start_day = rr.start_day if rr.start_day is not None else ''
+                    j_last_day = rr.last_day if rr.last_day is not None else ''
+
+                    self.add_error('start_day', '重複する利用期間：%s～%s' % (j_start_day, j_last_day))
