@@ -352,7 +352,6 @@ class RiyosyaEditRiyoukikan(forms.ModelForm):
         last_day = c_data['last_day'] if 'last_day' in c_data else None
         last_time = c_data['last_time'] if 'last_time' in c_data else None
         riyosya = self.riyosya
-        id = self.id
 
         if start_day == last_day:
             self.add_error('start_day', '利用開始予定日と利用終了予定日が同日です。')

@@ -438,10 +438,28 @@ class RiyosyaRenewView(CreateView):
             'riyosya': r_id,
         }
 
-    def get_context_data(self, **kwargs):
+    def get_form_kwargs(self):
+        kwargs = super(RiyosyaRenewView, self).get_form_kwargs()
         kwargs['riyosya'] = Riyosya.objects.get(id=self.kwargs.get('pk'))
+
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        riyosya = Riyosya.objects.get(id=self.kwargs.get('pk'))
+        kwargs['riyosya'] = riyosya
         kwargs['prev_page'] = self.kwargs.get('prev_page')
-        
+
+        today = date.today()
+        rrk_afters = RiyosyaRiyouKikan.objects.filter(
+            Q(riyosya=riyosya, start_day__gt=today)
+            |
+            Q(riyosya=riyosya, start_day__lte=today, last_day__gte=today)
+            |
+            Q(riyosya=riyosya, start_day__lte=today, last_day__isnull=True)
+        )
+
+        kwargs['rrk_afters'] = rrk_afters
+
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
