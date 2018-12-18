@@ -67,6 +67,7 @@
       <tr>
         <th>日付</th>
         <th>イベント</th>
+        <th>入退所</th>
       </tr>
     </thead>
     <tbody>
@@ -98,7 +99,22 @@
             </div>
           </div>
           {% endfor %}
-
+        </td>
+        <td>
+          {% for rs in day|get_nyutaisyo %}
+            <a href="#" class="text-dark">
+              <div class="{% if rs.order_time is None %}bg-warning{% endif %}">
+                <small>
+                  {% if rs.nyu == 0 %}
+                  入所：
+                  {% else %}
+                  退所：
+                  {% endif %}
+                  {{ rs.riyosya.name }} {{ rs.order_time|default:'(時間未設定)' }}
+                </small>
+              </div>
+            </a>
+          {% endfor %}
         </td>
       </tr>
     {% endfor %}
