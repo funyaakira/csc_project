@@ -7,6 +7,8 @@ admin.site.register(Staff)
 admin.site.register(Event_knd)
 
 admin.site.register(Riyosya)
+admin.site.register(RiyosyaRenrakusaki)
+admin.site.register(RiyosyaRiyouKikan)
 admin.site.register(Kyotaku)
 admin.site.register(CareManager)
 
