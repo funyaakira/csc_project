@@ -12,7 +12,13 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  {% if prev_page == 'yotei_list' %}
+    <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'riyosya_yotei_list' %}">利用予定者一覧</a></li>
+  {% else %}
+    <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者一覧</a></li>
+  {% endif %}
+
   <li class="breadcrumb-item active">{{ rr.riyosya.name }} 利用期間修正</li>
 {% endblock %}
 

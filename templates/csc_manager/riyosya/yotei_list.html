@@ -47,7 +47,7 @@
           </a>
         </td>
         <td>
-          <a href="{% url 'riyosya_edit_riyoukikan' rr.id request.path %}" class="text-dark">
+          <a href="{% url 'riyosya_edit_riyoukikan' rr.id request.path 'yotei_list' %}" class="text-dark">
             <div>
               <div>
                 {{ rr.start_day|seireki_to_wareki }} ～

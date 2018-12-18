@@ -160,7 +160,8 @@ class RiyosyaEditRiyoukikanView(UpdateView):
 
     def get_context_data(self, **kwargs):
         kwargs['return_url'] = self.kwargs.get('return_url')
-
+        kwargs['prev_page'] = self.kwargs.get('prev_page')
+        
         if self.object.start_status == settings._RIYOSYA_STATUS_NYUSYO:
             kwargs['start_commit_msg'] = "開始日時は確定済みのため編集できません。"
 
