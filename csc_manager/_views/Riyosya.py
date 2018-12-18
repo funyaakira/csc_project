@@ -133,7 +133,6 @@ class RiyosyaLastInputView(UpdateView):
         # 今回の利用終了日以降に予定がある場合はRiyosya.statusを予定に更新
         # ない場合は退所に更新
         next_rr = RiyosyaRiyouKikan.objects.filter(riyosya=rr.riyosya, start_day__gt=rr.last_day)
-        print(next_rr)
         if next_rr:
             upd_status = settings._RIYOSYA_STATUS_YOTEI
         else:
@@ -159,13 +158,10 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         return reverse('riyosya_list')
 
     def get_context_data(self, **kwargs):
-        print(self.kwargs.get('return_url'))
-        print(self.kwargs.get('prev_page'))
         kwargs['return_url'] = self.kwargs.get('return_url')
         kwargs['prev_page'] = self.kwargs.get('prev_page')
 
         # 年月の指定がある場合に対応
-        print(self.kwargs.get('year'))
         kwargs['year'] = self.kwargs.get('year')
         kwargs['month'] = self.kwargs.get('month')
 
