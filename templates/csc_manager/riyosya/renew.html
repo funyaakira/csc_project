@@ -32,10 +32,13 @@
 
   {% csrf_token %}
 <h5 class="mb-3">{{ riyosya.name }}  /  再利用</h5>
+
+<form method="post" novalidate>
+{% csrf_token %}
 {{ form.riyosya.as_hidden }}
 <div class="row">
   <div class="col-6 my_border rounded mb-3 py-3 px-3">
-    <form method="post" novalidate>
+
     <!-- 再利用開始予定日 -->
     <div class="form-group">
       <div class="form-control-sm" for="{{ form.first_day.name }}">
@@ -137,7 +140,7 @@
       <small><div class="text-muted">※不明の場合は空白にしてください。</div></small>
     </div>
     <!-- 再利用終了予定日 ここまで-->
-    </form>
+
   </div>
   <div class="col-6 my_border rounded mb-3 py-3 px-3">
     <small>今後の利用予定</small>
@@ -150,5 +153,5 @@
 </div>
 <button type="submit" class="btn btn-success">登録</button>
 
-
+</form>
 {% endblock %}
