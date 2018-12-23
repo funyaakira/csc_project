@@ -25,12 +25,16 @@
   <li class="breadcrumb-item active">{{ rr.riyosya.name }} 利用期間修正</li>
 {% endblock %}
 
+
 {% block content %}
+
+
 {{ form.errors }}
 
 <h2>{{ rr.riyosya.name }} - 利用期間修正</h2>
 
-<form method="post" novalidate>
+<form method="post" novalidate id="form">
+  {% include "del_dialog.html" %}
   {% csrf_token %}
   <div class="row">
   <div class="rounded p-3 my-3 my_border col-6">
@@ -101,7 +105,16 @@
     {% endfor %}
   </div>
   </div>
-  <button type="submit" class="btn btn-success my-1">修正</button>
+  <button type="submit" name='entry' class="btn btn-success my-1">登録</button>
+  {% if last_commit_msg or start_commit_msg %}
+  
+  {% else %}
+  <a href="#" data-toggle="modal" data-target="#myModal"
+    onclick="document.getElementById('delete_confirm').onclick='alert()'" class="btn btn-success my-1">
+    この利用期間を削除する
+  </a>
+  {% endif %}
+
   <a href="/{{ return_url }}" class="btn btn-secondary">
     戻る
   </a>

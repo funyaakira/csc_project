@@ -215,12 +215,22 @@ class RiyosyaEditRiyoukikanView(UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        form.save()
+        if 'entry' in self.request.POST:
+            # ボタン1がクリックされた場合の処理
+            print('entry clicked')
+            form.save()
+        elif 'delete' in self.request.POST:
+            # ボタン2がクリックされた場合の処理
+            print('delete clicked')
+            self.object.delete()
+
 
         return_url = self.kwargs.get('return_url')
 
         import socket
-        if socket.gethostname()=='AKIRA-PC':
+        hostName = socket.gethostname()
+        print(hostName)
+        if hostName=='AKIRA-PC' or hostName=='SURFACE':
             return redirect(return_url)
         else:
             return redirect('/' + return_url)
@@ -528,3 +538,11 @@ class RiyosyaTranBedView(TemplateView):
         kwargs['prev_page'] = 'tran_bed:'+str(year)+':'+str(month)
 
         return super().get_context_data(**kwargs)
+
+
+# イベント - 削除
+def riyoukiaknDelete(request, pk, return_url):
+
+    RiyosyaRiyouKikan.objects.get(id=pk).delete()
+
+    return redirect(return_url)
