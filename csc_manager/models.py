@@ -89,6 +89,7 @@ class Riyosya(models.Model):
     first_day = models.DateField(_("利用開始日"), null=True, default=None, blank=True)
     last_day = models.DateField(_("最終退所日"), null=True, default=None, blank=True)
     status = models.IntegerField(_("入所ステータス"), choices=riyosya_status, default=0)
+    decease = models.BooleanField(_("死亡フラグ"), default=False)
     memo = models.TextField(max_length=4000, help_text='The max length of the text is 4000.', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(null=True)
