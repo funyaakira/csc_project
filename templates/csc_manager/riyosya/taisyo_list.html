@@ -35,11 +35,14 @@
     </thead>
     <tbody>
       {% for riyosya in riyosyas %}
-      <tr>
+      <tr {% if riyosya.decease %}style="background-color: gainsboro"{% endif %}>
         <td>
           <a href="{% url 'taisyosya_detail' riyosya.id %}"  class="text-dark">
             <div>
               {{ riyosya.name }}
+              {% if riyosya.decease %}
+              (死亡)
+              {% endif %}
             </div>
             <small class="text-muted d-block">{{ riyosya.furigana }}</small>
           </a>
@@ -79,7 +82,9 @@
           <small class="text-muted d-block">{{ riyosya.caremanager.kyotaku.tel }}</small>
         </td>
         <td>
-          <a href="{% url 'riyosya_renew' riyosya.id 'taisyo_list' %}" class="btn btn-primary btn-sm" role="button">再利用</a>
+          {% if riyosya.decease == False %}
+            <a href="{% url 'riyosya_renew' riyosya.id 'taisyo_list' %}" class="btn btn-primary btn-sm" role="button">再利用</a>
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
