@@ -60,8 +60,12 @@ day_night = (
 )
 
 class Youkaigodo(models.Model):
-    name = models.CharField(max_length=200)
-    tanisu = models.IntegerField
+    name = models.CharField(_("名称"), max_length=200)
+    tanisu = models.IntegerField(_("単位数"), default=0)
+
+    def __str__(self):
+        return self.name
+
 
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
