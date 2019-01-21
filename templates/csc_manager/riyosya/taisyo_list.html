@@ -22,6 +22,8 @@
   <a href="{% url 'riyosya_yotei_list' %}" class="btn btn-info">利用予定者一覧</a>
   <a href="#" class="btn btn-secondary">退所者一覧</a>
 </div>
+
+  <div class="d-none d-lg-block">
   <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -90,5 +92,45 @@
       {% endfor %}
     </tbody>
   </table>
+  </div>
+
+  <div class="d-inline d-lg-none">
+    {% for r in riyosyas %}
+    <div class="border rounded mb-3 py-3 px-3" {% if r.decease %}style="background-color: gainsboro"{% endif %}>
+      <div class="border-bottom">
+        <a href="{% url 'taisyosya_detail' r.id %}"  class="text-dark">
+          <div>
+            {{ r.name }} {% if r.decease %}(死亡){% endif %}
+          </div>
+          <small class="text-muted d-block">{{ r.furigana }}</small>
+        </a>
+        {{ r.birthday|seireki_to_wareki }} {% if r.decease == False %} ({{ r.birthday|calculate_age }}歳) {% endif %}
+        <small class="text-muted d-block">{{ r.birthday  }}</small>
+      </div>
+
+      {% if r.renrakusakis.all %}
+      <div class="border-bottom">
+        {% for renrakusaki in r.renrakusakis.all %}
+          {% if renrakusaki.primary_flg %}
+            <div>
+              {{ renrakusaki.name }}
+            </div>
+            <small class="text-muted d-block">{{ renrakusaki.zokugara }}</small>
+            <small class="text-muted d-block">{{ renrakusaki.tel }}</small>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="border-bottom">
+        <div>
+          {{ r.caremanager.name }}
+        </div>
+        <small class="text-muted d-block">{{ r.caremanager.kyotaku.name }}</small>
+        <small class="text-muted d-block">{{ r.caremanager.kyotaku.tel }}</small>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
 {% endblock %}
