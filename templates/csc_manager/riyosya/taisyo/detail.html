@@ -12,7 +12,7 @@
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
 <li class="breadcrumb-item"><a href="{% url 'riyosya_list' %}">利用者</a></li>
-<li class="breadcrumb-item"><a href="{% url 'taisyo_list' %}">退所者一覧</a></li>
+<li class="breadcrumb-item"><a href="{% url 'riyosya_taisyo_list' %}">退所者一覧</a></li>
 <li class="breadcrumb-item active">退所者詳細</li>
 {% endblock %}
 
@@ -30,34 +30,34 @@
     <h5>利用者情報 ({{ riyosya.name }})</h5>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">最終退所日：</small>
     <br>
     {{ riyosya.last_day|seireki_to_wareki }}
     <small class="text-muted d-block">{{ riyosya.last_day }}</small>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">氏名：</small>
     <br>
     {{ riyosya.name }}<br>
     <small class="text-muted d-block">{{ riyosya.furigana }}</small>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">性別：</small>
     <br>
     {{ riyosya.sex|get_gender_name }}<br>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">生年月日：</small>
     <br>
     {{ riyosya.birthday|seireki_to_wareki }}<br>
     <small class="text-muted d-block">{{ riyosya.birthday }}</small>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">住所：</small>
     <br>
     {{ riyosya.addr|default:'' }}<br>
@@ -68,19 +68,19 @@
     {% endif %}
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">電話番号：</small>
     <br>
     {{ riyosya.tel|default:'' }}<br>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">要介護度：</small>
     <br>
     {{ riyosya.youkaigodo|get_yokaigodo_name }}<br>
   </div>
 
-  <div class="border rounded p-1 my-1">
+  <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">ケアマネージャー：</small>
     <br>
     {{ riyosya.caremanager }}<br>
@@ -93,29 +93,29 @@
   </div>
   {% if riyosya.renrakusakis %}
     {% for renrakusaki in riyosya.renrakusakis.all %}
-      <div class="border rounded mb-3 py-1 px-3">
-        <div  class="border rounded p-1 my-1">
+      <div class="rounded my-3 py-1 px-3 my_border">
+        <div  class="rounded p-3 my-3 my_border">
           <small class="text-muted">氏名：</small><br>
           {{ renrakusaki.name|default:'' }}
           <small class="text-muted d-block">{{ renrakusaki.furigana }}</small>
         </div>
 
-        <div  class="border rounded p-1 my-1">
+        <div  class="rounded p-3 my-3 my_border">
           <small class="text-muted">続柄：</small><br>
           {{ renrakusaki.zokugara|default:'' }}
         </div>
 
-        <div  class="border rounded p-1 my-1">
+        <div  class="rounded p-3 my-3 my_border">
           <small class="text-muted">住所：</small><br>
           {{ renrakusaki.addr|default:'' }}
         </div>
 
-        <div  class="border rounded p-1 my-1">
+        <div  class="rounded p-3 my-3 my_border">
           <small class="text-muted">電話番号1：</small><br>
           {{ renrakusaki.tel|default:'' }}
         </div>
 
-        <div  class="border rounded p-1 my-1">
+        <div  class="rounded p-3 my-3 my_border">
           <small class="text-muted">電話番号2：</small><br>
           {{ renrakusaki.tel2|default:'' }}
         </div>
