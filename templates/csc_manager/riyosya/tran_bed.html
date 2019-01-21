@@ -27,7 +27,33 @@
 
   <canvas id="ChartDemo" class="mb-3"></canvas>
   <small><p class="alert alert-warning">※入所予定時間、退所予定時間が入力されてていない場合は、正確なグラフにはなりません。</p></small>
+  <div id="total_riyosya_info"></div>
   <script>
+    var bed_list = [
+    {% for day in days %}
+    {{ day|get_bed_count }},
+    {% endfor %}
+    ]
+
+    var riyosya_max_list = [
+    {% for day in days %}
+    {{ day|get_riyosya_max_count }},
+    {% endfor %}
+    ]
+
+    var total_riyosya_max_count = 0
+    for(let i = 0; i < riyosya_max_list.length; i++) {
+      total_riyosya_max_count = total_riyosya_max_count + riyosya_max_list[i]
+    }
+
+    var total_riyosya_max_count_per_day = Math.round((total_riyosya_max_count / riyosya_max_list.length) * 100) / 100
+    var riyouritu = Math.round((total_riyosya_max_count_per_day / 20) * 10000) / 100
+
+    document.getElementById("total_riyosya_info").innerHTML =
+      "利用者数計 <b>" + total_riyosya_max_count + "</b>  " +
+      "1日あたりの利用者数 <b>" + total_riyosya_max_count_per_day + "</b>  " +
+      "利用率 <b>" + riyouritu + "%</b>  "
+
     var ctx = document.getElementById("ChartDemo").getContext('2d');
     var ChartDemo = new Chart(ctx, {
      type: 'line',
@@ -38,17 +64,13 @@
         {% endfor %}
         ],
         datasets: [
-        {
-           label: "ベッド使用数",
-           borderColor: 'rgb(255, 20, 147)',
-           lineTension: 0, //<===追加
-           fill: false,    //<===追加
-           data: [
-           {% for day in days %}
-           {{ day|get_bed_count }},
-           {% endfor %}
-           ],
-        },
+          {
+             label: "ベッド使用数",
+             borderColor: 'rgb(255, 20, 147)',
+             lineTension: 0, //<===追加
+             fill: false,    //<===追加
+             data: bed_list,
+          },
         ]
      },
      options: {
