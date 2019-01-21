@@ -6,6 +6,7 @@ admin.site.register(Syokumu)
 admin.site.register(Staff)
 admin.site.register(Event_knd)
 
+admin.site.register(Youkaigodo)
 admin.site.register(Riyosya)
 admin.site.register(RiyosyaRenrakusaki)
 admin.site.register(RiyosyaRiyouKikan)
