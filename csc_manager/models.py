@@ -59,6 +59,10 @@ day_night = (
     (settings._YAKIN, '夜勤帯'),
 )
 
+class Youkaigodo(models.Model):
+    name = models.CharField(max_length=200)
+    tanisu = models.IntegerField
+
 class Kyotaku(models.Model):
     name = models.CharField(max_length=200)
     fullname = models.CharField(max_length=200, default=None)
