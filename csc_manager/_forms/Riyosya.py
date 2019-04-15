@@ -3,7 +3,7 @@ from django.conf import settings
 
 from django.db.models import Q
 
-from ..models import Riyosya, RiyosyaRiyouKikan, start_kbn, last_kbn
+from ..models import Riyosya, RiyosyaRiyouKikan, start_kbn, last_kbn, CareManager
 from ..libs.funcs import wareki_to_seireki
 
 class RiyosyaForm(forms.ModelForm):
@@ -226,6 +226,7 @@ class RiyosyaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['caremanager'].queryset = CareManager.objects.order_by('kyotaku__name')
 
 
 class RiyosyaStartInput(forms.ModelForm):
