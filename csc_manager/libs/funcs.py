@@ -1,5 +1,10 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 
+from ..models import Riyosya, RiyosyaRiyouKikan
+
+from django.conf import settings
+from django.db.models import Q
 
 def seireki_to_wareki(arg):
 
@@ -8,6 +13,7 @@ def seireki_to_wareki(arg):
 
     syouwaGannen = date(1926, 12, 25)
     heiseiGnanen = date(1989, 1, 8)
+    reiwaGannen = date(2019, 5, 1)
 
     year = arg.year
     month = arg.month
@@ -20,9 +26,12 @@ def seireki_to_wareki(arg):
     elif syouwaGannen <= arg < heiseiGnanen:
         gengo = "昭和"
         year -= 1925
-    else:
+    elif heiseiGnanen <= arg < reiwaGannen:
         gengo = "平成"
         year -= 1988
+    else:
+        gengo = "令和"
+        year -= 2018
 
     wareki = gengo + str(year) + '年' + str(month) + '月' + str(day) + '日'
 
@@ -30,7 +39,7 @@ def seireki_to_wareki(arg):
 
 
 def wareki_to_seireki(gengou, g_year, month, day):
-    
+
     try:
         year = 0
         if int(gengou) == 2:
@@ -66,3 +75,33 @@ def calculate_age(born):
     if (today.month, today.day) < (born.month, born.day):
         age -= 1
     return age
+
+
+def get_riyosyas_target_month(year, month):
+    # 指定の年月を利用した利用者のリストを取得
+
+    target_day_from = date(year, month, 1)
+    target_day_to = target_day_from + relativedelta(months=1)
+
+    rs = Riyosya.objects.filter(
+        Q(riyoukikans__start_day__lte=target_day_from, riyoukikans__last_day__isnull=True)
+        |
+        Q(riyoukikans__start_day__lte=target_day_from, riyoukikans__last_day__lte=target_day_to, riyoukikans__last_day__gte=target_day_from)
+        |
+        Q(riyoukikans__start_day__gte=target_day_from, riyoukikans__last_day__lte=target_day_to)
+        |
+        Q(riyoukikans__start_day__gte=target_day_from, riyoukikans__last_day__isnull=True)
+    ).order_by('furigana').distinct()
+
+    return rs
+
+
+def exist_riyosya(riyosya, day):
+    # 指定の日付に指定の利用者が利用しているか判定
+    rs = RiyosyaRiyouKikan.objects.filter(
+        Q(riyosya=riyosya, start_day__lte=day, last_day__isnull=True)
+        |
+        Q(riyosya=riyosya, start_day__lte=day, last_day__gte=day)
+    )
+
+    return rs
