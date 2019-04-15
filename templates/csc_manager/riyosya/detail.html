@@ -52,7 +52,7 @@
   <div class="rounded p-3 my-3 my_border">
     <small class="text-muted">生年月日：</small>
     <br>
-    {{ riyosya.birthday|seireki_to_wareki }}<br>
+    {{ riyosya.birthday|seireki_to_wareki }} ({{ riyosya.birthday|calculate_age }}歳)<br>
     <small class="text-muted d-block">{{ riyosya.birthday }}</small>
   </div>
 
