@@ -224,32 +224,38 @@ class RiyosyaEditRiyoukikanView(UpdateView):
             # ボタン2がクリックされた場合の処理
             print('delete clicked')
             self.object.delete()
+            print('self.request.POST = %s' % self.request.POST)
+            ### --- 利用期間が削除された場合、削除された利用期間以外に利用の予定がない場合 ---
+            ### --- かつ、現在利用中でない場合は、利用者のステータスを退所に更新する ---
 
-            ### --- 利用期間が削除された場合、削除された利用期間以降に利用の予定がない場合は ---
-            ### --- 利用者テーブルを更新する ---
-
-            ### まず以降に利用期間がないか判定
+            ### まず他に利用期間がない、かつ、現在利用中でないか判定
             riyosya = Riyosya.objects.get(id=self.object.riyosya.id)
             current_start_day = self.object.start_day
-            rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, start_day__gt=current_start_day)
 
-            if not rrs:
-                print("--- 削除された利用期間以降に、別の利用期間がないため、退所とする ---")
-                print("--- Riyosya.status,last_dayを更新  ---")
-                ### 利用者テーブル更新
-                ### 利用者のRiyosya.statusを退所に更新
-                ### 最終退所日に、一つ前の利用期間の退所日を設定する
-                riyosya.status = settings._RIYOSYA_STATUS_TAISYO
-                rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, last_day__lte=current_start_day).order_by('last_day').reverse()
+            rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, start_status=0, last_status=2) # 現在入所中か取得
+            if rrs:
+                print("--- 利用予定期間が削除されたが、現在利用中のため、退所とならない ---")
+            else:
+                rrs = RiyosyaRiyouKikan.objects.filter(~Q(start_day=current_start_day),riyosya=riyosya,start_status=2,last_status=2)
                 if rrs:
-                    for rr in rrs:
-                        print("--- 利用者:%s, 最終退所日を%sに更新 ---" % (rr.riyosya.name, rr.last_day))
-                        riyosya.last_day = rr.last_day
-                        break
+                    print("--- 利用予定期間が削除されたが、他に利用予定があるため、退所とならない ---")
+                else:
+                    print("--- 削除された利用期間以外に、別の利用期間がないため、退所とする ---")
+                    
+                    ### 利用者テーブル更新
+                    ### 利用者のRiyosya.statusを退所に更新
+                    ### 最終退所日に、一つ前の利用期間の退所日を設定する
+                    riyosya.status = settings._RIYOSYA_STATUS_TAISYO
+                    rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, last_day__lte=current_start_day).order_by('last_day').reverse()
+                    if rrs:
+                        for rr in rrs:
+                            print("--- 利用者:%s, 最終退所日を%sに更新 ---" % (rr.riyosya.name, rr.last_day))
+                            riyosya.last_day = rr.last_day
+                            break
 
-                riyosya.save()
+                    riyosya.save()
 
-            return_url = self.kwargs.get('return_url')
+        return_url = self.kwargs.get('return_url')
 
         import socket
         hostName = socket.gethostname()
