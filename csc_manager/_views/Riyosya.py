@@ -19,7 +19,8 @@ from ..models import Riyosya, RiyosyaRiyouKikan, RiyosyaRenrakusaki, gender, riy
 from .._forms.Riyosya import RiyosyaForm, RiyosyaStartInput, RiyosyaLastInput, RiyosyaEditRiyoukikan
 from .._forms.RiyosyaRiyouKikan import RiyosyaRiyouKikanForm, RiyosyaRiyouKikanForm_Renew
 from ..libs.funcs import wareki_to_seireki
-
+from ..libs.funcs import get_riyosyas_target_month
+from ..libs.funcs import exist_riyosya
 
 
 # 利用者 - トップ(一覧)
@@ -224,8 +225,31 @@ class RiyosyaEditRiyoukikanView(UpdateView):
             print('delete clicked')
             self.object.delete()
 
+            ### --- 利用期間が削除された場合、削除された利用期間以降に利用の予定がない場合は ---
+            ### --- 利用者テーブルを更新する ---
 
-        return_url = self.kwargs.get('return_url')
+            ### まず以降に利用期間がないか判定
+            riyosya = Riyosya.objects.get(id=self.object.riyosya.id)
+            current_start_day = self.object.start_day
+            rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, start_day__gt=current_start_day)
+
+            if not rrs:
+                print("--- 削除された利用期間以降に、別の利用期間がないため、退所とする ---")
+                print("--- Riyosya.status,last_dayを更新  ---")
+                ### 利用者テーブル更新
+                ### 利用者のRiyosya.statusを退所に更新
+                ### 最終退所日に、一つ前の利用期間の退所日を設定する
+                riyosya.status = settings._RIYOSYA_STATUS_TAISYO
+                rrs = RiyosyaRiyouKikan.objects.filter(riyosya=riyosya, last_day__lte=current_start_day).order_by('last_day').reverse()
+                if rrs:
+                    for rr in rrs:
+                        print("--- 利用者:%s, 最終退所日を%sに更新 ---" % (rr.riyosya.name, rr.last_day))
+                        riyosya.last_day = rr.last_day
+                        break
+
+                riyosya.save()
+
+            return_url = self.kwargs.get('return_url')
 
         import socket
         hostName = socket.gethostname()
@@ -536,6 +560,48 @@ class RiyosyaTranBedView(TemplateView):
         kwargs["next_month"] = (target_month + relativedelta(months=1)).month
 
         kwargs['prev_page'] = 'tran_bed:'+str(year)+':'+str(month)
+
+        return super().get_context_data(**kwargs)
+
+
+# 利用者 - 利用状況詳細
+class RiyosyaUsageSituationInfoView(TemplateView):
+    template_name = 'csc_manager/riyosya/usage_situation_info.html'
+
+    def get_context_data(self, **kwargs):
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+
+        # カレンダーの機能を利用して、指定年月のdateオブジェクトのリストを作成
+        days = [date(year, month, i+1)
+            for i in range(calendar.monthrange(year, month)[1])]
+
+        kwargs['year'] = year
+        kwargs['month'] = month
+        kwargs['days'] = days
+
+        target_month = date(year, month, 1)
+        kwargs["prev_year"] = (target_month - relativedelta(months=1)).year
+        kwargs["prev_month"] = (target_month - relativedelta(months=1)).month
+        kwargs["next_year"] = (target_month + relativedelta(months=1)).year
+        kwargs["next_month"] = (target_month + relativedelta(months=1)).month
+
+        # 指定の月の利用者の一覧を取得、設定
+        rs = get_riyosyas_target_month(year, month)
+
+        r_info = []
+        for r in rs:
+            r_work = []
+            r_work.append(r.name)
+            for d in days:
+                if exist_riyosya(r, d):
+                    r_work.append('○')
+                else:
+                    r_work.append('')
+
+            r_info.append(r_work)
+
+        kwargs["riyosyas_target_month"] = r_info
 
         return super().get_context_data(**kwargs)
 
