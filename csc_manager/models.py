@@ -163,8 +163,10 @@ class Shift_knd(models.Model):
 
 class Gaibu(models.Model):
     def __str__(self):
-        return self.GB_NAME
+        return self.name
     name = models.CharField(max_length=200)
+    short_name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
 
 
 class Syokumu(models.Model):
@@ -184,12 +186,14 @@ class Staff(models.Model):
     tel1 = models.CharField(max_length=200, null=True, default=None, blank=True)
     tel2 = models.CharField(max_length=200, null=True, default=None, blank=True)
     del_flg = models.BooleanField(default=False)
-
+    driver_flg = models.BooleanField(default=False)
+    tukis_flg = models.BooleanField(default=False)
 
 class Event_knd(models.Model):
     name = models.CharField(max_length=200)
     short_name = models.CharField(max_length=200, default=None)
     css_class = models.CharField(max_length=200, default=None)
+    order = models.IntegerField(max_length=0, default=0, null=True, blank=True)
     def __str__(self):
         return self.name
 
